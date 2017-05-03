@@ -8,7 +8,7 @@ signet.subtype('string')('shortState', function (value) { return value.length ==
 var baseSchema =
     {
         //////// Device to User Example ////////
-        SchemaName: null,
+        SchemaName: 'dbo', // can be null
         DbQueryColumns: true,
         DbQueryTables: true,
         MyDevice: Joy.table('MyDevice', {
