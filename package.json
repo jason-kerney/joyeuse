@@ -18,5 +18,14 @@
   "bugs": {
     "url": "https://github.com/jason-kerney/joyeuse/issues"
   },
-  "homepage": "https://github.com/jason-kerney/joyeuse#readme"
+  "homepage": "https://github.com/jason-kerney/joyeuse#readme",
+  "dependencies": {
+    "knex": "^0.13.0",
+    "signet": "^1.4.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "grunt": "^1.0.1",
+    "mocha": "^3.3.0"
+  }
 }
