@@ -29,7 +29,7 @@ var baseSchema =
         MyUser: Joy.table('MyUser', {
             tableName: 'user',
             key: ['ssoUserId'],
-            ssoUserId: joy.readOnly('int'),
+            ssoUserId: joy.type('int').readOnly(),
             name: 'string',
             devices: 'MyUserDevice.Devices'
         }),
