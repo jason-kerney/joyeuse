@@ -7,9 +7,9 @@ var ip4Format = 'ip4Format';
 var ip4String = 'ip4String';
 var octet = 'octet';
 
-var validStringType = 'validString';
+var requiredStringName = 'requiredString';
 
-signet.subtype('string')(validStringType, function(value){
+signet.subtype('string')(requiredStringName, function(value){
     return value.trim().length > 0;
 });
 
@@ -21,12 +21,12 @@ signet.subtype(ip4Format)(ip4String, function (value) {
     return signet.isTypeOf('array<'+ octet +'>')(octets);
 });
 
-// var knexConnection = {
-//     host : ip4String,
-//     user : 'your_database_user',
-//     password : 'your_database_password',
-//     database : 'myapp_test'
-//   };
+var knexConnection = {
+    host : ip4String,
+    user : 'your_database_user',
+    password : 'your_database_password',
+    database : 'myapp_test'
+  };
 
 module.exports = {
     ip4: {
@@ -34,6 +34,6 @@ module.exports = {
         isOctet: signet.isTypeOf(octet)
     },
     base: {
-        isValidString: signet.isTypeOf(validStringType)
+        isRequiredString: signet.isTypeOf(requiredStringName)
     }
 };

@@ -49,7 +49,7 @@ describe('joyeuse', function () {
             }, this);
         });
 
-        it('should valide strings', function () {
+        it('should validate required strings', function () {
             var validString = "a";
             var spaceOnly = " ";
             var tabOnly = "\t";
@@ -57,12 +57,12 @@ describe('joyeuse', function () {
             var nullString = null;
             var emptyString = '';
 
-            assert.isTrue(types.base.isValidString(validString), "a valid string should be valid");
-            assert.isFalse(types.base.isValidString(spaceOnly), "a space is not a valid string");
-            assert.isFalse(types.base.isValidString(tabOnly), "a tab is not a valid string");
-            assert.isFalse(types.base.isValidString(undifinedString), "undifined is not a valid string");
-            assert.isFalse(types.base.isValidString(nullString), "null is not a valid string");
-            assert.isFalse(types.base.isValidString(emptyString), "an empty string is not a valid string");
+            assert.isTrue(types.base.isRequiredString(validString), "a valid string should be valid");
+            assert.isFalse(types.base.isRequiredString(spaceOnly), "a space is not a valid string");
+            assert.isFalse(types.base.isRequiredString(tabOnly), "a tab is not a valid string");
+            assert.isFalse(types.base.isRequiredString(undifinedString), "undifined is not a valid string");
+            assert.isFalse(types.base.isRequiredString(nullString), "null is not a valid string");
+            assert.isFalse(types.base.isRequiredString(emptyString), "an empty string is not a valid string");
         });
     });
 });
