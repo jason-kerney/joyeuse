@@ -24,6 +24,7 @@
     "signet": "^1.4.0"
   },
   "devDependencies": {
+    "approvals": "^2.1.2",
     "chai": "^3.5.0",
     "grunt": "^1.0.1",
     "mocha": "^3.3.0"
