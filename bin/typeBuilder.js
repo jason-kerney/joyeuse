@@ -2,6 +2,8 @@
 
 var signet = require('signet')();
 
+var isUndefined = signet.isTypeOf('undefined');
+
 var asMethod = signet.enforce('string=>string',
     function (input, output) {
         return input + '=>' + output;
@@ -19,10 +21,16 @@ var asVariant = signet.enforce(asMethod('variant<string; array<string>>', 'strin
         return 'variant<' + args.join('; ') + '>'
     });
 
+var asBoundedInt = signet.enforce(asMethod('int, [int]', 'string'),
+function(min, max){
+    var realMax = isUndefined(max) ? Infinity : max;
+    return 'boundedInt<' + min + ';' + realMax + '>';
+});
+
 var asArray = signet.enforce(asMethod(asVariant('undefined', 'string'), 'string'),
     function (typeString) {
         const arrayName = 'array';
-        if (typeof typeString === 'undefined') {
+        if (isUndefined(typeString)) {
             return arrayName;
         }
         return arrayName + '<' + typeString + '>';
@@ -42,11 +50,14 @@ var asOptionalProperty = signet.enforce(asMethod('string', 'string'), asVariant.
 
 var exportedType = {
     signet: signet,
+    isUndefined: isUndefined,
     asArray: asArray,
     asVariant: asVariant,
     asFormattedString: asFormattedString,
     asOptional: asOptional,
     asOptionalProperty: asOptionalProperty,
+    asBoundedInt: asBoundedInt,
+    asMethod: asMethod,
 };
 
 module.exports = exportedType;

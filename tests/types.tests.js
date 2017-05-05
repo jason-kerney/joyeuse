@@ -85,6 +85,10 @@ describe('joyeuse', function () {
             assert.isFalse(isClient('access'), 'Access');
         });
 
+        it('should validate a valid connection pool object', function () {
+            assert.isTrue(types.knex.baseTypes.isConnectionPool({ min: 0, max: 1000 }));
+        });
+
         describe('knex connection object', function () {
             it('should recognize a valid connection object with IP', function () {
                 var connection = {
@@ -217,10 +221,38 @@ describe('joyeuse', function () {
         });
 
         describe('knex constructor parameter', function () {
-            it('should validate a correct object', function () {
+            var isKnexConstructor = types.knex.isKnexConstructor;
+            it('should validate a correct object with connection string, debug, connection pool and acquireConnectionTimeout', function () {
                 var param = {
-                    client: 'mysql'
+                    client: 'mysql',
+                    connection: "some connection string",
+                    searchPath: "some,path",
+                    debug: false,
+                    pool: { min: 0, max: 1000 },
+                    acquireConnectionTimeout: 100,
                 };
+
+                assert.isTrue(isKnexConstructor(param))
+            });
+
+            it('should validate a correct object wit connection string and without debug, connection pool and acquireConnectionTimeout', function () {
+                var param = {
+                    client: 'mysql',
+                    connection: "some connection string",
+                    searchPath: "some,path",
+                };
+
+                assert.isTrue(isKnexConstructor(param))
+            });
+
+            it('should require a correct client', function () {
+                var param = {
+                    client: 'access',
+                    connection: "some connection string",
+                    searchPath: "some,path",
+                };
+
+                assert.isFalse(isKnexConstructor(param));
             });
         });
     });

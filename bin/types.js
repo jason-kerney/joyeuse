@@ -25,20 +25,37 @@ var knexConnectionFileObject = 'knexConnectionFileObject';
 var knexConnectionType = 'knexConnectionType';
 var knexConstructorParam = 'knexConstructorParam';
 var knexClients = 'knexClients';
+var connectionPool = 'connectionPool';
+var connectionAfterCreate = 'connectionAfterCreate';
 
-signet.alias(path, typeBuilder.asFormattedString(fullPathRegex));
+var baseTypes = (function () {
+    signet.alias(path, typeBuilder.asFormattedString(fullPathRegex));
 
-signet.subtype('string')(requiredString, function (value) {
-    return value.trim().length > 0;
-});
+    signet.subtype('string')(requiredString, function (value) {
+        return value.trim().length > 0;
+    });
 
-signet.alias(ip4Format, typeBuilder.asFormattedString(ip4Regex));
-signet.subtype('int')(octet, function (value) { return value >= 0 && value <= 255; })
+    return {
+        isRequiredString: signet.isTypeOf(requiredString),
+        isPath: signet.isTypeOf(path)
+    };
+})();
 
-signet.subtype(ip4Format)(ip4String, function (value) {
-    var octets = value.split(['.']).map(function (v) { return parseInt(v); });
-    return signet.isTypeOf(typeBuilder.asArray(octet))(octets);
-});
+var ip4 = (function () {
+    signet.alias(ip4Format, typeBuilder.asFormattedString(ip4Regex));
+
+    signet.subtype('int')(octet, function (value) { return value >= 0 && value <= 255; })
+
+    signet.subtype(ip4Format)(ip4String, function (value) {
+        var octets = value.split(['.']).map(function (v) { return parseInt(v); });
+        return signet.isTypeOf(typeBuilder.asArray(octet))(octets);
+    });
+
+    return {
+        isIp4String: signet.isTypeOf(ip4String),
+        isOctet: signet.isTypeOf(octet)
+    };
+})();
 
 var knexConnection = {
     host: typeBuilder.asOptionalProperty(ip4String),
@@ -52,6 +69,31 @@ var knexConnectionFile = {
     filename: path
 };
 
+var knexBaseTypes = (function () {
+    const allowedDatabases = ['postgres', 'mssql', 'mysql', 'mariadb', 'sqlite3', 'oracle'];
+    signet.subtype(requiredString)(knexClients, function (value) {
+        return allowedDatabases.includes(value);
+    });
+
+    signet.defineDuckType('connectionMethodForConnectionPool', { query: 'function' });
+
+    var connectionAfterCreateExample = {
+        afterCreate: 'connectionMethodForConnectionPool'
+    };
+    var connectionPoolMinMaxExample = { min: typeBuilder.asBoundedInt(0), max: typeBuilder.asBoundedInt(0) };
+
+    signet.defineDuckType(connectionPool + 'MinMax', connectionPoolMinMaxExample);
+
+    signet.defineDuckType(connectionAfterCreate, connectionAfterCreateExample)
+
+    signet.alias(connectionPool, typeBuilder.asVariant(connectionPool + 'MinMax', connectionAfterCreate));
+
+    return {
+        allowedDatabases: allowedDatabases,
+        isClient: signet.isTypeOf(knexClients),
+        isConnectionPool: signet.isTypeOf(connectionPool),
+    };
+})();
 
 signet.defineDuckType(knexConnectionObject + 'Part', knexConnection);
 
@@ -59,44 +101,34 @@ signet.subtype(knexConnectionObject + 'Part')(knexConnectionObject, function (co
     var hasHost = signet.isTypeOf('undefined')(conn.host);
     var hasSocketPath = signet.isTypeOf('undefined')(conn.socketPath);
 
-    return (hasHost !== hasSocketPath)
+    return (hasHost !== hasSocketPath);
 });
 
 signet.defineDuckType(knexConnectionFileObject, knexConnectionFile);
 
 signet.alias(knexConnectionType, typeBuilder.asVariant(requiredString, knexConnectionFileObject, knexConnectionObject));
 
-signet.subtype(requiredString)(knexClients, function (value) {
-    // Postgres MSSQL MySQL MariaDB SQLite3 Oracle
-    return ['postgres', 'mssql', 'mysql', 'mariadb', 'sqlite3', 'oracle'].includes(value);
-});
-
 var knexConstructor = {
-    client: requiredString,
-    //     connection: knexConnectionType,
-    //     searchPath: 
+    client: knexClients,
+    connection: knexConnectionType,
+    searchPath: requiredString,
+    debug: typeBuilder.asOptionalProperty('boolean'),
+    pool: typeBuilder.asOptionalProperty(connectionPool),
+    acquireConnectionTimeout: typeBuilder.asOptionalProperty(typeBuilder.asBoundedInt(0)),
 };
 
 signet.defineDuckType(knexConstructorParam, knexConstructor);
 
 module.exports = {
-    ip4: {
-        isIp4String: signet.isTypeOf(ip4String),
-        isOctet: signet.isTypeOf(octet)
-    },
-    base: {
-        isRequiredString: signet.isTypeOf(requiredString),
-        isPath: signet.isTypeOf(path)
-    },
+    ip4: ip4,
+    base: baseTypes,
     knex: {
-        baseTypes: {
-            isClient: signet.isTypeOf(knexClients)
-        },
+        baseTypes: knexBaseTypes,
         connectionParts: {
             isSubConnectionInfo: signet.isTypeOf(knexConnectionObject),
             isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
         },
         isConnectionInfo: signet.isTypeOf(knexConnectionType),
-        isKnexConstructor: signet.isTypeOf(knexConstructorParam)
+        isKnexConstructor: signet.isTypeOf(knexConstructorParam),
     }
 };
