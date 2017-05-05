@@ -7,8 +7,9 @@ function when(map) {
     var conditions = [];
 
     function match(value) {
+        var xformed = map(value)
         var found = conditions.find(function (condition) {
-            return condition.condition(map(value));
+            return condition.condition(xformed);
         });
 
         if(typeBuilder.isUndefined(found))
@@ -35,4 +36,8 @@ function when(map) {
             match: match
         };
     }
+
+    return {
+            cond: cond
+        }
 }
