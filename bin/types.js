@@ -2,10 +2,6 @@
 var typeBuilder = require('./typeBuilder');
 var signet = typeBuilder.signet;
 
-var pathSeperatorRegex = '\\/';
-var pathStartRegex = '(\\.{0,2}|[a-zA-Z]\\:|[a-zA-Z]{2,}\\:' + pathSeperatorRegex + ')?';
-var pathRegex = pathStartRegex + pathSeperatorRegex + '[a-zA-Z0-9_'+ pathSeperatorRegex +'\\.\\_]{1,}';
-
 var fullPathRegex = 
     '^(' + 
         '(\\.{0,2})|' + 
@@ -69,13 +65,13 @@ signet.defineDuckType(knexConnectionFileObject, knexConnectionFile);
 
 signet.alias(knexConnectionType, typeBuilder.asVariant(requiredString, knexConnectionFileObject, knexConnectionObject));
 
-
-
-// var knexConstructor = {
-//     client: requiredString,
+var knexConstructor = {
+    client: requiredString,
 //     connection: knexConnectionType,
 //     searchPath: 
-// };
+};
+
+signet.defineDuckType(knexConstructorParam, knexConstructor);
 
 module.exports = {
     ip4: {
@@ -91,6 +87,7 @@ module.exports = {
             isSubConnectionInfo: signet.isTypeOf(knexConnectionObject),
             isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
         },
-        isConnectionInfo: signet.isTypeOf(knexConnectionType)
+        isConnectionInfo: signet.isTypeOf(knexConnectionType),
+        isKnexConstructor: signet.isTypeOf(knexConstructorParam)
     }
 };
