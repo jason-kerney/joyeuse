@@ -2,16 +2,17 @@
 
 var approvalsConfig = require('./test-utils/approvalsConfig');
 var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
-var signetConfig = require('../bin/signetConfig');
+var typeBuilder = require('../bin/typeBuilder');
 
 
-describe('signet config', function () {
+describe('type builder', function () {
     describe('asVariant', function () {
         it('should return for a hard coded variant type', function () {
-            this.verify(signetConfig.asVariant('int; string'));
+            this.verify(typeBuilder.asVariant('int; string'));
         });
+        
         it('should return for an array of types', function () {
-            this.verify(signetConfig.asVariant('int', 'boolean', 'string'));
+            this.verify(typeBuilder.asVariant('int', 'boolean', 'string'));
         });
     });
 });

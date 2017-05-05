@@ -70,8 +70,139 @@ describe('joyeuse', function () {
         });
 
         it('should validate a knex connection path object', function () {
-            assert.isTrue(types.knex.isSubConnectionInfoFilePath({filename: "./mydb.sqlite"}));
-            assert.isFalse(types.knex.isSubConnectionInfoFilePath({filename: 'hello?'}));
+            assert.isTrue(types.knex.connectionParts.isSubConnectionInfoFilePath({ filename: "./mydb.sqlite" }));
+            assert.isFalse(types.knex.connectionParts.isSubConnectionInfoFilePath({ filename: 'hello?' }));
+        });
+
+        describe('knex connection object', function () {
+            it('should recognize a valid connection object with IP', function () {
+                var connection = {
+                    host: '192.168.1.1',
+                    user: 'your.user.name',
+                    password: 'your.password',
+                    database: 'your.database.name'
+                };
+
+                assert.isTrue(types.knex.connectionParts.isSubConnectionInfo(connection), 'a valid connection refused')
+            });
+
+            it('should recognize a valid connection object with socet path', function () {
+                var connection = {
+                    socketPath: '/path/to/socket.sock',
+                    user: 'your.user.name',
+                    password: 'your.password',
+                    database: 'your.database.name'
+                };
+
+                assert.isTrue(types.knex.connectionParts.isSubConnectionInfo(connection), 'a valid connection refused')
+            });
+
+            it('should fail with invalid path', function () {
+                var connection = {
+                    socketPath: '/bad/path?/to/socket.sock',
+                    user: 'your.user.name',
+                    password: 'your.password',
+                    database: 'your.database.name'
+                };
+
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'socet path needs to be valid')
+            });
+
+            it('should not allow connection to have both a socket path and a host', function () {
+                var connection = {
+                    host: '192.168.1.1',
+                    socketPath: '/path/to/socket.sock',
+                    user: 'your.user.name',
+                    password: 'your.password',
+                    database: 'your.database.name'
+                };
+
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'a connection excepted with both socket path and host')
+            });
+
+            it('should fail if missing both a valid host and a valid socet path', function () {
+                var connection = {
+                    user: 'your.user.name',
+                    password: 'your.password',
+                    database: 'your.database.name'
+                };
+
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'must have a valid host or socet path')
+            });
+
+            it('should fail if host is an invalid IP', function () {
+                var connection = {
+                    host: '192.168.1.300',
+                    user: 'your.user.name',
+                    password: 'your.password',
+                    database: 'your.database.name'
+                };
+
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'an invalid host was accepted')
+            });
+
+            it('should fail if user name is empty', function () {
+                var connection = {
+                    host: '192.168.1.300',
+                    user: '',
+                    password: 'your.password',
+                    database: 'your.database.name'
+                };
+
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'an invalid user name was accepted')
+            });
+
+            it('should fail if user name is missing', function () {
+                var connection = {
+                    host: '192.168.1.300',
+                    password: 'your.password',
+                    database: 'your.database.name'
+                };
+
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'an invalid user name was accepted')
+            });
+
+            it('should fail if password is empty', function () {
+                var connection = {
+                    host: '192.168.1.300',
+                    user: 'your.user.name',
+                    password: '',
+                    database: 'your.database.name'
+                };
+
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'an invalid password was accepted')
+            });
+
+            it('should fail if password is missing', function () {
+                var connection = {
+                    host: '192.168.1.300',
+                    user: 'your.user.name',
+                    database: 'your.database.name'
+                };
+
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'an invalid password was accepted')
+            });
+
+            it('should fail if database is empty', function () {
+                var connection = {
+                    host: '192.168.1.300',
+                    user: 'your.user.name',
+                    password: 'your.password',
+                    database: ''
+                };
+
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'an invalid database was accepted')
+            });
+
+            it('should fail if database is missing', function () {
+                var connection = {
+                    host: '192.168.1.300',
+                    user: 'your.user.name',
+                    password: 'your.password',
+                };
+
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'an invalid database was accepted')
+            });
         });
     });
 });
