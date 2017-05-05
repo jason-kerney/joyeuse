@@ -7,7 +7,16 @@ function when(map) {
     var conditions = [];
 
     function match(value) {
+        var found = conditions.find(function (condition) {
+            return condition.condition(map(value));
+        });
 
+        if(typeBuilder.isUndefined(found))
+        {
+            throw new Error("no conditions met");
+        }
+
+        found.execution(value);
     }
 
     function cond(condition, execution){
