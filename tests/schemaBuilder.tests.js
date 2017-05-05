@@ -64,5 +64,14 @@ describe('joyeuse', function () {
             assert.isFalse(types.base.isRequiredString(nullString), "null is not a valid string");
             assert.isFalse(types.base.isRequiredString(emptyString), "an empty string is not a valid string");
         });
+
+        it('should validate knex example file path as a file path', function () {
+            assert.isTrue(types.base.isPath("./mydb.sqlite"));
+        });
+
+        it('should validate a knex connection path object', function () {
+            assert.isTrue(types.knex.isSubConnectionInfoFilePath({filename: "./mydb.sqlite"}));
+            assert.isFalse(types.knex.isSubConnectionInfoFilePath({filename: 'hello?'}));
+        });
     });
 });
