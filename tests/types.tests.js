@@ -74,6 +74,17 @@ describe('joyeuse', function () {
             assert.isFalse(types.knex.connectionParts.isSubConnectionInfoFilePath({ filename: 'hello?' }));
         });
 
+        it('should validate an exceptable sql client', function () {
+            var isClient = types.knex.baseTypes.isClient;
+            assert.isTrue(isClient('postgres'), 'Postgres');
+            assert.isTrue(isClient('mssql'), 'MSSQL');
+            assert.isTrue(isClient('mariadb'), 'MariaDB');
+            assert.isTrue(isClient('sqlite3'), 'SQLite3');
+            assert.isTrue(isClient('oracle'), 'Oracle');
+
+            assert.isFalse(isClient('access'), 'Access');
+        });
+
         describe('knex connection object', function () {
             it('should recognize a valid connection object with IP', function () {
                 var connection = {
@@ -202,6 +213,14 @@ describe('joyeuse', function () {
                 };
 
                 assert.isFalse(types.knex.connectionParts.isSubConnectionInfo(connection), 'an invalid database was accepted')
+            });
+        });
+
+        describe('knex constructor parameter', function () {
+            it('should validate a correct object', function () {
+                var param = {
+                    client: 'mysql'
+                };
             });
         });
     });

@@ -2,16 +2,16 @@
 var typeBuilder = require('./typeBuilder');
 var signet = typeBuilder.signet;
 
-var fullPathRegex = 
-    '^(' + 
-        '(\\.{0,2})|' + 
-        '(\\w\\:)|' + 
-        '(\\w{2,}\\:\\/)|' + 
-        '([\\w\\d\\.\\_]+)' +
-    ')?' + 
-    '(' + 
-        '\\/[\\w\\d\\.\\_]+' + 
-    ')+' + 
+var fullPathRegex =
+    '^(' +
+    '(\\.{0,2})|' +
+    '(\\w\\:)|' +
+    '(\\w{2,}\\:\\/)|' +
+    '([\\w\\d\\.\\_]+)' +
+    ')?' +
+    '(' +
+    '\\/[\\w\\d\\.\\_]+' +
+    ')+' +
     '\\/?$';
 
 var ip4Regex = '[0-2]?[0-9]?[0-9]\.[0-2]?[0-9]?[0-9]\.[0-2]?[0-9]?[0-9]';
@@ -24,6 +24,7 @@ var knexConnectionObject = 'knexConnectionObject';
 var knexConnectionFileObject = 'knexConnectionFileObject';
 var knexConnectionType = 'knexConnectionType';
 var knexConstructorParam = 'knexConstructorParam';
+var knexClients = 'knexClients';
 
 signet.alias(path, typeBuilder.asFormattedString(fullPathRegex));
 
@@ -65,10 +66,15 @@ signet.defineDuckType(knexConnectionFileObject, knexConnectionFile);
 
 signet.alias(knexConnectionType, typeBuilder.asVariant(requiredString, knexConnectionFileObject, knexConnectionObject));
 
+signet.subtype(requiredString)(knexClients, function (value) {
+    // Postgres MSSQL MySQL MariaDB SQLite3 Oracle
+    return ['postgres', 'mssql', 'mysql', 'mariadb', 'sqlite3', 'oracle'].includes(value);
+});
+
 var knexConstructor = {
     client: requiredString,
-//     connection: knexConnectionType,
-//     searchPath: 
+    //     connection: knexConnectionType,
+    //     searchPath: 
 };
 
 signet.defineDuckType(knexConstructorParam, knexConstructor);
@@ -83,6 +89,9 @@ module.exports = {
         isPath: signet.isTypeOf(path)
     },
     knex: {
+        baseTypes: {
+            isClient: signet.isTypeOf(knexClients)
+        },
         connectionParts: {
             isSubConnectionInfo: signet.isTypeOf(knexConnectionObject),
             isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
