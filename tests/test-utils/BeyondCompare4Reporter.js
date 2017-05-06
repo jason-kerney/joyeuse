@@ -16,7 +16,7 @@ function BeyondCompare4 () {
             return true;
         },
         report: function (approvedFilePath, receivedFilePath) {
-            var executionPath = '/Program Files/Beyond Compare 4/BCompare.exe';
+            var executionPath = 'c:/Program Files (x86)/Beyond Compare 3/BCompare.exe';
             var approvedPath = './' + approvedFilePath;
             var receivedPath = './' + receivedFilePath;
 
