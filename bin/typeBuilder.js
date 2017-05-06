@@ -4,9 +4,13 @@ var signet = require('signet')();
 
 var isUndefined = signet.isTypeOf('undefined');
 
-var asMethod = signet.enforce('string=>string',
+var asMethod = signet.enforce('variant<string; array<string>> => string',
     function (input, output) {
-        return input + ' => ' + output;
+        if(signet.isTypeOf('string')(input)){
+            return input + ' => ' + output;
+        } else {
+            return input.join(", ") + ' => ' + output;
+        }
     });
 
 var typedString = signet.enforce(asMethod('string', 'string'),

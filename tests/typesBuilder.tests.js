@@ -59,5 +59,9 @@ describe('type builder', function () {
         it('should be able to create method types', function () {
             this.verify(typeBuilder.asMethod('string', 'int'));
         });
+
+        it('should be able to create a method with multiple input parameters', function () {
+            this.verify(typeBuilder.asMethod(['int', 'boolean', 'string'], '*'))
+        })
     });
 });
