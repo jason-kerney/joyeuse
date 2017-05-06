@@ -194,4 +194,15 @@ describe('when', function () {
         assert.equal(0, callCount, 'did not get called the correct number of times');
         assert.equal("first result", result,'did not return the correct value');
     });
+
+    it('should return a warning when all conditions fail', function () {
+
+        var result =
+            when(function (input) { return ""; })
+                .cond(function () { return false; }, function () { return "bad1"; })
+                .cond('int', function (_) { return "bad2"; })
+                .match("hello world");
+
+        this.verify(JSON.stringify(result) + '\r\n');
+    });
 });

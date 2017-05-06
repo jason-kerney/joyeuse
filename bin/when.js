@@ -23,7 +23,7 @@ module.exports = function () {
 
             if(typeBuilder.isUndefined(found))
             {
-                return;
+                return { warning: 'no condition was successful' };
             }
 
             return found.action(value);
