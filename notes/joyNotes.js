@@ -106,7 +106,7 @@ var userTable = db.MyUser;
 
 var devices =
     deviceTable
-        .include(deviceTable.users) ``
+        .include(deviceTable.users)
         .select(
         db.or(
             userTable.id.equals(5),
@@ -227,28 +227,3 @@ if (filters.length === 0) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// jfp need this functionality.
-j.when(map) // defaults to indentity
-    .cond(value1, handle_Input_When_Map_Returns_Value1)
-    .cond(value2, handle_Input_When_Map_Returns_Value2)
-    .cond(value3, handle_Input_When_Map_Returns_Value3)
-    .match(input);

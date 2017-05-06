@@ -205,4 +205,15 @@ describe('when', function () {
 
         this.verify(JSON.stringify(result) + '\r\n');
     });
+
+    it('should evaluate a condition as truthy', function () {
+
+        var result =
+            when(function (input) { return ""; })
+                .cond(function () { return "bob"; }, function () { return "truthy"; })
+                .cond('int', function (_) { return "bad"; })
+                .match("hello world");
+
+        assert.equal("truthy", result);
+    });
 });

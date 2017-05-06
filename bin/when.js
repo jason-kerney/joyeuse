@@ -16,7 +16,7 @@ module.exports = function () {
         var conditions = [];
 
         var match = signet.sign('* => *', function (value) {
-            var xformed = transformer(value)
+            var xformed = transformer(value);
             var found = conditions.find(function (condition) {
                 return condition.condition(xformed);
             });
@@ -31,10 +31,11 @@ module.exports = function () {
 
         var cond = signet.sign('function, function => conditionalBuilder', function (condition, action){
             var trueCondition;
-            if(signet.isTypeOf('string')) {
+            if(signet.isTypeOf('string')(condition)) {
                 trueCondition = signet.isTypeOf(condition);
-            } else if (signet.isTypeOf('function')) {
-                trueCondition = function(v) { Boolean(condition(v)); }
+            } else
+                if (signet.isTypeOf('function')) {
+                trueCondition = function(v) { return Boolean(condition(v)); }
             } else {
                 throw new Error("expect a predicate or type");
             }
