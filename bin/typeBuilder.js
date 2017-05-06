@@ -6,7 +6,7 @@ var isUndefined = signet.isTypeOf('undefined');
 
 var asMethod = signet.enforce('string=>string',
     function (input, output) {
-        return input + '=>' + output;
+        return input + ' => ' + output;
     });
 
 var typedString = signet.enforce(asMethod('string', 'string'),
@@ -41,7 +41,7 @@ var asFormattedString = signet.enforce(asMethod('string', 'string'),
         return 'formattedString<' + format + '>';
     });
 
-var asOptional = signet.enforce(asMethod('string', 'string'),
+var asOptionalParameter = signet.enforce(asMethod('string', 'string'),
     function (typestring) {
         return '[' + typestring + ']';
     });
@@ -54,7 +54,7 @@ var exportedType = {
     asArray: asArray,
     asVariant: asVariant,
     asFormattedString: asFormattedString,
-    asOptional: asOptional,
+    asOptionalParameter: asOptionalParameter,
     asOptionalProperty: asOptionalProperty,
     asBoundedInt: asBoundedInt,
     asMethod: asMethod,
