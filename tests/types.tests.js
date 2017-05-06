@@ -12,7 +12,7 @@ function ipGenerator(max) {
         return Math.floor(Math.random() * max);
     }
 
-    for (var i = 0; i <= 10000; i++) {
+    for (var i = 0; i <= 1000; i++) {
         var part1 = part();
         var part2 = part();
         var part3 = part();

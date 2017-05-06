@@ -1,8 +1,6 @@
 'use strict';
 
-var typeBuilder = require('../bin/typeBuilder');
-var signet = typeBuilder.signet;
-
+/*
 function when(map) {
     var conditions = [];
 
@@ -41,3 +39,33 @@ function when(map) {
             cond: cond
         }
 }
+
+//*/
+
+var assert = require('chai').assert;
+
+var typeBuilder = require('../bin/typeBuilder');
+var signet = typeBuilder.signet;
+var sinon = require('sinon');
+var approvalsConfig = require('./test-utils/approvalsConfig');
+var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
+
+describe('when', function () {
+    var when;
+    beforeEach(function () {
+        when = require('../bin/when')();
+    })
+
+    it('should be a function that takes a function and returns a condition', function () {
+        assert.equal(when.signature, 'function => initialCond');
+    })
+
+    it.skip('should call the transformer on match', function () {
+        var transformer = sinon.spy();
+        when(transformer)
+            .cond(function (_) { return true; })
+            .match(5);
+
+        this.verify(JSON.stringify(transformer.args[0]) + '\r\n');
+    })
+})
