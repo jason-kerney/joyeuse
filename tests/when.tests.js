@@ -15,7 +15,7 @@ describe('when', function () {
     });
 
     it('should be a function that takes a function and returns a condition', function () {
-        assert.equal(when.signature, 'function => initialCond');
+        this.verify(when.signature);
     });
 
     it('should call the transformer on match', function () {
@@ -215,5 +215,19 @@ describe('when', function () {
                 .match("hello world");
 
         assert.equal("truthy", result);
+    });
+    
+    it('should default to an identity transformer', function () {
+        var actual;
+        function condition(input) {
+            actual = input;
+            return false;
+        }
+
+        when()
+            .cond(condition, function () { })
+            .match(77);
+
+        assert.equal(77, actual);
     });
 });

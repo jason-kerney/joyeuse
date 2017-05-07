@@ -12,11 +12,13 @@ signet.defineDuckType(conditionalBuilder, { cond:'function', match:'function' })
 
 module.exports = function () {
 
-    var when = signet.sign('function => initialCond', function (transformer) {
+    var when = signet.sign(typeBuilder.asMethod(typeBuilder.asOptionalParameter('function'), conditionalBuilder), function (transformer) {
         var conditions = [];
 
+        var trueXformer = typeBuilder.isUndefined(transformer) ? function (item) { return item; } : transformer;
+
         var match = signet.sign('* => *', function (value) {
-            var xformed = transformer(value);
+            var xformed = trueXformer(value);
             var found = conditions.find(function (condition) {
                 return condition.condition(xformed);
             });
