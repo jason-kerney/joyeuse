@@ -14,6 +14,7 @@ var typeNames = {
     },
     requiredString: 'requiredString',
     path: 'path',
+    distinctItemArray: 'distinctItemArray',
 };
 
 var baseTypes = (function () {
@@ -35,11 +36,22 @@ var baseTypes = (function () {
         return value.trim().length > 0;
     });
 
+    function hasDuplicates(values) {
+        return (values.some(function (item, idx) {
+            return values.indexOf(item) !== idx
+        }));
+    }
+
+    signet.subtype(typeBuilder.asArray())(typeNames.distinctItemArray, function(values){
+        return !hasDuplicates(values);
+    });
+
     return {
         isRequiredString: signet.isTypeOf(typeNames.requiredString),
-        isPath: signet.isTypeOf(typeNames.path)
+        isPath: signet.isTypeOf(typeNames.path),
+        isDistinctItemArray: signet.isTypeOf(typeNames.distinctItemArray),
     };
-})();
+}());
 
 var ip4 = (function () {
     var ip4Format = 'ip4Format';
@@ -59,7 +71,7 @@ var ip4 = (function () {
         isIp4String: signet.isTypeOf(typeNames.ip4.format),
         isOctet: signet.isTypeOf(octet)
     };
-})();
+}());
 
 var knexBaseTypes = (function () {
     var connectionAfterCreate = 'connectionAfterCreate';
@@ -87,7 +99,7 @@ var knexBaseTypes = (function () {
         isClient: signet.isTypeOf(typeNames.knex.clients),
         isConnectionPool: signet.isTypeOf(typeNames.knex.connectionPool),
     };
-})();
+}());
 
 var connectionParts = (function () {
     var knexConnectionObject = 'knexConnectionObject';
@@ -122,7 +134,7 @@ var connectionParts = (function () {
         isSubConnectionInfo: signet.isTypeOf(knexConnectionObject),
         isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
     };
-})();
+}());
 
 var knex = (function () {
     var knexConstructorParam = 'knexConstructorParam';
@@ -144,7 +156,7 @@ var knex = (function () {
         isConnectionInfo: signet.isTypeOf(typeNames.knex.connectionType),
         isKnexConstructor: signet.isTypeOf(knexConstructorParam),
     };
-})();
+}());
 
 module.exports = {
     ip4: ip4,

@@ -69,27 +69,34 @@ describe('joyeuse', function () {
             assert.isTrue(types.base.isPath("./mydb.sqlite"));
         });
 
-        it('should validate a knex connection path object', function () {
-            assert.isTrue(types.knex.connectionParts.isSubConnectionInfoFilePath({ filename: "./mydb.sqlite" }));
-            assert.isFalse(types.knex.connectionParts.isSubConnectionInfoFilePath({ filename: 'hello?' }));
-        });
-
-        it('should validate an exceptable sql client', function () {
-            var isClient = types.knex.baseTypes.isClient;
-            assert.isTrue(isClient('postgres'), 'Postgres');
-            assert.isTrue(isClient('mssql'), 'MSSQL');
-            assert.isTrue(isClient('mariadb'), 'MariaDB');
-            assert.isTrue(isClient('sqlite3'), 'SQLite3');
-            assert.isTrue(isClient('oracle'), 'Oracle');
-
-            assert.isFalse(isClient('access'), 'Access');
-        });
-
-        it('should validate a valid connection pool object', function () {
-            assert.isTrue(types.knex.baseTypes.isConnectionPool({ min: 0, max: 1000 }));
+        it('should validate a unique array', function(){
+            assert.isTrue(types.base.isDistinctItemArray([]), 'empty array');
+            assert.isTrue(types.base.isDistinctItemArray(['hello', 'bob', 3, 2]), 'mixed array');
+            assert.isFalse(types.base.isDistinctItemArray([1, 2, 1]), 'number array with duplicates');
+            assert.isFalse(types.base.isDistinctItemArray(['world', 'hello', 'world']), 'string array with duplicates');
         });
 
         describe('knex connection object', function () {
+            it('should validate a knex connection path object', function () {
+                assert.isTrue(types.knex.connectionParts.isSubConnectionInfoFilePath({ filename: "./mydb.sqlite" }));
+                assert.isFalse(types.knex.connectionParts.isSubConnectionInfoFilePath({ filename: 'hello?' }));
+            });
+
+            it('should validate an exceptable sql client', function () {
+                var isClient = types.knex.baseTypes.isClient;
+                assert.isTrue(isClient('postgres'), 'Postgres');
+                assert.isTrue(isClient('mssql'), 'MSSQL');
+                assert.isTrue(isClient('mariadb'), 'MariaDB');
+                assert.isTrue(isClient('sqlite3'), 'SQLite3');
+                assert.isTrue(isClient('oracle'), 'Oracle');
+
+                assert.isFalse(isClient('access'), 'Access');
+            });
+
+            it('should validate a valid connection pool object', function () {
+                assert.isTrue(types.knex.baseTypes.isConnectionPool({ min: 0, max: 1000 }));
+            });
+
             it('should recognize a valid connection object with IP', function () {
                 var connection = {
                     host: '192.168.1.1',
