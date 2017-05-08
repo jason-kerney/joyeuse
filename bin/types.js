@@ -12,6 +12,9 @@ var typeNames = {
         clients: 'knexClients',
         connectionPool: 'connectionPool',
     },
+    joyeuse: {
+        columnFlags: 'columnFlags',
+    },
     requiredString: 'requiredString',
     path: 'path',
     distinctItemArray: 'distinctItemArray',
@@ -52,6 +55,13 @@ var baseTypes = (function () {
         isPath: signet.isTypeOf(typeNames.path),
         isDistinctItemArray: signet.isTypeOf(typeNames.distinctItemArray),
     };
+}());
+
+var joyeuseTypes = (function(){
+    // const columnFlags = [];
+    // signet.subtype(names.distinctItemArray)(names.joyeuse.columnFlags, function(values){
+    //     if(signet.isTypeOf(typeBuilder.))
+    // });
 }());
 
 var ip4 = (function () {

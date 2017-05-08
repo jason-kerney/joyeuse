@@ -62,4 +62,11 @@ describe('type builder', function () {
     it('should be able to create a method with multiple input parameters', function () {
         this.verify(typeBuilder.asMethod(['int', 'boolean', 'string'], '*'))
     })
+
+    it('should be able to construct a string enum', function () {
+        var enumType = typeBuilder.asStringEnum('hello', 'world', 'blue');
+        this.verify(enumType);
+        assert.isTrue(typeBuilder.signet.isTypeOf(enumType)('hello'));
+        assert.isFalse(typeBuilder.signet.isTypeOf(enumType)('ahello'));
+    });
 });
