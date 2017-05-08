@@ -69,7 +69,7 @@ describe('joyeuse', function () {
             assert.isTrue(types.base.isPath("./mydb.sqlite"));
         });
 
-        it('should validate a unique array', function(){
+        it('should validate a unique array', function () {
             assert.isTrue(types.base.isDistinctItemArray([]), 'empty array');
             assert.isTrue(types.base.isDistinctItemArray(['hello', 'bob', 3, 2]), 'mixed array');
             assert.isFalse(types.base.isDistinctItemArray([1, 2, 1]), 'number array with duplicates');
@@ -262,5 +262,20 @@ describe('joyeuse', function () {
                 assert.isFalse(isKnexConstructor(param));
             });
         });
+
+        describe('connect to real db', function () {
+            it.only('should connect to a real db', function () {
+                var joy = require('../bin/joyeuse');
+
+                var factory = joy.getFactory({
+                    client: 'mysql',
+                    connection: {
+                        host: 'localhost',
+                        user: 'root',
+                        database: 'Local instance MySQL'
+                    }
+                });
+            });
+        })
     });
 });

@@ -11,6 +11,7 @@ var typeNames = {
         connectionType: 'knexConnectionType',
         clients: 'knexClients',
         connectionPool: 'connectionPool',
+        knexConstructorParam: 'knexConstructorParam',
     },
     joyeuse: {
         columnFlags: 'columnFlags',
@@ -46,7 +47,7 @@ var baseTypes = (function () {
         }));
     }
 
-    signet.subtype(typeBuilder.asArray())(typeNames.distinctItemArray, function(values){
+    signet.subtype(typeBuilder.asArray())(typeNames.distinctItemArray, function (values) {
         return !hasDuplicates(values);
     });
 
@@ -57,7 +58,7 @@ var baseTypes = (function () {
     };
 }());
 
-var joyeuseTypes = (function(){
+var joyeuseTypes = (function () {
     // const columnFlags = [];
     // signet.subtype(names.distinctItemArray)(names.joyeuse.columnFlags, function(values){
     //     if(signet.isTypeOf(typeBuilder.))
@@ -66,7 +67,8 @@ var joyeuseTypes = (function(){
 
 var ip4 = (function () {
     var ip4Format = 'ip4Format';
-    var ip4Regex = '[0-2]?[0-9]?[0-9]\.[0-2]?[0-9]?[0-9]\.[0-2]?[0-9]?[0-9]';
+    var ip4Regex = '(localhost)|(([0-2]?\\d?\\d)\\.([0-2]?\\d?\\d)\\.(\\d?\\d?\\d)\\.([0-2]?\\d?\\d))';
+    // var ip4Regex = '(localhost)';
     var octet = 'octet';
 
     signet.alias(ip4Format, typeBuilder.asFormattedString(ip4Regex));
@@ -74,6 +76,9 @@ var ip4 = (function () {
     signet.subtype('int')(octet, function (value) { return value >= 0 && value <= 255; })
 
     signet.subtype(ip4Format)(typeNames.ip4.format, function (value) {
+        if (value === 'localhost') {
+            return true;
+        }
         var octets = value.split(['.']).map(function (v) { return parseInt(v); });
         return signet.isTypeOf(typeBuilder.asArray(octet))(octets);
     });
@@ -120,7 +125,7 @@ var connectionParts = (function () {
         host: typeBuilder.asOptionalProperty(typeNames.ip4.format),
         socketPath: typeBuilder.asOptionalProperty(typeNames.path),
         user: typeNames.requiredString,
-        password: typeNames.requiredString,
+        password: typeBuilder.asOptionalProperty(typeNames.requiredString),
         database: typeNames.requiredString,
     };
 
@@ -144,28 +149,50 @@ var connectionParts = (function () {
     return {
         isSubConnectionInfo: signet.isTypeOf(knexConnectionObject),
         isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
+        knexConnectionObjectValidation: {
+            isHost: signet.isTypeOf(knexConnection.host),
+            isSocketPath: signet.isTypeOf(knexConnection.socketPath),
+            isUser: signet.isTypeOf(knexConnection.user),
+            isPassword: signet.isTypeOf(knexConnection.password),
+            isDatabase: signet.isTypeOf(knexConnection.database),
+        },
+        knexConnectionFileValidation: {
+            isFileNameObject: signet.isTypeOf(knexConnectionFileObject),
+            isFileName: signet.isTypeOf(knexConnectionFile.filename),
+        }
     };
 }());
 
 var knex = (function () {
-    var knexConstructorParam = 'knexConstructorParam';
-
     var knexConstructor = {
         client: typeNames.knex.clients,
         connection: typeNames.knex.connectionType,
-        searchPath: typeNames.requiredString,
+        searchPath: typeBuilder.asOptionalProperty(typeNames.requiredString),
         debug: typeBuilder.asOptionalProperty('boolean'),
         pool: typeBuilder.asOptionalProperty(typeNames.knex.connectionPool),
         acquireConnectionTimeout: typeBuilder.asOptionalProperty(typeBuilder.asBoundedInt(0)),
     };
 
-    signet.defineDuckType(knexConstructorParam, knexConstructor);
+    signet.defineDuckType(typeNames.knex.knexConstructorParam, knexConstructor);
 
     return {
         baseTypes: knexBaseTypes,
         connectionParts: connectionParts,
         isConnectionInfo: signet.isTypeOf(typeNames.knex.connectionType),
-        isKnexConstructor: signet.isTypeOf(knexConstructorParam),
+        isKnexConstructor: signet.isTypeOf(typeNames.knex.knexConstructorParam),
+        knexConstructorValidator: {
+            isClient: signet.isTypeOf(knexConstructor.client),
+            Connection: { 
+                isConnection: signet.isTypeOf(knexConstructor.connection),
+                ConnectionObject: connectionParts.knexConnectionObjectValidation,
+                knexConnectionFile: connectionParts.knexConnectionFileValidation,
+            },
+            isSearchPath: signet.isTypeOf(knexConstructor.searchPath),
+            isDebug: signet.isTypeOf(knexConstructor.debug),
+            isPool: signet.isTypeOf(knexConstructor.pool),
+            isAcquireConnectionTimeout: signet.isTypeOf(knexConstructor.acquireConnectionTimeout),
+
+        },
     };
 }());
 
