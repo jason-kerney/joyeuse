@@ -36,6 +36,7 @@ var baseTypes = (function () {
         return value.trim().length > 0;
     });
 
+    // thanks: http://stackoverflow.com/questions/30735465/how-can-i-check-if-the-array-of-objects-have-duplicate-property-values
     function hasDuplicates(values) {
         return (values.some(function (item, idx) {
             return values.indexOf(item) !== idx
