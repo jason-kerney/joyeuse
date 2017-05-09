@@ -9,6 +9,7 @@ var typeNames = {
     },
     knex: {
         connectionType: 'knexConnectionType',
+        connectionPathString: 'knexConnectionPathString',
         clients: 'knexClients',
         connectionPool: 'connectionPool',
         knexConstructorParam: 'knexConstructorParam',
@@ -144,11 +145,14 @@ var connectionParts = (function () {
 
     signet.defineDuckType(knexConnectionFileObject, knexConnectionFile);
 
-    signet.alias(typeNames.knex.connectionType, typeBuilder.asVariant(typeNames.requiredString, knexConnectionFileObject, knexConnectionObject));
+    signet.alias(typeNames.knex.connectionPathString, typeNames.requiredString);
+
+    signet.alias(typeNames.knex.connectionType, typeBuilder.asVariant(typeNames.knex.connectionPathString, knexConnectionFileObject, knexConnectionObject));
 
     return {
         isSubConnectionInfo: signet.isTypeOf(knexConnectionObject),
         isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
+        isConnectionPathString: signet.isTypeOf(typeNames.knex.connectionPathString),
         knexConnectionObjectValidation: {
             isHost: signet.isTypeOf(knexConnection.host),
             isSocketPath: signet.isTypeOf(knexConnection.socketPath),
@@ -173,63 +177,17 @@ var knex = (function () {
         acquireConnectionTimeout: typeBuilder.asOptionalProperty(typeBuilder.asBoundedInt(0)),
     };
 
-    function getConstructorError(constuctorInfo) {
-        var typeErrors = [];
-        var knexChecker = types.knex;
-
-        var validState = {
-            client: knexChecker.knexConstructorValidator.isClient(constuctorInfo.client),
-            searchPath: knexChecker.knexConstructorValidator.isSearchPath(constuctorInfo.searchPath),
-            debug: knexChecker.knexConstructorValidator.isDebug(constuctorInfo.debug),
-            pool: knexChecker.knexConstructorValidator.isPool(constuctorInfo.debug),
-        }
-
-        validState.isGood = 
-            validState.client
-            && validState.searchPath
-            && validState.debug
-            && validState.pool;
-
-        typeErrors.push('constuctor was not the correct type');
-        typeError.push('');
-        typeErrors.push(JSON.stringify(constuctorInfo, null, 4));
-        typeErrors.push('');
-        typeErrors.push('http://knexjs.org/');
-        typeErrors.push('constuctorInfo: ' + String(validState.isGood));
-        typeErrors.push('constuctorInfo.client: ' + String(validState.client));
-        typeErrors.push('constuctorInfo.searchPath: ' + String(validState.searchPath));
-        typeErrors.push('constuctorInfo.debug: ' + String(validState.debug));
-        typeErrors.push('constuctorInfo.pool: ' + String(pool));
-        typeErrors.push('constuctorInfo.acquireConnectionTimeout: ' + String(knexChecker.knexConstructorValidator.isAcquireConnectionTimeout(constuctorInfo.acquireConnectionTimeout)));
-
-        var connectionValidation = knexChecker.knexConstructorValidator.Connection;
-        var connectionObjectValidation = connectionValidation.ConnectionObject;
-        typeErrors.push('constuctorInfo.connection{object}: ' + String(connectionValidation.isConnection(constuctorInfo.connection)));
-        typeErrors.push('constuctorInfo.connection{object}.host: ' + String(connectionObjectValidation.isHost(constuctorInfo.connection.host)));
-        typeErrors.push('constuctorInfo.connection{object}.user: ' + String(connectionObjectValidation.isUser(constuctorInfo.connection.user)));
-        typeErrors.push('constuctorInfo.connection{object}.socketPath: ' + String(connectionObjectValidation.isSocketPath(constuctorInfo.connection.socketPath)));
-        typeErrors.push('constuctorInfo.connection{object}.password: ' + String(connectionObjectValidation.isPassword(constuctorInfo.connection.password)));
-        typeErrors.push('constuctorInfo.connection{object}.database: ' + String(connectionObjectValidation.isDatabase(constuctorInfo.connection.database)));
-
-        typeErrors.push('constuctorInfo.connection{path}: ' + String(connectionValidation.knexConnectionFile.isFileNameObject(constuctorInfo.connection)));
-        typeErrors.push('constuctorInfo.connection{path}.fileName: ' + String(connectionValidation.knexConnectionFile.isFileName(constuctorInfo.connection.isFileName)));
-
-        return typeErrors;
-    }
-
-    signet.defineDuckType(typeNames.knex.knexConstructorParam, knexConstructor);
-
-    return {
+    var knexChecker = {
         baseTypes: knexBaseTypes,
         connectionParts: connectionParts,
         isConnectionInfo: signet.isTypeOf(typeNames.knex.connectionType),
-        isKnexConstructor: signet.isTypeOf(typeNames.knex.knexConstructorParam),
-        knexConstructorValidator: {
+        constructorValidator: {
             isClient: signet.isTypeOf(knexConstructor.client),
             Connection: {
                 isConnection: signet.isTypeOf(knexConstructor.connection),
                 ConnectionObject: connectionParts.knexConnectionObjectValidation,
                 knexConnectionFile: connectionParts.knexConnectionFileValidation,
+                isConnectionString: connectionParts.isConnectionPathString,
             },
             isSearchPath: signet.isTypeOf(knexConstructor.searchPath),
             isDebug: signet.isTypeOf(knexConstructor.debug),
@@ -238,6 +196,92 @@ var knex = (function () {
 
         },
     };
+
+    function getConstructorErrors(constuctorInfo) {
+
+        var typeErrors = [];
+        var connectionValidation = knexChecker.constructorValidator.Connection;
+        var connectionObjectValidation = connectionValidation.ConnectionObject;
+
+        var hasConnection = Boolean(constuctorInfo.connection);
+        var validState = {
+            client: knexChecker.constructorValidator.isClient(constuctorInfo.client),
+            searchPath: knexChecker.constructorValidator.isSearchPath(constuctorInfo.searchPath),
+            debug: knexChecker.constructorValidator.isDebug(constuctorInfo.debug),
+            pool: knexChecker.constructorValidator.isPool(constuctorInfo.pool),
+            connection_string: connectionValidation.isConnectionString(constuctorInfo.connection),
+            connection_object: {
+                isGood: hasConnection ? connectionValidation.isConnection(constuctorInfo.connection) : false,
+                host: hasConnection ? connectionObjectValidation.isHost(constuctorInfo.connection.host) : false,
+                user: hasConnection ? connectionObjectValidation.isUser(constuctorInfo.connection.user) : false,
+                socketPath: hasConnection ? connectionObjectValidation.isSocketPath(constuctorInfo.connection.socketPath) : false,
+                password: hasConnection ? connectionObjectValidation.isPassword(constuctorInfo.connection.password) : false,
+                database: hasConnection ? connectionObjectValidation.isDatabase(constuctorInfo.connection.database) : false,
+            },
+            connection_file_object: {
+                isGood: hasConnection ? connectionValidation.knexConnectionFile.isFileNameObject(constuctorInfo.connection) : false,
+                filename: hasConnection ? connectionValidation.knexConnectionFile.isFileName(constuctorInfo.connection.isFileName) : false,
+            }
+        };
+
+        var isGood = (
+            validState.client
+            && validState.searchPath
+            && validState.debug
+            && validState.pool
+            &&
+            (
+                validState.connection_object.isGood
+                || validState.connection_file_object.isGood
+                || validState.connection_string
+            )
+        );
+
+        if (!isGood) {
+            var header = [
+                'constuctor was not the correct type',
+                '',
+                JSON.stringify(constuctorInfo, null, 4),
+                '',
+                'http://knexjs.org/'].join('\r\n');
+
+            typeErrors.push('constuctorInfo: ' + String(isGood));
+            typeErrors.push('constuctorInfo.client: ' + String(validState.client));
+            typeErrors.push('constuctorInfo.searchPath: ' + String(validState.searchPath));
+            typeErrors.push('constuctorInfo.debug: ' + String(validState.debug));
+            typeErrors.push('constuctorInfo.pool: ' + String(validState.pool));
+            typeErrors.push('constuctorInfo.acquireConnectionTimeout: ' + String(knexChecker.constructorValidator.isAcquireConnectionTimeout(constuctorInfo.acquireConnectionTimeout)));
+
+            typeErrors.push('constuctorInfo.connection{string}:' + String(validState.connection_string));
+
+            var connectionValidation = knexChecker.constructorValidator.Connection;
+            var connectionObjectValidation = connectionValidation.ConnectionObject;
+
+            typeErrors.push('constuctorInfo.connection{object}: ' + String(validState.connection_object.isGood));
+            typeErrors.push('constuctorInfo.connection{object}.host: ' + String(validState.connection_object.host));
+            typeErrors.push('constuctorInfo.connection{object}.user: ' + String(validState.connection_object.user));
+            typeErrors.push('constuctorInfo.connection{object}.socketPath: ' + String(validState.connection_object.socketPath));
+            typeErrors.push('constuctorInfo.connection{object}.password: ' + String(validState.connection_object.password));
+            typeErrors.push('constuctorInfo.connection{object}.database: ' + String(validState.connection_object.database));
+
+            typeErrors.push('constuctorInfo.connection{path-object}: ' + String(validState.connection_file_object.isGood));
+            typeErrors.push('constuctorInfo.connection{path-object}.fileName: ' + String(validState.connection_file_object.filename));
+        }
+
+        return {
+            valueString: header + '\r\n' + typeErrors.join('\r\n'),
+            errors: typeErrors
+        };
+    }
+
+    signet.extend(typeNames.knex.knexConstructorParam, function (constuctor) {
+        return getConstructorErrors(constuctor).errors.length === 0;
+    })
+
+    knexChecker.isKnexConstructor = signet.isTypeOf(typeNames.knex.knexConstructorParam);
+    knexChecker.getConstructorErrors = getConstructorErrors;
+
+    return knexChecker;
 }());
 
 module.exports = {

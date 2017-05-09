@@ -229,6 +229,7 @@ describe('joyeuse', function () {
 
         describe('knex constructor parameter', function () {
             var isKnexConstructor = types.knex.isKnexConstructor;
+            var getConstuctorErrors = types.knex.getConstructorErrors;
             it('should validate a correct object with connection string, debug, connection pool and acquireConnectionTimeout', function () {
                 var param = {
                     client: 'mysql',
@@ -239,7 +240,7 @@ describe('joyeuse', function () {
                     acquireConnectionTimeout: 100,
                 };
 
-                assert.isTrue(isKnexConstructor(param))
+                assert.isTrue(isKnexConstructor(param), getConstuctorErrors(param).valueString);
             });
 
             it('should validate a correct object wit connection string and without debug, connection pool and acquireConnectionTimeout', function () {
@@ -249,7 +250,7 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                assert.isTrue(isKnexConstructor(param))
+                assert.isTrue(isKnexConstructor(param), getConstuctorErrors(param).valueString);
             });
 
             it('should require a correct client', function () {
@@ -259,12 +260,41 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                assert.isFalse(isKnexConstructor(param));
+                assert.isFalse(isKnexConstructor(param), getConstuctorErrors(param).valueString);
+            });
+
+            it('should be able to tell you the client is incorrect', function () {
+                var param = {
+                    client: 'access',
+                    connection: "some connection string",
+                    searchPath: "some,path",
+                };
+
+               this.verify(getConstuctorErrors(param).valueString);
+            });
+
+            it('should require a connection', function () {
+                var param = {
+                    client: 'mssql',
+                    searchPath: "some,path",
+                };
+
+                assert.isFalse(isKnexConstructor(param), getConstuctorErrors(param).valueString);
+            });
+
+            it('should require a correct connection string', function () {
+                var param = {
+                    client: 'mssql',
+                    connection: "",
+                    searchPath: "some,path",
+                };
+
+                assert.isFalse(isKnexConstructor(param), getConstuctorErrors(param).valueString);
             });
         });
 
         describe('connect to real db', function () {
-            it.only('should connect to a real db', function () {
+            it.skip('should connect to a real db', function () {
                 var joy = require('../bin/joyeuse');
 
                 var factory = joy.getFactory({

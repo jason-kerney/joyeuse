@@ -1,0 +1,24 @@
+constuctor was not the correct type
+
+{
+    "client": "access",
+    "connection": "some connection string",
+    "searchPath": "some,path"
+}
+
+http://knexjs.org/
+constuctorInfo: false
+constuctorInfo.client: false
+constuctorInfo.searchPath: true
+constuctorInfo.debug: true
+constuctorInfo.pool: true
+constuctorInfo.acquireConnectionTimeout: true
+constuctorInfo.connection{string}:true
+constuctorInfo.connection{object}: true
+constuctorInfo.connection{object}.host: true
+constuctorInfo.connection{object}.user: false
+constuctorInfo.connection{object}.socketPath: true
+constuctorInfo.connection{object}.password: true
+constuctorInfo.connection{object}.database: false
+constuctorInfo.connection{path-object}: false
+constuctorInfo.connection{path-object}.fileName: false
