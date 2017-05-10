@@ -244,39 +244,50 @@ var knex = (function () {
                 'object recieved from constuctor:',
                 JSON.stringify(constuctorInfo, null, 4),
                 '',
-                'Knex is the underlying library. To understand what it is extecting read:',
+                'Knex is the underlying library. To understand what it is expecting read:',
                 'http://knexjs.org/',
                 '',
                 'Below is a list of properties and whether or not they pass validation.',
-                'The connection property has 3 different valid variations on what it can be.', 
-                'only one of those need to be valid.',
+                '',
+                'NOTE: If the connection property is listed you should know that the',
+                'connection property has 3 different valid variations on what it can be.',
+                'only one of those needs to pass validation.',
+                '',
             ].join('\r\n');
 
-            typeErrors.push('constuctorInfo: ' + String(isGood));
-            typeErrors.push('constuctorInfo.client: ' + String(validState.client));
-            typeErrors.push('constuctorInfo.searchPath: ' + String(validState.searchPath));
-            typeErrors.push('constuctorInfo.debug: ' + String(validState.debug));
-            typeErrors.push('constuctorInfo.pool: ' + String(validState.pool));
-            typeErrors.push('constuctorInfo.acquireConnectionTimeout: ' + String(knexChecker.constructorValidator.isAcquireConnectionTimeout(constuctorInfo.acquireConnectionTimeout)));
+            typeErrors.push({ key: 'constuctorInfo: ', isGood: isGood });
+            typeErrors.push({ key: 'constuctorInfo.client: ', isGood: validState.client });
+            typeErrors.push({ key: 'constuctorInfo.searchPath: ', isGood: validState.searchPath });
+            typeErrors.push({ key: 'constuctorInfo.debug: ', isGood: validState.debug });
+            typeErrors.push({ key: 'constuctorInfo.pool: ', isGood: validState.pool });
+            typeErrors.push({ key: 'constuctorInfo.acquireConnectionTimeout: ', isGood: knexChecker.constructorValidator.isAcquireConnectionTimeout(constuctorInfo.acquireConnectionTimeout) });
 
-            typeErrors.push('constuctorInfo.connection{string}:' + String(validState.connection_string));
+            typeErrors.push({ key: 'constuctorInfo.connection{string}:', isGood: validState.connection_string });
 
             var connectionValidation = knexChecker.constructorValidator.Connection;
             var connectionObjectValidation = connectionValidation.ConnectionObject;
 
-            typeErrors.push('constuctorInfo.connection{object}: ' + String(validState.connection_object.isGood));
-            typeErrors.push('constuctorInfo.connection{object}.host: ' + String(validState.connection_object.host));
-            typeErrors.push('constuctorInfo.connection{object}.user: ' + String(validState.connection_object.user));
-            typeErrors.push('constuctorInfo.connection{object}.socketPath: ' + String(validState.connection_object.socketPath));
-            typeErrors.push('constuctorInfo.connection{object}.password: ' + String(validState.connection_object.password));
-            typeErrors.push('constuctorInfo.connection{object}.database: ' + String(validState.connection_object.database));
+            typeErrors.push({ key: 'constuctorInfo.connection{object}: ', isGood: validState.connection_object.isGood });
+            typeErrors.push({ key: 'constuctorInfo.connection{object}.host: ', isGood: validState.connection_object.host });
+            typeErrors.push({ key: 'constuctorInfo.connection{object}.user: ', isGood: validState.connection_object.user });
+            typeErrors.push({ key: 'constuctorInfo.connection{object}.socketPath: ', isGood: validState.connection_object.socketPath });
+            typeErrors.push({ key: 'constuctorInfo.connection{object}.password: ', isGood: validState.connection_object.password });
+            typeErrors.push({ key: 'constuctorInfo.connection{object}.database: ', isGood: validState.connection_object.database });
 
-            typeErrors.push('constuctorInfo.connection{path-object}: ' + String(validState.connection_file_object.isGood));
-            typeErrors.push('constuctorInfo.connection{path-object}.fileName: ' + String(validState.connection_file_object.filename));
+            typeErrors.push({ key: 'constuctorInfo.connection{path-object}: ', isGood: validState.connection_file_object.isGood });
+            typeErrors.push({ key: 'constuctorInfo.connection{path-object}.fileName: ', isGood: validState.connection_file_object.filename });
+        }
+
+        function isAnError(errors) {
+            return !errors.isGood;
+        }
+
+        function errorsToString(errors) {
+            return errors.key + errors.isGood.toString();
         }
 
         return {
-            valueString: isGood ? '' : header + '\r\n' + typeErrors.join('\r\n'),
+            valueString: isGood ? '' : '\r\n' + header + '\r\n' + typeErrors.filter(isAnError).map(errorsToString).join('\r\n') + '\r\n',
             errors: typeErrors
         };
     }
