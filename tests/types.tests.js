@@ -311,7 +311,7 @@ describe('joyeuse', function () {
                 this.verify(getConstuctorErrors(param).valueString);
             });
 
-            it.only('should not require a search path', function () {
+            it('should not require a search path', function () {
                 var param = {
                     client: 'oracle',
                     connection: "some connection string",

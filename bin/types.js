@@ -241,9 +241,16 @@ var knex = (function () {
             var header = [
                 'constuctor was not the correct type',
                 '',
+                'object recieved from constuctor:',
                 JSON.stringify(constuctorInfo, null, 4),
                 '',
-                'http://knexjs.org/'].join('\r\n');
+                'Knex is the underlying library. To understand what it is extecting read:',
+                'http://knexjs.org/',
+                '',
+                'Below is a list of properties and whether or not they pass validation.',
+                'The connection property has 3 different valid variations on what it can be.', 
+                'only one of those need to be valid.',
+            ].join('\r\n');
 
             typeErrors.push('constuctorInfo: ' + String(isGood));
             typeErrors.push('constuctorInfo.client: ' + String(validState.client));
