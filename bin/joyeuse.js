@@ -9,8 +9,6 @@ function getFactory(constuctorInfo) {
     var expectedType = typeBuilder.asVariant('undefined', types.typeNames.knex.knexConstructorParam);
 
     if (!signet.isTypeOf(types.typeNames.knex.knexConstructorParam)(constuctorInfo)) {
-        // var typeErrors = ['constuctor was not the correct type', ''];
-        
         throw new Error(types.knex.getConstructorError(constuctorInfo).valueString);
     }
 

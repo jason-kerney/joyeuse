@@ -311,23 +311,14 @@ describe('joyeuse', function () {
                 this.verify(getConstuctorErrors(param).valueString);
             });
 
-            it.only('should require a search path', function () {
+            it.only('should not require a search path', function () {
                 var param = {
                     client: 'oracle',
                     connection: "some connection string",
                     database: "some database"
                 };
 
-                assert.isFalse(isKnexConstructor(param), JSON.stringify(getConstuctorErrors(param), null, 4));
-            });
-
-            it('should require report non existing search path', function () {
-                var param = {
-                    client: 'oracle',
-                    connection: "some connection string",
-                };
-
-                this.verify(getConstuctorErrors(param).valueString);
+                assert.isTrue(isKnexConstructor(param), JSON.stringify(getConstuctorErrors(param), null, 4));
             });
         });
 

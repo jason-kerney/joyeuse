@@ -222,8 +222,6 @@ var knex = (function () {
             }
         };
 
-        console.log('-----------------------------------------\r\n', JSON.stringify(validState, null, 4));
-
         var isGood = (
             validState.client
             && validState.searchPath
@@ -271,7 +269,7 @@ var knex = (function () {
         }
 
         return {
-            valueString: header + '\r\n' + typeErrors.join('\r\n'),
+            valueString: isGood ? '' : header + '\r\n' + typeErrors.join('\r\n'),
             errors: typeErrors
         };
     }
