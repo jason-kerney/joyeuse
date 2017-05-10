@@ -69,7 +69,6 @@ var joyeuseTypes = (function () {
 var ip4 = (function () {
     var ip4Format = 'ip4Format';
     var ip4Regex = '(localhost)|(([0-2]?\\d?\\d)\\.([0-2]?\\d?\\d)\\.(\\d?\\d?\\d)\\.([0-2]?\\d?\\d))';
-    // var ip4Regex = '(localhost)';
     var octet = 'octet';
 
     signet.alias(ip4Format, typeBuilder.asFormattedString(ip4Regex));
@@ -198,7 +197,6 @@ var knex = (function () {
     };
 
     function getConstructorErrors(constuctorInfo) {
-
         var typeErrors = [];
         var connectionValidation = knexChecker.constructorValidator.Connection;
         var connectionObjectValidation = connectionValidation.ConnectionObject;
@@ -224,6 +222,8 @@ var knex = (function () {
             }
         };
 
+        console.log('-----------------------------------------\r\n', JSON.stringify(validState, null, 4));
+
         var isGood = (
             validState.client
             && validState.searchPath
@@ -236,6 +236,8 @@ var knex = (function () {
                 || validState.connection_string
             )
         );
+
+        validState.isGood = isGood;
 
         if (!isGood) {
             var header = [

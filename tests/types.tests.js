@@ -282,6 +282,15 @@ describe('joyeuse', function () {
                 assert.isFalse(isKnexConstructor(param), getConstuctorErrors(param).valueString);
             });
 
+            it('should report that connection is missing', function () {
+                var param = {
+                    client: 'mssql',
+                    searchPath: "some,path",
+                };
+
+                this.verify(getConstuctorErrors(param).valueString);
+            });
+
             it('should require a correct connection string', function () {
                 var param = {
                     client: 'mssql',
@@ -290,6 +299,35 @@ describe('joyeuse', function () {
                 };
 
                 assert.isFalse(isKnexConstructor(param), getConstuctorErrors(param).valueString);
+            });
+
+            it('should report connection string is incorrect', function () {
+                var param = {
+                    client: 'mssql',
+                    connection: "",
+                    searchPath: "some,path",
+                };
+
+                this.verify(getConstuctorErrors(param).valueString);
+            });
+
+            it.only('should require a search path', function () {
+                var param = {
+                    client: 'oracle',
+                    connection: "some connection string",
+                    database: "some database"
+                };
+
+                assert.isFalse(isKnexConstructor(param), JSON.stringify(getConstuctorErrors(param), null, 4));
+            });
+
+            it('should require report non existing search path', function () {
+                var param = {
+                    client: 'oracle',
+                    connection: "some connection string",
+                };
+
+                this.verify(getConstuctorErrors(param).valueString);
             });
         });
 
