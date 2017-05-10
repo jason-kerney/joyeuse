@@ -270,7 +270,7 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-               this.verify(getConstuctorErrors(param).valueString);
+                this.verify(getConstuctorErrors(param).valueString);
             });
 
             it('should require a connection', function () {
@@ -322,19 +322,32 @@ describe('joyeuse', function () {
             });
         });
 
+        //proof of concept
         describe('connect to real db', function () {
             it.skip('should connect to a real db', function () {
-                var joy = require('../bin/joyeuse');
 
-                var factory = joy.getFactory({
+                var props = {
                     client: 'mysql',
                     connection: {
                         host: 'localhost',
                         user: 'root',
-                        database: 'Local instance MySQL'
+                        database: 'playground'
                     }
-                });
+                };
+
+                var joy = require('../bin/joyeuse');
+                var factory = joy.getFactory(props);
+                var knex = factory.knex;
+
+                // var knex = require('knex')(props);
+
+                var people = knex('people').select();
+
+                console.log(Object.keys(people));
+                //assert.equal(people.toSQL().sql, '');
+
+                people.then(function (person) { console.log(JSON.stringify(person[0], null, 4)); });
             });
-        })
+        }); // end proof of concept
     });
 });
