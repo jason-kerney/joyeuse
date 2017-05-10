@@ -17,9 +17,9 @@ NOTE: If the connection property is listed you should know that the
 connection property has 3 different valid variations on what it can be.
 only one of those needs to pass validation.
 
-constuctorInfo: false
-constuctorInfo.client: false
-constuctorInfo.connection{object}.user: false
-constuctorInfo.connection{object}.database: false
-constuctorInfo.connection{path-object}: false
-constuctorInfo.connection{path-object}.fileName: false
+constuctorInfo: failed
+constuctorInfo.client: failed
+constuctorInfo.connection{object}.user: failed
+constuctorInfo.connection{object}.database: failed
+constuctorInfo.connection{path-object}: failed
+constuctorInfo.connection{path-object}.fileName: failed

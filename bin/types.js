@@ -283,7 +283,7 @@ var knex = (function () {
         }
 
         function errorsToString(errors) {
-            return errors.key + errors.isGood.toString();
+            return errors.key + (errors.isGood ? 'succeeded' : 'failed');
         }
 
         return {
