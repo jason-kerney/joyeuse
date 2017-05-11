@@ -260,7 +260,7 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                assert.isFalse(isKnexConstructor(param), getConstuctorErrors(param).valueString);
+                assert.isTrue(isKnexConstructor(param), getConstuctorErrors(param).valueString);
             });
 
             it('should be able to tell you the client is incorrect', function () {
@@ -322,7 +322,7 @@ describe('joyeuse', function () {
             });
         });
 
-        describe.only('joueuse types', function () {
+        describe('joueuse types', function () {
             it.skip('should have all column flags', function () {
                 this.verify(JSON.stringify(types.joyeuse.dbFlags, null, 4));
             });

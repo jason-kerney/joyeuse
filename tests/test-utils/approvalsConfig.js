@@ -5,7 +5,7 @@ module.exports = {
     normalizeLineEndingsTo: '\n',
     appendEOL: true,
     EOL: require('os').EOL,
-    errorOnStaleApprovedFiles: true,
+    errorOnStaleApprovedFiles: false,
     shouldIgnoreStaleApprovedFile: function (/*fileName*/) { return false; },
     stripBOM: false,
     forceApproveAll: false,

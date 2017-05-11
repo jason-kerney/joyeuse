@@ -1,0 +1,7 @@
+[
+    {
+        "property_name": "myProperty",
+        "type": "int",
+        "value_given": "not an int"
+    }
+]

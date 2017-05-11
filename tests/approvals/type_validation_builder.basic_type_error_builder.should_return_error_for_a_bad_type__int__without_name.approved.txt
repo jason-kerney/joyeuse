@@ -1,0 +1,7 @@
+[
+    {
+        "property_name": "",
+        "type": "int",
+        "value_given": false
+    }
+]
