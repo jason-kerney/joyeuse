@@ -56,14 +56,8 @@ var baseTypes = (function () {
         isRequiredString: signet.isTypeOf(typeNames.requiredString),
         isPath: signet.isTypeOf(typeNames.path),
         isDistinctItemArray: signet.isTypeOf(typeNames.distinctItemArray),
+        arrayHasDuplicates: hasDuplicates,
     };
-}());
-
-var joyeuseTypes = (function () {
-    // const columnFlags = [];
-    // signet.subtype(names.distinctItemArray)(names.joyeuse.columnFlags, function(values){
-    //     if(signet.isTypeOf(typeBuilder.))
-    // });
 }());
 
 var ip4 = (function () {
@@ -302,9 +296,39 @@ var knex = (function () {
     return knexChecker;
 }());
 
+var joyeuseTypes = (function () {
+    var dbFlags = ['readonly']
+    var columnType = {
+        name: typeNames.requiredString,
+        flags: typeNames.joyeuse.columnFlags,
+    };
+
+    function isDbFlag(item) {
+        return dbFlags.includes(item);
+    }
+
+    signet.alias('arrayString', typeBuilder.asArray('string'));
+    signet.subtype('arrayString')(typeNames.joyeuse.columnFlags,
+        function (params) {
+            var allItemsAreValid = params.filter(isDbFlag).length === params.length;
+
+            return (
+                (params.length > 0)
+                && (allItemsAreValid)
+                && (!baseTypes.arrayHasDuplicates(params))
+            );
+        });
+
+    return {
+        dbFlags: dbFlags,
+        isDbFlagType: signet.isTypeOf(typeNames.joyeuse.columnFlags),
+    };
+}());
+
 module.exports = {
     ip4: ip4,
     base: baseTypes,
     knex: knex,
+    joyeuse: joyeuseTypes,
     typeNames: typeNames,
 };

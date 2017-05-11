@@ -322,6 +322,24 @@ describe('joyeuse', function () {
             });
         });
 
+        describe.only('joueuse types', function () {
+            it.skip('should have all column flags', function () {
+                this.verify(JSON.stringify(types.joyeuse.dbFlags, null, 4));
+            });
+
+            it('should validate [\'readonly\'] as valid dbFlags', function () {
+                assert.isTrue(types.joyeuse.isDbFlagType(['readonly']));
+            });
+
+            it('should validate [\'readonly\', \'readonly\'] as not valid dbFlags', function () {
+                assert.isFalse(types.joyeuse.isDbFlagType(['readonly', 'readonly']));
+            });
+
+            it('should validate all flags as being valid as a dbFlags', function () {
+                assert.isTrue(types.joyeuse.isDbFlagType(types.joyeuse.dbFlags));
+            })
+        });
+
         //proof of concept
         describe('connect to real db', function () {
             it.skip('should connect to a real db', function () {
