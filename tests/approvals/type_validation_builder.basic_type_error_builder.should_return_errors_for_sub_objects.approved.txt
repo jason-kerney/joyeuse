@@ -1,0 +1,7 @@
+[
+    {
+        "property_name": "testObject.bProperty.age",
+        "type": "int",
+        "value_given": "two"
+    }
+]

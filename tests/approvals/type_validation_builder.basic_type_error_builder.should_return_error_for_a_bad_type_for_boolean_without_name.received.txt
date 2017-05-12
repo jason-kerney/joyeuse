@@ -1,7 +1,0 @@
-[
-    {
-        "property_name": "",
-        "type": "boolean",
-        "value_given": "not a boolean"
-    }
-]

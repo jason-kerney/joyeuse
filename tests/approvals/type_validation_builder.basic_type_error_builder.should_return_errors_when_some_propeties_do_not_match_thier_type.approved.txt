@@ -1,0 +1,12 @@
+[
+    {
+        "property_name": "testObject.aProperty",
+        "type": "boolean",
+        "value_given": "thingy"
+    },
+    {
+        "property_name": "testObject.bProperty",
+        "type": "string",
+        "value_given": "true"
+    }
+]
