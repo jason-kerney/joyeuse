@@ -11,7 +11,7 @@ var pretyJson = require('./test-utils/pretyJson');
 var assert = require('chai').assert;
 
 describe('type validation builder', function () {
-    describe.only('basic type error builder', function () {
+    describe('basic type error builder', function () {
         it('should return no error for a good type', function () {
             var errors = typesValidation.getErrors('myProperty', 'boolean', true);
             assert.lengthOf(errors, 0);
@@ -42,32 +42,32 @@ describe('type validation builder', function () {
             this.verify(pretyJson(errors));
         });
 
-        it.only('should return no errors when a field of a propety does match its type', function () {
+        it('should return no errors when a field of a propety does match its type', function () {
             var errors = typesValidation.getErrors({ aProperty: 'string' }, { aProperty: 'thingy' });
             assert.lengthOf(errors, 0);
         });
 
-        it.only('should return errors when a field of a propety does not match its type', function () {
+        it('should return errors when a field of a propety does not match its type', function () {
             var errors = typesValidation.getErrors('testObject', { aProperty: 'boolean' }, { aProperty: 'thingy' });
             this.verify(pretyJson(errors));
         });
 
-        it.only('should return errors when multiple propeties do not match thier type', function () {
+        it('should return errors when multiple propeties do not match thier type', function () {
             var errors = typesValidation.getErrors('testObject', { aProperty: 'boolean', bProperty: 'int' }, { aProperty: 'thingy', bProperty: true });
             this.verify(pretyJson(errors));
         });
 
-        it.only('should return errors when some propeties do not match thier type', function () {
+        it('should return errors when some propeties do not match thier type', function () {
             var errors = typesValidation.getErrors('testObject', { goodProperty: 'int', aProperty: 'boolean', bProperty: 'string' }, { goodProperty: 5, aProperty: 'thingy', bProperty: true });
             this.verify(pretyJson(errors));
         });
 
-        it.only('should return errors for missing propeties', function () {
+        it('should return errors for missing propeties', function () {
             var errors = typesValidation.getErrors('testObject', { goodProperty: 'int', aProperty: 'boolean', bProperty: 'string' }, { goodProperty: 5, aProperty: true });
             this.verify(pretyJson(errors));
         });
 
-        it.only('should return errors for sub-objects', function () {
+        it('should return errors for sub-objects', function () {
             var typeDef = {
                 aProperty: 'boolean',
                 bProperty: {
@@ -85,7 +85,7 @@ describe('type validation builder', function () {
             this.verify(pretyJson(errors));
         });
 
-        it.only('should return errors for constuctor when connection object has a bad host and invalid client.', function () {
+        it('should return errors for constuctor when connection object has a bad host and invalid client.', function () {
             var connectionObjectDef = {
                 host: typeBuilder.asOptionalProperty(typeNames.ip4.format),
                 socketPath: typeBuilder.asOptionalProperty(typeNames.path),

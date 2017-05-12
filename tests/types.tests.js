@@ -260,7 +260,7 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                assert.isTrue(isKnexConstructor(param), getConstuctorErrors(param).valueString);
+                assert.isFalse(isKnexConstructor(param), getConstuctorErrors(param).valueString);
             });
 
             it('should be able to tell you the client is incorrect', function () {

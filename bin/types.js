@@ -115,17 +115,27 @@ var connectionParts = (function () {
     var knexConnectionObject = 'knexConnectionObject';
     var knexConnectionFileObject = 'knexConnectionFileObject';
 
-    var knexConnection = {
-        host: typeBuilder.asOptionalProperty(typeNames.ip4.format),
-        socketPath: typeBuilder.asOptionalProperty(typeNames.path),
-        user: typeNames.requiredString,
-        password: typeBuilder.asOptionalProperty(typeNames.requiredString),
-        database: typeNames.requiredString,
-    };
+    function getKnexConnectionDef() {
+        return {
+            objectDef:
+            {
+                host: typeBuilder.asOptionalProperty(typeNames.ip4.format),
+                socketPath: typeBuilder.asOptionalProperty(typeNames.path),
+                user: typeNames.requiredString,
+                password: typeBuilder.asOptionalProperty(typeNames.requiredString),
+                database: typeNames.requiredString,
+            },
+            pathObjectDef: {
+                filename: typeNames.path,
+            },
+            connectionStringDef : typeNames.requiredString,
+        };
+    }
 
-    var knexConnectionFile = {
-        filename: typeNames.path
-    };
+    var knexConnectionTypes = getKnexConnectionDef();
+    var knexConnection = knexConnectionTypes.objectDef;
+
+    var knexConnectionFile = knexConnectionTypes.pathObjectDef;
 
     signet.defineDuckType(knexConnectionObject + 'Part', knexConnection);
 
