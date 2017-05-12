@@ -1,0 +1,12 @@
+[
+    {
+        "property_name": "constructor.client",
+        "type": "knexClients",
+        "value_given": "access"
+    },
+    {
+        "property_name": "constructor.connection.host",
+        "type": "variant<undefined; ip4String>",
+        "value_given": "10.12.13"
+    }
+]

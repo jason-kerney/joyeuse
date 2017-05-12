@@ -1,5 +1,8 @@
 'use strict';
 
+var typeBuilder = require('../bin/typeBuilder');
+var types = require('../bin/types');
+var typeNames = types.typeNames;
 var approvalsConfig = require('./test-utils/approvalsConfig');
 var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 var typesValidation = require('../bin/typesValidation');
@@ -77,8 +80,43 @@ describe('type validation builder', function () {
                     age: 'two'
                 }
             };
-            
+
             var errors = typesValidation.getErrors('testObject', typeDef, value);
+            this.verify(pretyJson(errors));
+        });
+
+        it.only('should return errors for constuctor when connection object has a bad host and invalid client.', function () {
+            var connectionObjectDef = {
+                host: typeBuilder.asOptionalProperty(typeNames.ip4.format),
+                socketPath: typeBuilder.asOptionalProperty(typeNames.path),
+                user: typeNames.requiredString,
+                password: typeBuilder.asOptionalProperty(typeNames.requiredString),
+                database: typeNames.requiredString,
+            };
+
+            var constructorDef = {
+                client: typeNames.knex.clients,
+                connection: connectionObjectDef,
+                searchPath: typeBuilder.asOptionalProperty(typeNames.requiredString),
+                debug: typeBuilder.asOptionalProperty('boolean'),
+                pool: typeBuilder.asOptionalProperty(typeNames.knex.connectionPool),
+                acquireConnectionTimeout: typeBuilder.asOptionalProperty(typeBuilder.asBoundedInt(0)),
+            };
+
+
+            var connectionObject = {
+                host: "10.12.13",
+                user: "some_user",
+                password: "12345",
+                database: "default",
+            };
+
+            var constructor = {
+                client: "access",
+                connection: connectionObject,
+            }
+
+            var errors = typesValidation.getErrors('constructor', constructorDef, constructor);
             this.verify(pretyJson(errors));
         });
     });
