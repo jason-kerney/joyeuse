@@ -197,8 +197,6 @@ var connectionParts = (function () {
     signet.alias(typeNames.knex.connectionType, typeBuilder.asVariant(typeNames.knex.connectionString, knexConnectionFileObject, knexConnectionObject));
 
     return {
-        getKnexConnectionDef: getKnexConnectionDef,
-        isSubConnectionInfo: signet.isTypeOf(knexConnectionObject),
         isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
         getConnectionErrors: getConnectionErrors,
     };
@@ -215,8 +213,6 @@ var knex = (function () {
         };
     }
 
-    var knexConstructor = getKnexConstructorDef();
-    var knexConnectionTypes = connectionParts.getKnexConnectionDef();
 
     function getConstuctorParameterErrors(constructorParameter) {
 
@@ -269,7 +265,6 @@ var knex = (function () {
         isKnexConstructor: signet.isTypeOf(typeNames.knex.knexConstructorParam),
         getConstuctorParameterErrors: getConstuctorParameterErrors,
         getConstructorParameterErrorMessage: getConstructorParameterErrorMessage,
-        isClient: signet.isTypeOf(knexConstructor.client),
     };
 
     return knexChecker;
