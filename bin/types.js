@@ -242,6 +242,7 @@ var knex = (function () {
         baseTypes: knexBaseTypes,
         connectionParts: connectionParts,
         getKnexConnectionDef: connectionParts.getKnexConnectionDef,
+        getKnexConstructorDef: getKnexConstructorDef,
         isKnexConstructor: signet.isTypeOf(typeNames.knex.knexConstructorParam),
         getConstuctorParameterErrors: getConstuctorParameterErrors,
         getConstructorParameterErrorMessage: getConstructorParameterErrorMessage,

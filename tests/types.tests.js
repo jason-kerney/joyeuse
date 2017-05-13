@@ -100,6 +100,11 @@ describe('joyeuse', function () {
         describe('knex constructor parameter', function () {
             var isKnexConstructor = types.knex.isKnexConstructor;
             var getConstuctorErrors = types.knex.getConstructorParameterErrorMessage;
+
+            it('should contain a type definition for the construction parameter', function () {
+                this.verify(pretyJson(types.knex.getKnexConstructorDef()));
+            });
+
             it('should validate a correct object with connection string, debug, connection pool and acquireConnectionTimeout', function () {
                 var param = {
                     client: 'mysql',
