@@ -83,7 +83,9 @@ var ip4 = (function () {
 }());
 
 var knexBaseTypes = (function () {
-    var connectionAfterCreate = 'connectionAfterCreate';
+    const connectionAfterCreate = 'connectionAfterCreate';
+    const connectionPoolMinMax = 'connectionPoolMinMax';
+    var connectionPoolTypeName = typeBuilder.asVariant(connectionAfterCreate, connectionPoolMinMax);
 
     function getConnectionPoolDef() {
         return {
@@ -120,11 +122,13 @@ var knexBaseTypes = (function () {
     };
 }());
 
+const connectionString = 'knexConnectionString';
+const connectionObject = 'knexConnectionObject';
+const connectionFileObject = 'knexConnectionFileObject';
+const connectionTypeDefs = typeBuilder.asVariant(connectionObject, connectionFileObject, connectionString);
+
 var connectionParts = (function () {
     const connectionType = 'knexConnectionType';
-    const connectionString = 'knexConnectionString';
-    const connectionObject = 'knexConnectionObject';
-    const connectionFileObject = 'knexConnectionFileObject';
 
     function getKnexConnectionDef() {
         return {
@@ -151,7 +155,6 @@ var connectionParts = (function () {
     signet.defineDuckType(connectionObject, connectionObjectTypes.objectDef);
     signet.defineDuckType(connectionFileObject, connectionObjectTypes.pathObjectDef);
     signet.alias(connectionString, typeNames.requiredString);
-    var connectionTypeDefs = typeBuilder.asVariant(connectionObject, connectionFileObject, connectionString);
     var isAConnectionObject = signet.isTypeOf(connectionTypeDefs);
 
     function mightBeConnectionObject(value) {
@@ -184,16 +187,14 @@ var connectionParts = (function () {
 
     function getConnectionErrors(namePrefix) {
         return function (connection) {
-            if(!isAConnectionObject(connection)){
-                validator.typeError(namePrefix + 'connection', connectionTypeDefs, connection);
+            if (isAConnectionObject(connection)) {
+                return [];
             }
 
             return when()
                 .cond(mightBeConnectionObject, validateConnectionObject(namePrefix))
                 .cond(mightBeConnectionPathObject, validateConnectionPathObject(namePrefix))
-                .cond(defaultCondition, function (value) {
-                    return validator.getErrors(namePrefix + connectionName, typeNames.requiredString, value);
-                })
+                .cond(defaultCondition, validator.getErrors.bind(null, namePrefix + connectionName, connectionTypeDefs))
                 .match(connection);
         };
     }
@@ -205,6 +206,13 @@ var connectionParts = (function () {
 }());
 
 var knex = (function () {
+    const knexConstructorTypeName = 'knexConstructorType';
+
+    var constructorType = getKnexConstructorDef();
+    constructorType.connection = connectionTypeDefs;
+
+    signet.defineDuckType(knexConstructorTypeName, constructorType);
+
     function getKnexConstructorDef() {
         return {
             client: typeNames.knex.clients,
@@ -216,13 +224,18 @@ var knex = (function () {
 
 
     function getConstuctorParameterErrors(constructorParameter) {
+        var constructorTypePartial = getKnexConstructorDef();
+        if (signet.isTypeOf(knexConstructorTypeName)(constructorParameter)) {
+            return [];
+        }
+
         var constructorParameterName = 'constructorParameter';
         var connectionName = constructorParameterName + '.connection';
 
         var connectionErrors = connectionParts.getConnectionErrors(constructorParameterName + ".")(constructorParameter.connection);
         var connectionPoolErrors = knexBaseTypes.getConnectionPoolErrors(constructorParameterName + ".")(constructorParameter.pool);
 
-        var errors = validator.getErrors(constructorParameterName, getKnexConstructorDef(), constructorParameter);
+        var errors = validator.getErrors(constructorParameterName, constructorTypePartial, constructorParameter);
 
         return errors.concat(connectionPoolErrors).concat(connectionErrors);
     }
