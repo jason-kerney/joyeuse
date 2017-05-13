@@ -13,13 +13,5 @@ http://knexjs.org/
 
 Below is a list of properties and whether or not they pass validation.
 
-NOTE: If the connection property is listed you should know that the
-connection property has 3 different valid variations on what it can be.
-only one of those needs to pass validation.
-
-constuctorInfo: failed
-constuctorInfo.client: failed
-constuctorInfo.connection{object}.user: failed
-constuctorInfo.connection{object}.database: failed
-constuctorInfo.connection{path-object}: failed
-constuctorInfo.connection{path-object}.fileName: failed
+constructorParameter.client: access
+Expected type: knexClients

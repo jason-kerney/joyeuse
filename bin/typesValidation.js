@@ -2,19 +2,21 @@
 var typeBuilder = require('./typeBuilder');
 var signet = typeBuilder.signet;
 
+function typeError(name, typeInfo, value) {
+    return {
+        property_name: name,
+        type: typeInfo,
+        value_given: typeBuilder.isUndefined(value) ? String(value) : value
+    };
+}
+
 function getBasicErrors(propertyName, typeInfo, value, errors) {
     var isType = signet.isTypeOf(typeInfo)(value);
     if (isType) {
         return errors;
     } else {
         var newErrors = errors.slice();
-        newErrors.push(
-            {
-                property_name: propertyName,
-                type: typeInfo,
-                value_given: String(value),
-            }
-        );
+        newErrors.push(typeError(propertyName, typeInfo, value));
         return newErrors;
     }
 }
@@ -55,5 +57,6 @@ function getErrors() {
 }
 
 module.exports = {
+    typeError: typeError,
     getErrors: getErrors,
 }

@@ -7,6 +7,6 @@
     {
         "property_name": "testObject.bProperty",
         "type": "int",
-        "value_given": "true"
+        "value_given": true
     }
 ]

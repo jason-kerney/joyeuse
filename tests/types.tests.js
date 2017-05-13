@@ -229,7 +229,7 @@ describe('joyeuse', function () {
 
         describe('knex constructor parameter', function () {
             var isKnexConstructor = types.knex.isKnexConstructor;
-            var getConstuctorErrors = types.knex.getConstructorErrors;
+            var getConstuctorErrors = types.knex.getConstructorParameterErrorMessage;
             it('should validate a correct object with connection string, debug, connection pool and acquireConnectionTimeout', function () {
                 var param = {
                     client: 'mysql',
