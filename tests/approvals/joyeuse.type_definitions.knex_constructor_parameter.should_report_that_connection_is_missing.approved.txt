@@ -13,4 +13,4 @@ http://knexjs.org/
 Below is a list of properties and whether or not they pass validation.
 
 constructorParameter.connection: undefined
-Expected type: knexConnectionType
+Expected type: requiredString

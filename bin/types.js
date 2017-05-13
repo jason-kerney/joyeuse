@@ -179,7 +179,7 @@ var knex = (function () {
     function getKnexConstructorDef() {
         return {
             client: typeNames.knex.clients,
-            connection: typeNames.knex.connectionType,
+            // connection: typeNames.knex.connectionType,
             searchPath: typeBuilder.asOptionalProperty(typeNames.requiredString),
             debug: typeBuilder.asOptionalProperty('boolean'),
             pool: typeBuilder.asOptionalProperty(typeNames.knex.connectionPool),
@@ -211,7 +211,7 @@ var knex = (function () {
             return validator.getErrors(connectionName, knexConnectionTypes.objectDef, value);
         }
 
-        function validateConnectionPathObject (value){
+        function validateConnectionPathObject(value) {
             return validator.getErrors(connectionName, knexConnectionTypes.pathObjectDef, value);
         }
 
@@ -270,19 +270,20 @@ var knex = (function () {
         isKnexConstructor: signet.isTypeOf(typeNames.knex.knexConstructorParam),
         getConstuctorParameterErrors: getConstuctorParameterErrors,
         getConstructorParameterErrorMessage: getConstructorParameterErrorMessage,
-        constructorValidator: {
-            isClient: signet.isTypeOf(knexConstructor.client),
-            Connection: {
-                isConnection: signet.isTypeOf(knexConstructor.connection),
-                ConnectionObject: connectionParts.knexConnectionObjectValidation,
-                knexConnectionFile: connectionParts.knexConnectionFileValidation,
-                isConnectionString: connectionParts.isConnectionPathString,
-            },
-            isSearchPath: signet.isTypeOf(knexConstructor.searchPath),
-            isDebug: signet.isTypeOf(knexConstructor.debug),
-            isPool: signet.isTypeOf(knexConstructor.pool),
-            isAcquireConnectionTimeout: signet.isTypeOf(knexConstructor.acquireConnectionTimeout),
-        },
+        isClient: signet.isTypeOf(knexConstructor.client),
+        // constructorValidator: {
+            // isClient: signet.isTypeOf(knexConstructor.client),
+            // Connection: {
+            // isConnection: signet.isTypeOf(knexConstructor.connection),
+            // ConnectionObject: connectionParts.knexConnectionObjectValidation,
+            // knexConnectionFile: connectionParts.knexConnectionFileValidation,
+            // isConnectionString: connectionParts.isConnectionPathString,
+            // },
+            // isSearchPath: signet.isTypeOf(knexConstructor.searchPath),
+            // isDebug: signet.isTypeOf(knexConstructor.debug),
+            // isPool: signet.isTypeOf(knexConstructor.pool),
+            // isAcquireConnectionTimeout: signet.isTypeOf(knexConstructor.acquireConnectionTimeout),
+        // },
     };
 
     return knexChecker;
