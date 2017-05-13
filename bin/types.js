@@ -160,18 +160,6 @@ var connectionParts = (function () {
         getKnexConnectionDef: getKnexConnectionDef,
         isSubConnectionInfo: signet.isTypeOf(knexConnectionObject),
         isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
-        // isConnectionPathString: signet.isTypeOf(typeNames.knex.connectionString),
-        // knexConnectionObjectValidation: {
-        //     // isHost: signet.isTypeOf(knexConnection.host),
-        //     // isSocketPath: signet.isTypeOf(knexConnection.socketPath),
-        //     // isUser: signet.isTypeOf(knexConnection.user),
-        //     // isPassword: signet.isTypeOf(knexConnection.password),
-        //     isDatabase: signet.isTypeOf(knexConnection.database),
-        // },
-        // knexConnectionFileValidation: {
-        //     // isFileNameObject: signet.isTypeOf(knexConnectionFileObject),
-        //     // isFileName: signet.isTypeOf(knexConnectionFile.filename),
-        // }
     };
 }());
 
@@ -179,7 +167,6 @@ var knex = (function () {
     function getKnexConstructorDef() {
         return {
             client: typeNames.knex.clients,
-            // connection: typeNames.knex.connectionType,
             searchPath: typeBuilder.asOptionalProperty(typeNames.requiredString),
             debug: typeBuilder.asOptionalProperty('boolean'),
             pool: typeBuilder.asOptionalProperty(typeNames.knex.connectionPool),
@@ -271,19 +258,6 @@ var knex = (function () {
         getConstuctorParameterErrors: getConstuctorParameterErrors,
         getConstructorParameterErrorMessage: getConstructorParameterErrorMessage,
         isClient: signet.isTypeOf(knexConstructor.client),
-        // constructorValidator: {
-            // isClient: signet.isTypeOf(knexConstructor.client),
-            // Connection: {
-            // isConnection: signet.isTypeOf(knexConstructor.connection),
-            // ConnectionObject: connectionParts.knexConnectionObjectValidation,
-            // knexConnectionFile: connectionParts.knexConnectionFileValidation,
-            // isConnectionString: connectionParts.isConnectionPathString,
-            // },
-            // isSearchPath: signet.isTypeOf(knexConstructor.searchPath),
-            // isDebug: signet.isTypeOf(knexConstructor.debug),
-            // isPool: signet.isTypeOf(knexConstructor.pool),
-            // isAcquireConnectionTimeout: signet.isTypeOf(knexConstructor.acquireConnectionTimeout),
-        // },
     };
 
     return knexChecker;
