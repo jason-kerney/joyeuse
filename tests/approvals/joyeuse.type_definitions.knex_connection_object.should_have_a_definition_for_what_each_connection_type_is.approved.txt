@@ -1,0 +1,13 @@
+{
+    "objectDef": {
+        "host": "variant<undefined; ip4String>",
+        "socketPath": "variant<undefined; path>",
+        "user": "requiredString",
+        "password": "variant<undefined; requiredString>",
+        "database": "requiredString"
+    },
+    "pathObjectDef": {
+        "filename": "path"
+    },
+    "connectionStringDef": "requiredString"
+}

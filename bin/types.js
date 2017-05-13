@@ -136,7 +136,7 @@ var connectionParts = (function () {
         };
     }
 
-    var connectionName = 'connection';
+    const connectionName = 'connection';
 
     function mightBeConnectionObject(value) {
         return signet.isTypeOf('object')(value)
@@ -176,28 +176,8 @@ var connectionParts = (function () {
             .match;
         }
 
-    var knexConnectionTypes = getKnexConnectionDef();
-    var knexConnection = knexConnectionTypes.objectDef;
-
-    var knexConnectionFile = knexConnectionTypes.pathObjectDef;
-
-    signet.defineDuckType(knexConnectionObject + 'Part', knexConnection);
-
-    signet.subtype(knexConnectionObject + 'Part')(knexConnectionObject, function (conn) {
-        var hasHost = signet.isTypeOf('undefined')(conn.host);
-        var hasSocketPath = signet.isTypeOf('undefined')(conn.socketPath);
-
-        return (hasHost !== hasSocketPath);
-    });
-
-    signet.defineDuckType(knexConnectionFileObject, knexConnectionFile);
-
-    signet.alias(typeNames.knex.connectionString, typeNames.requiredString);
-
-    signet.alias(typeNames.knex.connectionType, typeBuilder.asVariant(typeNames.knex.connectionString, knexConnectionFileObject, knexConnectionObject));
-
     return {
-        isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
+        getKnexConnectionDef: getKnexConnectionDef,
         getConnectionErrors: getConnectionErrors,
     };
 }());
@@ -261,7 +241,7 @@ var knex = (function () {
     var knexChecker = {
         baseTypes: knexBaseTypes,
         connectionParts: connectionParts,
-        isConnectionInfo: signet.isTypeOf(typeNames.knex.connectionType),
+        getKnexConnectionDef: connectionParts.getKnexConnectionDef,
         isKnexConstructor: signet.isTypeOf(typeNames.knex.knexConstructorParam),
         getConstuctorParameterErrors: getConstuctorParameterErrors,
         getConstructorParameterErrorMessage: getConstructorParameterErrorMessage,

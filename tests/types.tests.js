@@ -2,7 +2,7 @@
 
 var approvalsConfig = require('./test-utils/approvalsConfig');
 var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
-
+var pretyJson = require('./test-utils/pretyJson');
 var assert = require('chai').assert;
 
 function ipGenerator(max) {
@@ -77,9 +77,8 @@ describe('joyeuse', function () {
         });
 
         describe('knex connection object', function () {
-            it('should validate a knex connection path object', function () {
-                assert.isTrue(types.knex.connectionParts.isSubConnectionInfoFilePath({ filename: "./mydb.sqlite" }));
-                assert.isFalse(types.knex.connectionParts.isSubConnectionInfoFilePath({ filename: 'hello?' }));
+            it('should have a definition for what each connection type is', function () {
+                this.verify(pretyJson(types.knex.getKnexConnectionDef()));
             });
 
             it('should validate an exceptable sql client', function () {
