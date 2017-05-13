@@ -5,21 +5,30 @@ var validator = require('./typesValidation');
 var when = require('./when')();
 var signet = typeBuilder.signet;
 
-var typeNames = {
-    ip4: {
-        format: 'ip4String',
-    },
-    knex: {
-        clients: 'knexClients',
-        knexConstructorParam: 'knexConstructorParam',
-    },
-    joyeuse: {
-        columnFlags: 'columnFlags',
-    },
-    requiredString: 'requiredString',
-    path: 'path',
-    distinctItemArray: 'distinctItemArray',
-};
+const connectionString = 'knexConnectionString';
+const connectionObject = 'knexConnectionObject';
+const connectionFileObject = 'knexConnectionFileObject';
+const connectionTypeDefs = typeBuilder.asVariant(connectionObject, connectionFileObject, connectionString);
+
+function getTypeNames() {
+    return {
+        ip4: {
+            format: 'ip4String',
+        },
+        knex: {
+            clients: 'knexClients',
+            knexConstructorParam: 'knexConstructorParam',
+        },
+        joyeuse: {
+            columnFlags: 'columnFlags',
+        },
+        requiredString: 'requiredString',
+        path: 'path',
+        distinctItemArray: 'distinctItemArray',
+    };
+}
+
+var typeNames = getTypeNames();
 
 var baseTypes = (function () {
     var fullPathRegex =
@@ -121,11 +130,6 @@ var knexBaseTypes = (function () {
         isClient: signet.isTypeOf(typeNames.knex.clients),
     };
 }());
-
-const connectionString = 'knexConnectionString';
-const connectionObject = 'knexConnectionObject';
-const connectionFileObject = 'knexConnectionFileObject';
-const connectionTypeDefs = typeBuilder.asVariant(connectionObject, connectionFileObject, connectionString);
 
 var connectionParts = (function () {
     const connectionType = 'knexConnectionType';
@@ -267,22 +271,15 @@ var knex = (function () {
         };
     }
 
-    signet.extend(typeNames.knex.knexConstructorParam, function (constuctor) {
-        var errs = getConstructorParameterErrorMessage(constuctor);
-        return errs.errors.length === 0;
-    });
 
-
-    var knexChecker = {
+    return {
         baseTypes: knexBaseTypes,
         getKnexConnectionDef: connectionParts.getKnexConnectionDef,
         getKnexConstructorDef: getKnexConstructorDef,
-        isKnexConstructor: signet.isTypeOf(typeNames.knex.knexConstructorParam),
+        isKnexConstructor: signet.isTypeOf(knexConstructorTypeName),
         getConstuctorParameterErrors: getConstuctorParameterErrors,
         getConstructorParameterErrorMessage: getConstructorParameterErrorMessage,
     };
-
-    return knexChecker;
 }());
 
 var joyeuseTypes = (function () {
@@ -319,5 +316,5 @@ module.exports = {
     base: baseTypes,
     knex: knex,
     joyeuse: joyeuseTypes,
-    typeNames: typeNames,
+    typeNames: getTypeNames(),
 };
