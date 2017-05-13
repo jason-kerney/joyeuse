@@ -136,6 +136,46 @@ var connectionParts = (function () {
         };
     }
 
+    var connectionName = 'connection';
+
+    function mightBeConnectionObject(value) {
+        return signet.isTypeOf('object')(value)
+            && (
+                !typeBuilder.isUndefined(value.host)
+                || !typeBuilder.isUndefined(value.socketPath)
+            );
+    }
+
+    function mightBeConnectionPathObject(value) {
+        return signet.isTypeOf('object')(value);
+    }
+
+    function defaultCondition() {
+        return true;
+    }
+
+    function validateConnectionObject(prefix) {
+        return function (value) {
+            return validator.getErrors(prefix + connectionName, knexConnectionTypes.objectDef, value);
+        };
+    }
+
+    function validateConnectionPathObject(prefix) {
+        return function  (value){
+            return validator.getErrors(prefix + connectionName, knexConnectionTypes.pathObjectDef, value);
+        };
+    }
+
+    function getConnectionErrors(namePrefix) {
+        return when()
+            .cond(mightBeConnectionObject, validateConnectionObject(namePrefix))
+            .cond(mightBeConnectionPathObject, validateConnectionPathObject(namePrefix))
+            .cond(defaultCondition, function (value) {
+                return validator.getErrors(namePrefix + connectionName, typeNames.requiredString, value);
+            })
+            .match;
+        }
+
     var knexConnectionTypes = getKnexConnectionDef();
     var knexConnection = knexConnectionTypes.objectDef;
 
@@ -160,6 +200,7 @@ var connectionParts = (function () {
         getKnexConnectionDef: getKnexConnectionDef,
         isSubConnectionInfo: signet.isTypeOf(knexConnectionObject),
         isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
+        getConnectionErrors: getConnectionErrors,
     };
 }());
 
@@ -178,40 +219,11 @@ var knex = (function () {
     var knexConnectionTypes = connectionParts.getKnexConnectionDef();
 
     function getConstuctorParameterErrors(constructorParameter) {
-        function mightBeConnectionObject(value) {
-            return signet.isTypeOf('object')(value)
-                && (
-                    !typeBuilder.isUndefined(value.host)
-                    || !typeBuilder.isUndefined(value.socketPath)
-                );
-        }
-
-        function mightBeConnectionPathObject(value) {
-            return signet.isTypeOf('object')(value);
-        }
-
-        function defaultCondition() {
-            return true;
-        }
-
-        function validateConnectionObject(value) {
-            return validator.getErrors(connectionName, knexConnectionTypes.objectDef, value);
-        }
-
-        function validateConnectionPathObject(value) {
-            return validator.getErrors(connectionName, knexConnectionTypes.pathObjectDef, value);
-        }
 
         var constructorParameterName = 'constructorParameter';
         var connectionName = constructorParameterName + '.connection';
-        var connectionValid =
-            when()
-                .cond(mightBeConnectionObject, validateConnectionObject)
-                .cond(mightBeConnectionPathObject, validateConnectionPathObject)
-                .cond(defaultCondition, function (value) {
-                    return validator.getErrors(connectionName, typeNames.requiredString, value);
-                })
-                .match(constructorParameter.connection);
+
+        var connectionValid = connectionParts.getConnectionErrors(constructorParameterName + ".")(constructorParameter.connection);
 
         var errors = validator.getErrors(constructorParameterName, getKnexConstructorDef(), constructorParameter);
 
