@@ -103,7 +103,7 @@ describe('joyeuse', function () {
 
         describe('knex constructor parameter', function () {
             var isKnexConstructor = types.knex.isKnexConstructor;
-            var getConstuctorErrors = types.knex.getConstructorParameterErrorMessage;
+            var getConstructorParameterErrorMessage = types.knex.getConstructorParameterErrorMessage;
 
             it('should contain a type definition for the construction parameter', function () {
                 this.verify(pretyJson(types.knex.getKnexConstructorDef()));
@@ -119,7 +119,7 @@ describe('joyeuse', function () {
                     acquireConnectionTimeout: 100,
                 };
 
-                assert.isTrue(isKnexConstructor(param), getConstuctorErrors(param).valueString);
+                assert.isTrue(isKnexConstructor(param), getConstructorParameterErrorMessage(param).valueString);
             });
 
             it('should validate a correct object wit connection string and without debug, connection pool and acquireConnectionTimeout', function () {
@@ -129,7 +129,7 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                assert.isTrue(isKnexConstructor(param), getConstuctorErrors(param).valueString);
+                assert.isTrue(isKnexConstructor(param), getConstructorParameterErrorMessage(param).valueString);
             });
 
             it('should require a correct client', function () {
@@ -139,7 +139,7 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                assert.isFalse(isKnexConstructor(param), getConstuctorErrors(param).valueString);
+                assert.isFalse(isKnexConstructor(param), getConstructorParameterErrorMessage(param).valueString);
             });
 
             it('should be able to tell you the client is incorrect', function () {
@@ -149,7 +149,7 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                this.verify(getConstuctorErrors(param).valueString);
+                this.verify(getConstructorParameterErrorMessage(param).valueString);
             });
 
             it('should require a connection', function () {
@@ -158,7 +158,7 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                assert.isFalse(isKnexConstructor(param), getConstuctorErrors(param).valueString);
+                assert.isFalse(isKnexConstructor(param), getConstructorParameterErrorMessage(param).valueString);
             });
 
             it('should report that connection is missing', function () {
@@ -167,7 +167,7 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                this.verify(getConstuctorErrors(param).valueString);
+                this.verify(getConstructorParameterErrorMessage(param).valueString);
             });
 
             it('should require a correct connection string', function () {
@@ -177,7 +177,7 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                assert.isFalse(isKnexConstructor(param), getConstuctorErrors(param).valueString);
+                assert.isFalse(isKnexConstructor(param), getConstructorParameterErrorMessage(param).valueString);
             });
 
             it('should report connection string is incorrect', function () {
@@ -187,17 +187,17 @@ describe('joyeuse', function () {
                     searchPath: "some,path",
                 };
 
-                this.verify(getConstuctorErrors(param).valueString);
+                this.verify(getConstructorParameterErrorMessage(param).valueString);
             });
 
-            it('should not require a search path', function () {
+            it.only('should not require a search path', function () {
                 var param = {
                     client: 'oracle',
                     connection: "some connection string",
                     database: "some database"
                 };
 
-                assert.isTrue(isKnexConstructor(param), JSON.stringify(getConstuctorErrors(param), null, 4));
+                assert.isTrue(isKnexConstructor(param), JSON.stringify(getConstructorParameterErrorMessage(param), null, 4));
             });
         });
 

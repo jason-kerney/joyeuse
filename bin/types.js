@@ -106,7 +106,7 @@ var knexBaseTypes = (function () {
             if (!typeBuilder.isUndefined(connectionPool.min) || !(typeBuilder.isUndefined(connectionPool.max))) {
                 return validator.getErrors(prefix + "pool", getConnectionPoolDef().minMax, connectionPool);
             }
-            
+
             return validator.getErrors(prefix + "pool", getConnectionPoolDef().minMax, connectionPool.afterCreate);
 
         };
@@ -125,14 +125,11 @@ var knexBaseTypes = (function () {
 
     signet.defineDuckType(connectionAfterCreate, connectionPoolDef.afterCreate)
 
-    signet.alias(typeNames.knex.connectionPool, typeBuilder.asVariant(typeNames.knex.connectionPool + 'MinMax', connectionAfterCreate));
-
     return {
         getConnectionPoolDef: getConnectionPoolDef,
         getConnectionPoolErrors: getConnectionPoolErrors,
         allowedDatabases: allowedDatabases,
         isClient: signet.isTypeOf(typeNames.knex.clients),
-        isConnectionPool: signet.isTypeOf(typeNames.knex.connectionPool),
     };
 }());
 
@@ -209,20 +206,17 @@ var knex = (function () {
             client: typeNames.knex.clients,
             searchPath: typeBuilder.asOptionalProperty(typeNames.requiredString),
             debug: typeBuilder.asOptionalProperty('boolean'),
-            pool: typeBuilder.asOptionalProperty(typeNames.knex.connectionPool),
             acquireConnectionTimeout: typeBuilder.asOptionalProperty(typeBuilder.asBoundedInt(0)),
         };
     }
 
 
     function getConstuctorParameterErrors(constructorParameter) {
-
         var constructorParameterName = 'constructorParameter';
         var connectionName = constructorParameterName + '.connection';
 
         var connectionErrors = connectionParts.getConnectionErrors(constructorParameterName + ".")(constructorParameter.connection);
         var connectionPoolErrors = knexBaseTypes.getConnectionPoolErrors(constructorParameterName + ".")(constructorParameter.pool);
-
 
         var errors = validator.getErrors(constructorParameterName, getKnexConstructorDef(), constructorParameter);
 
@@ -257,8 +251,9 @@ var knex = (function () {
     }
 
     signet.extend(typeNames.knex.knexConstructorParam, function (constuctor) {
-        return getConstructorParameterErrorMessage(constuctor).errors.length === 0;
-    })
+        var errs = getConstructorParameterErrorMessage(constuctor);
+        return errs.errors.length === 0;
+    });
 
 
     var knexChecker = {
