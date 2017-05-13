@@ -108,22 +108,14 @@ var knexBaseTypes = (function () {
             }
 
             return validator.getErrors(prefix + "pool", getConnectionPoolDef().minMax, connectionPool.afterCreate);
-
         };
     }
 
     const allowedDatabases = ['postgres', 'mssql', 'mysql', 'mariadb', 'sqlite3', 'oracle'];
+    
     signet.subtype(typeNames.requiredString)(typeNames.knex.clients, function (value) {
         return allowedDatabases.includes(value);
     });
-
-    signet.defineDuckType('connectionMethodForConnectionPool', { query: 'function' });
-
-    var connectionPoolDef = getConnectionPoolDef();
-
-    signet.defineDuckType(typeNames.knex.connectionPool + 'MinMax', connectionPoolDef.minMax);
-
-    signet.defineDuckType(connectionAfterCreate, connectionPoolDef.afterCreate)
 
     return {
         getConnectionPoolDef: getConnectionPoolDef,
