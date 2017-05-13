@@ -95,10 +95,6 @@ describe('joyeuse', function () {
             it('should contain a definition for connection pool', function () {
                 this.verify(pretyJson(types.knex.baseTypes.getConnectionPoolDef()));
             });
-
-            it('should validate a valid connection pool object', function () {
-                assert.isTrue(types.knex.baseTypes.isConnectionPool({ min: 0, max: 1000 }));
-            });
         });
 
         describe('knex constructor parameter', function () {
@@ -190,7 +186,7 @@ describe('joyeuse', function () {
                 this.verify(getConstructorParameterErrorMessage(param).valueString);
             });
 
-            it.only('should not require a search path', function () {
+            it('should not require a search path', function () {
                 var param = {
                     client: 'oracle',
                     connection: "some connection string",

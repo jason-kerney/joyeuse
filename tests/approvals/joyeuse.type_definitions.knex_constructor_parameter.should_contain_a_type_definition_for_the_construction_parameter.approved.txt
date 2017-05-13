@@ -2,6 +2,5 @@
     "client": "knexClients",
     "searchPath": "variant<undefined; requiredString>",
     "debug": "variant<undefined; boolean>",
-    "pool": "variant<undefined; connectionPool>",
     "acquireConnectionTimeout": "variant<undefined; boundedInt<0;Infinity>>"
 }

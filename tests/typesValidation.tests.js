@@ -99,7 +99,6 @@ describe('type validation builder', function () {
                 connection: connectionObjectDef,
                 searchPath: typeBuilder.asOptionalProperty(typeNames.requiredString),
                 debug: typeBuilder.asOptionalProperty('boolean'),
-                pool: typeBuilder.asOptionalProperty(typeNames.knex.connectionPool),
                 acquireConnectionTimeout: typeBuilder.asOptionalProperty(typeBuilder.asBoundedInt(0)),
             };
 
