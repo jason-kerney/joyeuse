@@ -151,13 +151,13 @@ var connectionParts = (function () {
         };
     }
 
-    var connectionObjectTypes = getKnexConnectionDef();
+    var knexConnectionTypes = getKnexConnectionDef();
 
 
     const connectionName = 'connection';
 
-    signet.defineDuckType(connectionObject, connectionObjectTypes.objectDef);
-    signet.defineDuckType(connectionFileObject, connectionObjectTypes.pathObjectDef);
+    signet.defineDuckType(connectionObject, knexConnectionTypes.objectDef);
+    signet.defineDuckType(connectionFileObject, knexConnectionTypes.pathObjectDef);
     signet.alias(connectionString, typeNames.requiredString);
     var isAConnectionObject = signet.isTypeOf(connectionTypeDefs);
 
@@ -166,6 +166,9 @@ var connectionParts = (function () {
             && (
                 !typeBuilder.isUndefined(value.host)
                 || !typeBuilder.isUndefined(value.socketPath)
+                || !typeBuilder.isUndefined(value.user)
+                || !typeBuilder.isUndefined(value.password)
+                || !typeBuilder.isUndefined(value.database)
             );
     }
 
@@ -179,7 +182,14 @@ var connectionParts = (function () {
 
     function validateConnectionObject(prefix) {
         return function (value) {
-            return validator.getErrors(prefix + connectionName, knexConnectionTypes.objectDef, value);
+            var errors = validator.getErrors(prefix + connectionName, knexConnectionTypes.objectDef, value);
+            
+            if (typeBuilder.isUndefined(value.host) && typeBuilder.isUndefined(value.socketPath)) {
+                errors.push(validator.typeError(prefix + connectionName + ".host", knexConnectionTypes.objectDef.host));
+                errors.push(validator.typeError(prefix + connectionName + ".socketPath", knexConnectionTypes.objectDef.socketPath));
+            }
+
+            return errors;
         };
     }
 

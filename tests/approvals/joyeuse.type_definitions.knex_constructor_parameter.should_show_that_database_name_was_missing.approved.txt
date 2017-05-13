@@ -1,0 +1,17 @@
+[
+    {
+        "property_name": "constructorParameter.connection.database",
+        "type": "requiredString",
+        "value_given": "undefined"
+    },
+    {
+        "property_name": "constructorParameter.connection.host",
+        "type": "variant<undefined; ip4String>",
+        "value_given": "undefined"
+    },
+    {
+        "property_name": "constructorParameter.connection.socketPath",
+        "type": "variant<undefined; path>",
+        "value_given": "undefined"
+    }
+]

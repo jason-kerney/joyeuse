@@ -105,6 +105,16 @@ describe('joyeuse', function () {
                 this.verify(pretyJson(types.knex.getKnexConstructorDef()));
             });
 
+            it('should show that database name was missing', function () {
+                var props = {
+                    client: 'mysql',
+                    connection: {
+                        user: 'root',
+                    }
+                };
+                this.verify(pretyJson(types.knex.getConstuctorParameterErrors(props)))
+            });
+
             it('should validate a correct object with connection string, debug, connection pool and acquireConnectionTimeout', function () {
                 var param = {
                     client: 'mysql',
@@ -217,7 +227,7 @@ describe('joyeuse', function () {
 
         //proof of concept
         describe('connect to real db', function () {
-            it.skip('should connect to a real db', function () {
+            it.skip('should connect to a real db', function (done) {
 
                 var props = {
                     client: 'mysql',
@@ -232,14 +242,18 @@ describe('joyeuse', function () {
                 var factory = joy.getFactory(props);
                 var knex = factory.knex;
 
-                // var knex = require('knex')(props);
-
                 var people = knex('people').select();
 
                 console.log(Object.keys(people));
-                //assert.equal(people.toSQL().sql, '');
 
-                people.then(function (person) { console.log(JSON.stringify(person[0], null, 4)); });
+                people.then(function (person) { 
+                    console.log('here');
+                    console.log(JSON.stringify(person[0], null, 4)); 
+                    done();
+                }).catch(function () {
+                    console.log('error');
+                    done();
+                });
             });
         }); // end proof of concept
     });

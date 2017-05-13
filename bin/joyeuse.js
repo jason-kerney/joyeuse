@@ -6,10 +6,8 @@ var types = require('./types');
 var signet = typeBuilder.signet;
 
 function getFactory(constuctorInfo) {
-    var expectedType = typeBuilder.asVariant('undefined', types.typeNames.knex.knexConstructorParam);
-
-    if (!signet.isTypeOf(types.typeNames.knex.knexConstructorParam)(constuctorInfo)) {
-        throw new Error(types.knex.getConstructorError(constuctorInfo).valueString);
+    if (!types.knex.isKnexConstructor(constuctorInfo) && !typeBuilder.isUndefined(constuctorInfo)) {
+        throw new Error(types.knex.getConstructorParameterErrorMessage(constuctorInfo).valueString);
     }
 
 
