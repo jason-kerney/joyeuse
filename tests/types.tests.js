@@ -92,6 +92,10 @@ describe('joyeuse', function () {
                 assert.isFalse(isClient('access'), 'Access');
             });
 
+            it('should contain a definition for connection pool', function () {
+                this.verify(pretyJson(types.knex.baseTypes.getConnectionPoolDef()));
+            });
+
             it('should validate a valid connection pool object', function () {
                 assert.isTrue(types.knex.baseTypes.isConnectionPool({ min: 0, max: 1000 }));
             });

@@ -90,6 +90,28 @@ var ip4 = (function () {
 var knexBaseTypes = (function () {
     var connectionAfterCreate = 'connectionAfterCreate';
 
+    function getConnectionPoolDef() {
+        return {
+            minMax: { min: typeBuilder.asBoundedInt(0), max: typeBuilder.asBoundedInt(0) },
+            afterCreate: { afterCreate: 'connectionMethodForConnectionPool' },
+        };
+    }
+
+    function getConnectionPoolErrors(prefix) {
+        return function (connectionPool) {
+            if (typeBuilder.isUndefined(connectionPool)) {
+                return [];
+            }
+
+            if (!typeBuilder.isUndefined(connectionPool.min) || !(typeBuilder.isUndefined(connectionPool.max))) {
+                return validator.getErrors(prefix + "pool", getConnectionPoolDef().minMax, connectionPool);
+            }
+            
+            return validator.getErrors(prefix + "pool", getConnectionPoolDef().minMax, connectionPool.afterCreate);
+
+        };
+    }
+
     const allowedDatabases = ['postgres', 'mssql', 'mysql', 'mariadb', 'sqlite3', 'oracle'];
     signet.subtype(typeNames.requiredString)(typeNames.knex.clients, function (value) {
         return allowedDatabases.includes(value);
@@ -97,18 +119,17 @@ var knexBaseTypes = (function () {
 
     signet.defineDuckType('connectionMethodForConnectionPool', { query: 'function' });
 
-    var connectionAfterCreateExample = {
-        afterCreate: 'connectionMethodForConnectionPool'
-    };
-    var connectionPoolMinMaxExample = { min: typeBuilder.asBoundedInt(0), max: typeBuilder.asBoundedInt(0) };
+    var connectionPoolDef = getConnectionPoolDef();
 
-    signet.defineDuckType(typeNames.knex.connectionPool + 'MinMax', connectionPoolMinMaxExample);
+    signet.defineDuckType(typeNames.knex.connectionPool + 'MinMax', connectionPoolDef.minMax);
 
-    signet.defineDuckType(connectionAfterCreate, connectionAfterCreateExample)
+    signet.defineDuckType(connectionAfterCreate, connectionPoolDef.afterCreate)
 
     signet.alias(typeNames.knex.connectionPool, typeBuilder.asVariant(typeNames.knex.connectionPool + 'MinMax', connectionAfterCreate));
 
     return {
+        getConnectionPoolDef: getConnectionPoolDef,
+        getConnectionPoolErrors: getConnectionPoolErrors,
         allowedDatabases: allowedDatabases,
         isClient: signet.isTypeOf(typeNames.knex.clients),
         isConnectionPool: signet.isTypeOf(typeNames.knex.connectionPool),
@@ -161,7 +182,7 @@ var connectionParts = (function () {
     }
 
     function validateConnectionPathObject(prefix) {
-        return function  (value){
+        return function (value) {
             return validator.getErrors(prefix + connectionName, knexConnectionTypes.pathObjectDef, value);
         };
     }
@@ -174,7 +195,7 @@ var connectionParts = (function () {
                 return validator.getErrors(namePrefix + connectionName, typeNames.requiredString, value);
             })
             .match;
-        }
+    }
 
     return {
         getKnexConnectionDef: getKnexConnectionDef,
@@ -199,11 +220,13 @@ var knex = (function () {
         var constructorParameterName = 'constructorParameter';
         var connectionName = constructorParameterName + '.connection';
 
-        var connectionValid = connectionParts.getConnectionErrors(constructorParameterName + ".")(constructorParameter.connection);
+        var connectionErrors = connectionParts.getConnectionErrors(constructorParameterName + ".")(constructorParameter.connection);
+        var connectionPoolErrors = knexBaseTypes.getConnectionPoolErrors(constructorParameterName + ".")(constructorParameter.pool);
+
 
         var errors = validator.getErrors(constructorParameterName, getKnexConstructorDef(), constructorParameter);
 
-        return errors.concat(connectionValid);
+        return errors.concat(connectionPoolErrors).concat(connectionErrors);
     }
 
     function getConstructorParameterErrorMessage(constuctorInfo) {
@@ -240,7 +263,6 @@ var knex = (function () {
 
     var knexChecker = {
         baseTypes: knexBaseTypes,
-        connectionParts: connectionParts,
         getKnexConnectionDef: connectionParts.getKnexConnectionDef,
         getKnexConstructorDef: getKnexConstructorDef,
         isKnexConstructor: signet.isTypeOf(typeNames.knex.knexConstructorParam),
