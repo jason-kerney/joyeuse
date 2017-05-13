@@ -160,18 +160,18 @@ var connectionParts = (function () {
         getKnexConnectionDef: getKnexConnectionDef,
         isSubConnectionInfo: signet.isTypeOf(knexConnectionObject),
         isSubConnectionInfoFilePath: signet.isTypeOf(knexConnectionFileObject),
-        isConnectionPathString: signet.isTypeOf(typeNames.knex.connectionString),
-        knexConnectionObjectValidation: {
-            isHost: signet.isTypeOf(knexConnection.host),
-            isSocketPath: signet.isTypeOf(knexConnection.socketPath),
-            isUser: signet.isTypeOf(knexConnection.user),
-            isPassword: signet.isTypeOf(knexConnection.password),
-            isDatabase: signet.isTypeOf(knexConnection.database),
-        },
-        knexConnectionFileValidation: {
-            isFileNameObject: signet.isTypeOf(knexConnectionFileObject),
-            isFileName: signet.isTypeOf(knexConnectionFile.filename),
-        }
+        // isConnectionPathString: signet.isTypeOf(typeNames.knex.connectionString),
+        // knexConnectionObjectValidation: {
+        //     // isHost: signet.isTypeOf(knexConnection.host),
+        //     // isSocketPath: signet.isTypeOf(knexConnection.socketPath),
+        //     // isUser: signet.isTypeOf(knexConnection.user),
+        //     // isPassword: signet.isTypeOf(knexConnection.password),
+        //     isDatabase: signet.isTypeOf(knexConnection.database),
+        // },
+        // knexConnectionFileValidation: {
+        //     // isFileNameObject: signet.isTypeOf(knexConnectionFileObject),
+        //     // isFileName: signet.isTypeOf(knexConnectionFile.filename),
+        // }
     };
 }());
 
