@@ -293,9 +293,16 @@ var knex = (function () {
 }());
 
 var joyeuseTypes = (function () {
-    var dbFlags = ['readonly']
+    function getColumnFlags() {
+        return ['readonly', 'hidden'];
+    }
+
+    const joyeuseColumnDef = 'joyeuseColumnDef';
+    var dbFlags = getColumnFlags();
+    signet.extend('validType', signet.isType);
     var columnType = {
         name: typeNames.requiredString,
+        type: 'validType',
         flags: typeNames.joyeuse.columnFlags,
     };
 
@@ -305,19 +312,32 @@ var joyeuseTypes = (function () {
 
     signet.alias('arrayString', typeBuilder.asArray('string'));
     signet.subtype('arrayString')(typeNames.joyeuse.columnFlags,
-        function (params) {
-            var allItemsAreValid = params.filter(isDbFlag).length === params.length;
+        function (flags) {
+            var allItemsAreValid = flags.filter(isDbFlag).length === flags.length;
 
             return (
-                (params.length > 0)
+                (flags.length > 0)
                 && (allItemsAreValid)
-                && (!baseTypes.arrayHasDuplicates(params))
+                && (!baseTypes.arrayHasDuplicates(flags))
             );
         });
 
+    signet.defineDuckType(joyeuseColumnDef, columnType);
+
+    function getColumnTypeErrors(columnInfo) {
+        if (signet.isTypeOf(joyeuseColumnDef)(columnInfo)) {
+            return [];
+        }
+
+        return validator.getErrors('joyeuseColumnDefinition', joyeuseColumnDef, columnInfo);
+    }
+
     return {
-        dbFlags: dbFlags,
-        isDbFlagType: signet.isTypeOf(typeNames.joyeuse.columnFlags),
+        columnDefinitionType: columnType,
+        dbFlags: getColumnFlags(),
+        getColumnTypeErrors: getColumnTypeErrors,
+        isDbFlag: signet.isTypeOf(typeNames.joyeuse.columnFlags),
+        isJoyeuseColumnDefinition: signet.isTypeOf(joyeuseColumnDef),
     };
 }());
 

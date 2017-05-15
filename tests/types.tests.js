@@ -206,22 +206,36 @@ describe('type definitions', function () {
         });
     });
 
-    describe('joueuse types', function () {
-        it.skip('should have all column flags', function () {
+    describe('for joueuse types', function () {
+        it('should have all column flags', function () {
             this.verify(JSON.stringify(types.joyeuse.dbFlags, null, 4));
         });
 
         it('should validate [\'readonly\'] as valid dbFlags', function () {
-            assert.isTrue(types.joyeuse.isDbFlagType(['readonly']));
+            assert.isTrue(types.joyeuse.isDbFlag(['readonly']));
         });
 
         it('should validate [\'readonly\', \'readonly\'] as not valid dbFlags', function () {
-            assert.isFalse(types.joyeuse.isDbFlagType(['readonly', 'readonly']));
+            assert.isFalse(types.joyeuse.isDbFlag(['readonly', 'readonly']));
         });
 
         it('should validate all flags as being valid as a dbFlags', function () {
-            assert.isTrue(types.joyeuse.isDbFlagType(types.joyeuse.dbFlags));
+            assert.isTrue(types.joyeuse.isDbFlag(types.joyeuse.dbFlags));
         })
+
+        it('should contain a column definition type', function () {
+            this.verify(pretyJson(types.joyeuse.columnDefinitionType));
+        });
+
+        it('should validate a good column deffinition', function () {
+            var columnDefinition = {
+                name: "ProductName",
+                type: 'int',
+                flags: ["readonly"],
+            };
+
+            assert.isTrue(types.joyeuse.isJoyeuseColumnDefinition(columnDefinition));
+        });
     });
 
     //proof of concept
@@ -255,4 +269,17 @@ describe('type definitions', function () {
             });
         });
     }); // end proof of concept
+});
+
+describe('signet', function () {
+    var signetFactory = require('signet');
+    var signet;
+
+    beforeEach(function () {
+        signet = signetFactory();
+    });
+
+    it('should recognize a bogus type', function () {
+       assert.isFalse(signet.isType('foo')); 
+    });
 });

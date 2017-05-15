@@ -1,0 +1,5 @@
+{
+    "name": "requiredString",
+    "type": "validType",
+    "flags": "columnFlags"
+}
