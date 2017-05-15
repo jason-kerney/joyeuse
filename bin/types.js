@@ -183,7 +183,7 @@ var connectionParts = (function () {
     function validateConnectionObject(prefix) {
         return function (value) {
             var errors = validator.getErrors(prefix + connectionName, knexConnectionTypes.objectDef, value);
-            
+
             if (typeBuilder.isUndefined(value.host) && typeBuilder.isUndefined(value.socketPath)) {
                 errors.push(validator.typeError(prefix + connectionName + ".host", knexConnectionTypes.objectDef.host));
                 errors.push(validator.typeError(prefix + connectionName + ".socketPath", knexConnectionTypes.objectDef.socketPath));
@@ -300,11 +300,16 @@ var joyeuseTypes = (function () {
     const joyeuseColumnDef = 'joyeuseColumnDef';
     var dbFlags = getColumnFlags();
     signet.extend('validType', signet.isType);
-    var columnType = {
-        name: typeNames.requiredString,
-        type: 'validType',
-        flags: typeNames.joyeuse.columnFlags,
-    };
+
+    function getColumnTypeDef() {
+        return {
+            name: typeNames.requiredString,
+            type: 'validType',
+            flags: typeNames.joyeuse.columnFlags,
+        };
+    }
+
+    var columnType = getColumnTypeDef();
 
     function isDbFlag(item) {
         return dbFlags.includes(item);
@@ -329,11 +334,16 @@ var joyeuseTypes = (function () {
             return [];
         }
 
-        return validator.getErrors('joyeuseColumnDefinition', joyeuseColumnDef, columnInfo);
+        var deffErrors = validator.getErrors('joyeuseColumnDefinition', joyeuseColumnDef, columnInfo);
+        (Object.keys(columnType)).forEach(function (element) {
+            deffErrors = deffErrors.concat(validator.getErrors(element, columnType[element], columnInfo[element]))
+        }, this);
+
+        return deffErrors;
     }
 
     return {
-        columnDefinitionType: columnType,
+        columnDefinitionType: getColumnTypeDef(),
         dbFlags: getColumnFlags(),
         getColumnTypeErrors: getColumnTypeErrors,
         isDbFlag: signet.isTypeOf(typeNames.joyeuse.columnFlags),

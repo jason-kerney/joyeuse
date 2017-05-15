@@ -1,0 +1,29 @@
+[
+    {
+        "property_name": "joyeuseColumnDefinition",
+        "type": "joyeuseColumnDef",
+        "value_given": {
+            "type": "numberThingy",
+            "flags": [
+                "helpful"
+            ]
+        }
+    },
+    {
+        "property_name": "name",
+        "type": "requiredString",
+        "value_given": "undefined"
+    },
+    {
+        "property_name": "type",
+        "type": "validType",
+        "value_given": "numberThingy"
+    },
+    {
+        "property_name": "flags",
+        "type": "columnFlags",
+        "value_given": [
+            "helpful"
+        ]
+    }
+]

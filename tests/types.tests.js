@@ -236,6 +236,15 @@ describe('type definitions', function () {
 
             assert.isTrue(types.joyeuse.isJoyeuseColumnDefinition(columnDefinition));
         });
+
+        it('should be able to give good errors for a column deffinition', function () {
+            var columnDefinition = {
+                type: 'numberThingy',
+                flags: ["helpful"],
+            };
+
+            this.verify(pretyJson(types.joyeuse.getColumnTypeErrors(columnDefinition)));
+        });
     });
 
     //proof of concept
