@@ -329,7 +329,7 @@ var joyeuseTypes = (function () {
 
     signet.defineDuckType(joyeuseColumnDef, columnType);
 
-    function getColumnTypeErrors(columnInfo) {
+    function getColumnDefinitionTypeErrors(columnInfo) {
         if (signet.isTypeOf(joyeuseColumnDef)(columnInfo)) {
             return [];
         }
@@ -345,7 +345,7 @@ var joyeuseTypes = (function () {
     return {
         columnDefinitionType: getColumnTypeDef(),
         dbFlags: getColumnFlags(),
-        getColumnTypeErrors: getColumnTypeErrors,
+        getColumnDefinitionTypeErrors: getColumnDefinitionTypeErrors,
         isDbFlag: signet.isTypeOf(typeNames.joyeuse.columnFlags),
         isJoyeuseColumnDefinition: signet.isTypeOf(joyeuseColumnDef),
     };

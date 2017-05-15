@@ -243,7 +243,7 @@ describe('type definitions', function () {
                 flags: ["helpful"],
             };
 
-            this.verify(pretyJson(types.joyeuse.getColumnTypeErrors(columnDefinition)));
+            this.verify(pretyJson(types.joyeuse.getColumnDefinitionTypeErrors(columnDefinition)));
         });
     });
 
