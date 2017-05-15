@@ -10,11 +10,6 @@
         }
     },
     {
-        "property_name": "name",
-        "type": "requiredString",
-        "value_given": "undefined"
-    },
-    {
         "property_name": "type",
         "type": "validType",
         "value_given": "numberThingy"

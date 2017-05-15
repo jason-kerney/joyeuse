@@ -25,6 +25,7 @@ function getTypeNames() {
         requiredString: 'requiredString',
         path: 'path',
         distinctItemArray: 'distinctItemArray',
+        validType: 'validType',
     };
 }
 
@@ -299,12 +300,11 @@ var joyeuseTypes = (function () {
 
     const joyeuseColumnDef = 'joyeuseColumnDef';
     var dbFlags = getColumnFlags();
-    signet.extend('validType', signet.isType);
+    signet.extend(typeNames.validType, signet.isType);
 
     function getColumnTypeDef() {
         return {
-            name: typeNames.requiredString,
-            type: 'validType',
+            type: typeNames.validType,
             flags: typeNames.joyeuse.columnFlags,
         };
     }
@@ -313,6 +313,15 @@ var joyeuseTypes = (function () {
 
     function isDbFlag(item) {
         return dbFlags.includes(item);
+    }
+
+    function getColumnDefinitionBuilder() {
+        return signet.enforce(typeBuilder.asMethod(typeNames.validType, joyeuseColumnDef), function type(validTypeName) {
+            return {
+                type: validTypeName,
+                flags: []
+            };
+        });
     }
 
     signet.alias('arrayString', typeBuilder.asArray('string'));
@@ -348,6 +357,7 @@ var joyeuseTypes = (function () {
         getColumnDefinitionTypeErrors: getColumnDefinitionTypeErrors,
         isDbFlag: signet.isTypeOf(typeNames.joyeuse.columnFlags),
         isJoyeuseColumnDefinition: signet.isTypeOf(joyeuseColumnDef),
+        getColumnDefinitionBuilder: getColumnDefinitionBuilder,
     };
 }());
 

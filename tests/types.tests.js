@@ -245,6 +245,18 @@ describe('type definitions', function () {
 
             this.verify(pretyJson(types.joyeuse.getColumnDefinitionTypeErrors(columnDefinition)));
         });
+
+        it('should be have a column definition builder that takes a type name', function () {
+            var columnBuilder = types.joueuse.getColumnDefinitionBuilder();
+            var columnDef = columnBuilder('int');
+            this.verify(pretyJson(columnDef));
+        });
+
+        it.skip('should be have a column definition builder that takes a type name', function () {
+            var columnBuilder = types.joueuse.getColumnDefinitionBuilder();
+            var columnDef = columnBuilder('bool');
+            this.verify(pretyJson(columnDef));
+        });
     });
 
     //proof of concept
