@@ -356,8 +356,29 @@ var joyeuseTypes = (function () {
                 return columnDefinition;                
             }
 
+            function init(fn) {
+                if (!typeBuilder.isUndefined(columnDefinition.initFn)) {
+                    return columnDefinition;
+                }
+
+                var functionSignature = typeBuilder.asMethod('()', validTypeName);
+                // signet.sign(functionSignature, fn);
+                
+                // columnDefinition.initFn = signet.enforce(functionSignature, fn);
+                columnDefinition.initFn = function () {
+                    var result = fn();
+                    if (!signet.isTypeOf(validTypeName)(result)) {
+                        throw new Error("Expected to return type of " + validTypeName);
+                    }
+
+                    return result;
+                };
+                return columnDefinition;
+            }
+
             columnDefinition.hidden = hidden;
             columnDefinition.readonly = readonly;
+            columnDefinition.init = init;
 
             return columnDefinition;
         });

@@ -293,6 +293,64 @@ describe('type definitions', function () {
             var columnDef = columnBuilder('boolean').hidden().hidden();
             this.verify(pretyJson(columnDef));
         });
+
+        it('should be have a column definition builder that can be made hidden then hidden', function () {
+            var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+            var columnDef = columnBuilder('boolean').hidden().hidden();
+            this.verify(pretyJson(columnDef));
+        });
+
+        it('should have a column definition builder that init a type', function () {
+            var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+
+            var columnDef = columnBuilder('int');
+            assert.isUndefined(columnBuilder.initFn);
+            columnDef = columnDef.init(function () {
+                return 2;
+            });
+
+            var result = columnDef.initFn();
+            assert.equal(2, result);
+        });
+
+        it('should have a column definition builder that init a type - boolean', function () {
+            var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+
+            var columnDef = columnBuilder('boolean');
+            assert.isUndefined(columnBuilder.initFn);
+            columnDef = columnDef.init(function () {
+                return true;
+            });
+
+            var result = columnDef.initFn();
+            assert.equal(true, result);
+        });
+
+        it('should have a column definition that throws an error when it returns wrong type.', function () {
+            var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+
+            var columnDef = columnBuilder('int');
+            assert.isUndefined(columnBuilder.initFn);
+            columnDef = columnDef.init(function () {
+                return "some thing";
+            });
+
+            var throwing = columnDef.initFn.bind(null);
+            assert.throws(throwing, "Expected to return type of int");
+        });
+
+        it('should have a column definition that throws an error when it returns wrong type. - boolean', function () {
+            var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+
+            var columnDef = columnBuilder('boolean');
+            assert.isUndefined(columnBuilder.initFn);
+            columnDef = columnDef.init(function () {
+                return 4;
+            });
+
+            var throwing = columnDef.initFn.bind(null);
+            assert.throws(throwing, "Expected to return type of boolean");
+        });
     });
 
     //proof of concept
@@ -337,6 +395,6 @@ describe('signet', function () {
     });
 
     it('should recognize a bogus type', function () {
-       assert.isFalse(signet.isType('foo')); 
+        assert.isFalse(signet.isType('foo'));
     });
 });
