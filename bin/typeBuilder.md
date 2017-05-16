@@ -6,7 +6,7 @@
 
 example:
 ```javascript
-    var typeBuilder = require('typeBuilder');
+    var typeBuilder = require('joyeuse').typeBuilder;
 ```
 
 ### Signet
