@@ -186,8 +186,8 @@ var connectionParts = (function () {
             var errors = validator.getErrors(prefix + connectionName, knexConnectionTypes.objectDef, value);
 
             if (typeBuilder.isUndefined(value.host) && typeBuilder.isUndefined(value.socketPath)) {
-                errors.push(validator.typeError(prefix + connectionName + ".host", knexConnectionTypes.objectDef.host));
-                errors.push(validator.typeError(prefix + connectionName + ".socketPath", knexConnectionTypes.objectDef.socketPath));
+                errors.push(validator.costructTypeError(prefix + connectionName + ".host", knexConnectionTypes.objectDef.host));
+                errors.push(validator.costructTypeError(prefix + connectionName + ".socketPath", knexConnectionTypes.objectDef.socketPath));
             }
 
             return errors;

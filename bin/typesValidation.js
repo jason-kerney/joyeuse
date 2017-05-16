@@ -57,6 +57,6 @@ function getErrors() {
 }
 
 module.exports = {
-    typeError: typeError,
+    costructTypeError: typeError,
     getErrors: getErrors,
 }
