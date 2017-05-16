@@ -9,7 +9,7 @@ function statPath(filePath) {
     }
 }
 
-function BeyondCompare4 () {
+function BeyondCompare4() {
     return {
         name: 'BeyondCompare4',
         canReportOn: function () {
@@ -27,12 +27,11 @@ function BeyondCompare4 () {
             }
 
             spawn(executionPath, [receivedPath, approvedPath], { detached: true });
-
         }
     };
 };
 
-function BeyondCompare3 () {
+function BeyondCompare3() {
     return {
         name: 'BeyondCompare3',
         canReportOn: function () {
@@ -55,4 +54,7 @@ function BeyondCompare3 () {
     };
 };
 
-module.exports = BeyondCompare4;
+module.exports = {
+    BeyondCompare4: BeyondCompare4,
+    BeyondCompare3: BeyondCompare3
+};

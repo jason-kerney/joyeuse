@@ -4,7 +4,7 @@ var signet = require('signet')();
 
 var isUndefined = signet.isTypeOf('undefined');
 
-var asMethod = signet.enforce('variant<string; array<string>> => string',
+var asMethodDefString = signet.enforce('variant<string; array<string>> => string',
     function (input, output) {
         if (signet.isTypeOf('string')(input)) {
             return input + ' => ' + output;
@@ -13,12 +13,12 @@ var asMethod = signet.enforce('variant<string; array<string>> => string',
         }
     });
 
-var typedString = signet.enforce(asMethod('string', 'string'),
+var typedString = signet.enforce(asMethodDefString('string', 'string'),
     function (name, typeString) {
         return name + '<' + typedString + '>';
     });
 
-var asVariant = signet.enforce(asMethod('string', 'string'),
+var asVariantDefString = signet.enforce(asMethodDefString('string', 'string'),
     function () {
         var args = Array.prototype.slice.call(arguments);
         if (!(signet.isTypeOf('array<string>'))) {
@@ -28,13 +28,13 @@ var asVariant = signet.enforce(asMethod('string', 'string'),
         return 'variant<' + args.join('; ') + '>'
     });
 
-var asBoundedInt = signet.enforce(asMethod('int, [int]', 'string'),
+var asBoundedIntDefString = signet.enforce(asMethodDefString('int, [int]', 'string'),
     function (min, max) {
         var realMax = isUndefined(max) ? Infinity : max;
         return 'boundedInt<' + min + ';' + realMax + '>';
     });
 
-var asArray = signet.enforce(asMethod(asVariant('undefined', 'string'), 'string'),
+var asArrayDefString = signet.enforce(asMethodDefString(asVariantDefString('undefined', 'string'), 'string'),
     function (typeString) {
         const arrayName = 'array';
         if (isUndefined(typeString)) {
@@ -43,38 +43,38 @@ var asArray = signet.enforce(asMethod(asVariant('undefined', 'string'), 'string'
         return arrayName + '<' + typeString + '>';
     });
 
-var asFormattedString = signet.enforce(asMethod('string', 'string'),
+var asFormattedStringDefString = signet.enforce(asMethodDefString('string', 'string'),
     function (format) {
         return 'formattedString<' + format + '>';
     });
 
-var asOptionalParameter = signet.enforce(asMethod('string', 'string'),
+var asOptionalParameterDefString = signet.enforce(asMethodDefString('string', 'string'),
     function (typestring) {
         return '[' + typestring + ']';
     });
 
-var asOptionalProperty = signet.enforce(asMethod('string', 'string'), asVariant.bind(null, 'undefined'));
+var asOptionalPropertyDefString = signet.enforce(asMethodDefString('string', 'string'), asVariantDefString.bind(null, 'undefined'));
 
-var asStringEnum = signet.enforce(asMethod('string', 'string'), function () {
+var asStringEnumDefString = signet.enforce(asMethodDefString('string', 'string'), function () {
     var args = Array.prototype.slice.call(arguments);
     if (!(signet.isTypeOf('array<string>'))) {
         throw new Error("all parrameters need to be of type'string'");
     }
 
-    return asFormattedString('^(' + args.join('|') + ')$');
+    return asFormattedStringDefString('^(' + args.join('|') + ')$');
 });
 
 var exportedType = {
     signet: signet,
     isUndefined: isUndefined,
-    asArray: asArray,
-    asVariant: asVariant,
-    asFormattedString: asFormattedString,
-    asOptionalParameter: asOptionalParameter,
-    asOptionalProperty: asOptionalProperty,
-    asBoundedInt: asBoundedInt,
-    asMethod: asMethod,
-    asStringEnum: asStringEnum,
+    asArray: asArrayDefString,
+    asVariant: asVariantDefString,
+    asFormattedString: asFormattedStringDefString,
+    asOptionalParameter: asOptionalParameterDefString,
+    asOptionalProperty: asOptionalPropertyDefString,
+    asBoundedInt: asBoundedIntDefString,
+    asMethod: asMethodDefString,
+    asStringEnum: asStringEnumDefString,
 };
 
 module.exports = exportedType;
