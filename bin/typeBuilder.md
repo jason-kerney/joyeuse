@@ -95,7 +95,7 @@ signature:
 example:
 ```javascript
     var optionalParam = typeBuilder.asOptionalParameterDefString('int');
-    returns: '[int]'
+    // returns: '[int]'
 ```
 
 ### asOptionalPropertyDefString
