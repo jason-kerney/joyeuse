@@ -1,0 +1,6 @@
+{
+    "type": "int",
+    "flags": [
+        "readonly"
+    ]
+}

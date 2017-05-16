@@ -317,10 +317,49 @@ var joyeuseTypes = (function () {
 
     function getColumnDefinitionBuilder() {
         return signet.enforce(typeBuilder.asMethod(typeNames.validType, joyeuseColumnDef), function type(validTypeName) {
-            return {
+            var columnDefinition = {
                 type: validTypeName,
                 flags: []
             };
+
+            function contains(flags) {
+                return function (flagToFind) {
+                    return flags.filter(function (flag) {
+                        return flag === flagToFind;
+                    }).length > 0;
+                };
+            }
+
+            function containsHidden(flags) {
+                return contains(columnDefinition.flags)('hidden');
+            }
+
+            function containsReadonly(flags) {
+                return contains(columnDefinition.flags)('readonly');
+            }
+
+            function hidden() {
+                if (containsHidden(columnDefinition.flags)) {
+                    return columnDefinition;
+                }
+                columnDefinition.flags.push('hidden');
+
+                return columnDefinition;
+            }
+
+            function readonly() {
+                if (contains(columnDefinition.flags)('readonly')) {
+                    return columnDefinition;
+                }
+
+                columnDefinition.flags.push('readonly');
+                return columnDefinition;                
+            }
+
+            columnDefinition.hidden = hidden;
+            columnDefinition.readonly = readonly;
+
+            return columnDefinition;
         });
     }
 
@@ -333,7 +372,7 @@ var joyeuseTypes = (function () {
                 (flags.length > 0)
                 && (allItemsAreValid)
                 && (!baseTypes.arrayHasDuplicates(flags))
-            );
+            ) || flags.length === 0;
         });
 
     signet.defineDuckType(joyeuseColumnDef, columnType);
