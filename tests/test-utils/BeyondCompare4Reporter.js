@@ -9,8 +9,6 @@ function statPath(filePath) {
     }
 }
 
-
-
 function BeyondCompare4 () {
     return {
         name: 'BeyondCompare4',
