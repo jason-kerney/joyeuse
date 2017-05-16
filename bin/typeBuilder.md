@@ -1,6 +1,6 @@
-#typeBuilder.js
+# typeBuilder.js
 
-##Type Builder
+## Type Builder
 
 **This module is used to build a custom type system for use with Joyeuse**
 
@@ -8,15 +8,15 @@ example:
 
     var typeBuilder = require('typeBuilder');
 
-###Signet
+### Signet
 
 [Signet](https://www.npmjs.com/package/signet) is the underlying type system used by Joyeuse
 
 example:
-
+<code>
     var signet = typeBuilder.signet;
-
-###isUndefined
+</code>
+### isUndefined
 
 Returns whether or not an item is undefined. this is the same as:
 
@@ -32,7 +32,7 @@ example
     ...
     }
 
-###asArrayDefString
+### asArrayDefString
 
 Creates the type definition for either a typed or untyped array
 
@@ -49,7 +49,7 @@ example:
     var typedDef = typeBuilder.asArrayDefString('number');
     // returns: 'array<number>'
 
-###asVariantDefString
+### asVariantDefString
 
 Creates the type definition for a variant type
 
@@ -62,7 +62,7 @@ example:
     var variant = typeBuilder.asVariantDefString('int', 'string');
     // returns 'variant<int; string>'
 
-###asFormattedStringDefString
+### asFormattedStringDefString
 
 Creates the type definition for a string that must follow a defined format.
 
@@ -75,7 +75,7 @@ example:
     var usPhoneDef = typeBuilder.asFormattedStringDefString('(\\d{3}\\-)?\d{3}\\-?\d{4}');
     // returns: 'formattedString<(\\d{3}\\-)?\d{3}\\-?\d{4}>'
 
-###asOptionalParameterDefString
+### asOptionalParameterDefString
 
 Creates the type definition for an optional parameter to a function.
 
@@ -88,7 +88,7 @@ example:
     var optionalParam = typeBuilder.asOptionalParameterDefString('int');
     returns: '[int]'
 
-###asOptionalPropertyDefString
+### asOptionalPropertyDefString
 
 Creates the type definition for an optional property of an object. This allows the property to not be present but guarantees the property is of the correct type if it exists.
 
@@ -101,7 +101,7 @@ example:
     var optionalProp = typeBuilder.asOptionalPropertyDefString('boolean');
     // returns 'variant<undefined;boolean>'
 
-###asBoundedIntDefString
+### asBoundedIntDefString
 
 Creates a type definition for an integer that is bounded by at least the min value.
 
@@ -115,7 +115,7 @@ example:
 	var lbounded = typeBuilder.asBoundedIntDefString(2);
 	// returns 'boundedInt<2, Infinity>'
 
-###asFunctionalDefString
+### asFunctionalDefString
 
 Creates a type definition for a function.
 
@@ -137,7 +137,7 @@ example:
     var twoParam = typeBuilder.asFunctionalDefString(['int', 'boolean'], 'number');
     // returns: 'int, boolean => number'
     
-###asStringEnum
+### asStringEnum
 
 Creates a type for a constrained string array that must have only strings of given values.
 
