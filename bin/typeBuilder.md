@@ -160,5 +160,5 @@ signature:
 
 example:
 ```javascript
-    typeBuilder.asStringEnumDefString('jason', 'joe', 'bob');
+    typeBuilder.asStringEnum('jason', 'joe', 'bob');
 ```
