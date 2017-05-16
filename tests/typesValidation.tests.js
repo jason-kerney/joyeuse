@@ -87,19 +87,19 @@ describe('type validation builder', function () {
 
         it('should return errors for constuctor when connection object has a bad host and invalid client.', function () {
             var connectionObjectDef = {
-                host: typeBuilder.asOptionalProperty(typeNames.ip4.format),
-                socketPath: typeBuilder.asOptionalProperty(typeNames.path),
+                host: typeBuilder.asOptionalPropertyDefString(typeNames.ip4.format),
+                socketPath: typeBuilder.asOptionalPropertyDefString(typeNames.path),
                 user: typeNames.requiredString,
-                password: typeBuilder.asOptionalProperty(typeNames.requiredString),
+                password: typeBuilder.asOptionalPropertyDefString(typeNames.requiredString),
                 database: typeNames.requiredString,
             };
 
             var constructorDef = {
                 client: typeNames.knex.clients,
                 connection: connectionObjectDef,
-                searchPath: typeBuilder.asOptionalProperty(typeNames.requiredString),
-                debug: typeBuilder.asOptionalProperty('boolean'),
-                acquireConnectionTimeout: typeBuilder.asOptionalProperty(typeBuilder.asBoundedInt(0)),
+                searchPath: typeBuilder.asOptionalPropertyDefString(typeNames.requiredString),
+                debug: typeBuilder.asOptionalPropertyDefString('boolean'),
+                acquireConnectionTimeout: typeBuilder.asOptionalPropertyDefString(typeBuilder.asBoundedIntDefString(0)),
             };
 
 

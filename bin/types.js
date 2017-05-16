@@ -8,7 +8,7 @@ var signet = typeBuilder.signet;
 const connectionString = 'knexConnectionString';
 const connectionObject = 'knexConnectionObject';
 const connectionFileObject = 'knexConnectionFileObject';
-const connectionTypeDefs = typeBuilder.asVariant(connectionObject, connectionFileObject, connectionString);
+const connectionTypeDefs = typeBuilder.asVariantDefString(connectionObject, connectionFileObject, connectionString);
 
 function getTypeNames() {
     return {
@@ -44,7 +44,7 @@ var baseTypes = (function () {
         ')+' +
         '\\/?$';
 
-    signet.alias(typeNames.path, typeBuilder.asFormattedString(fullPathRegex));
+    signet.alias(typeNames.path, typeBuilder.asFormattedStringDefString(fullPathRegex));
 
     signet.subtype('string')(typeNames.requiredString, function (value) {
         return value.trim().length > 0;
@@ -57,7 +57,7 @@ var baseTypes = (function () {
         }));
     }
 
-    signet.subtype(typeBuilder.asArray())(typeNames.distinctItemArray, function (values) {
+    signet.subtype(typeBuilder.asArrayDefString())(typeNames.distinctItemArray, function (values) {
         return !hasDuplicates(values);
     });
 
@@ -74,7 +74,7 @@ var ip4 = (function () {
     var ip4Regex = '(localhost)|(([0-2]?\\d?\\d)\\.([0-2]?\\d?\\d)\\.(\\d?\\d?\\d)\\.([0-2]?\\d?\\d))';
     var octet = 'octet';
 
-    signet.alias(ip4Format, typeBuilder.asFormattedString(ip4Regex));
+    signet.alias(ip4Format, typeBuilder.asFormattedStringDefString(ip4Regex));
 
     signet.subtype('int')(octet, function (value) { return value >= 0 && value <= 255; })
 
@@ -83,7 +83,7 @@ var ip4 = (function () {
             return true;
         }
         var octets = value.split(['.']).map(function (v) { return parseInt(v); });
-        return signet.isTypeOf(typeBuilder.asArray(octet))(octets);
+        return signet.isTypeOf(typeBuilder.asArrayDefString(octet))(octets);
     });
 
     return {
@@ -95,11 +95,11 @@ var ip4 = (function () {
 var knexBaseTypes = (function () {
     const connectionAfterCreate = 'connectionAfterCreate';
     const connectionPoolMinMax = 'connectionPoolMinMax';
-    var connectionPoolTypeName = typeBuilder.asVariant(connectionAfterCreate, connectionPoolMinMax);
+    var connectionPoolTypeName = typeBuilder.asVariantDefString(connectionAfterCreate, connectionPoolMinMax);
 
     function getConnectionPoolDef() {
         return {
-            minMax: { min: typeBuilder.asBoundedInt(0), max: typeBuilder.asBoundedInt(0) },
+            minMax: { min: typeBuilder.asBoundedIntDefString(0), max: typeBuilder.asBoundedIntDefString(0) },
             afterCreate: { afterCreate: 'connectionMethodForConnectionPool' },
         };
     }
@@ -139,10 +139,10 @@ var connectionParts = (function () {
         return {
             objectDef:
             {
-                host: typeBuilder.asOptionalProperty(typeNames.ip4.format),
-                socketPath: typeBuilder.asOptionalProperty(typeNames.path),
+                host: typeBuilder.asOptionalPropertyDefString(typeNames.ip4.format),
+                socketPath: typeBuilder.asOptionalPropertyDefString(typeNames.path),
                 user: typeNames.requiredString,
-                password: typeBuilder.asOptionalProperty(typeNames.requiredString),
+                password: typeBuilder.asOptionalPropertyDefString(typeNames.requiredString),
                 database: typeNames.requiredString,
             },
             pathObjectDef: {
@@ -231,9 +231,9 @@ var knex = (function () {
     function getKnexConstructorDef() {
         return {
             client: typeNames.knex.clients,
-            searchPath: typeBuilder.asOptionalProperty(typeNames.requiredString),
-            debug: typeBuilder.asOptionalProperty('boolean'),
-            acquireConnectionTimeout: typeBuilder.asOptionalProperty(typeBuilder.asBoundedInt(0)),
+            searchPath: typeBuilder.asOptionalPropertyDefString(typeNames.requiredString),
+            debug: typeBuilder.asOptionalPropertyDefString('boolean'),
+            acquireConnectionTimeout: typeBuilder.asOptionalPropertyDefString(typeBuilder.asBoundedIntDefString(0)),
         };
     }
 
@@ -316,7 +316,7 @@ var joyeuseTypes = (function () {
     }
 
     function getColumnDefinitionBuilder() {
-        return signet.enforce(typeBuilder.asMethod(typeNames.validType, joyeuseColumnDef), function type(validTypeName) {
+        return signet.enforce(typeBuilder.asFunctionalDefString(typeNames.validType, joyeuseColumnDef), function type(validTypeName) {
             var columnDefinition = {
                 type: validTypeName,
                 flags: []
@@ -361,7 +361,7 @@ var joyeuseTypes = (function () {
                     return columnDefinition;
                 }
 
-                var functionSignature = typeBuilder.asMethod('()', validTypeName);
+                var functionSignature = typeBuilder.asFunctionalDefString('()', validTypeName);
                 // signet.sign(functionSignature, fn);
                 
                 // columnDefinition.initFn = signet.enforce(functionSignature, fn);
@@ -384,7 +384,7 @@ var joyeuseTypes = (function () {
         });
     }
 
-    signet.alias('arrayString', typeBuilder.asArray('string'));
+    signet.alias('arrayString', typeBuilder.asArrayDefString('string'));
     signet.subtype('arrayString')(typeNames.joyeuse.columnFlags,
         function (flags) {
             var allItemsAreValid = flags.filter(isDbFlag).length === flags.length;
