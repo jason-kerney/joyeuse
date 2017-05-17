@@ -2,6 +2,7 @@
 
 ## Joyeuse Main File
 
+[getFactory](getFactory)
 .
 
 .
