@@ -11,24 +11,24 @@ example:
 
 Types members are:
 
-[typeNames](typeNames)</br>
-[base](base)</br>
-[ip4](ip4)</br>
-[knex](knex)</br>
-[joyeuse](joyeuse)</br>
+[typeNames](#typeNames)</br>
+[base](#base)</br>
+[ip4](#ip4)</br>
+[knex](#knex)</br>
+[joyeuse](#joyeuse)</br>
 
 ### typeNames ###
 
 These are all the exposed type names. They are:
 
-[typeNames.validType](typeNames.validType)</br>
-[typeNames.requiredString](typeNames.requiredString)</br>
-[typeNames.path](typeNames.path)</br>
-[typeNames.distinctItemArray](typeNames.distinctItemArray)</br>
-[typeNames.ip4.format](typeNames.ip4.format)</br>
-[typeNames.knex.clients](typeNames.knex.clients)</br>
-[typeNames.knex.knexConstructorParam](typeNames.knex.knexConstructorParam)</br>
-[typeNames.joyeuse.columnFlags](typeNames.joyeuse.columnFlags)
+[typeNames.validType](#typeNames.validType)</br>
+[typeNames.requiredString](#typeNames.requiredString)</br>
+[typeNames.path](#typeNames.path)</br>
+[typeNames.distinctItemArray](#typeNames.distinctItemArray)</br>
+[typeNames.ip4.format](#typeNames.ip4.format)</br>
+[typeNames.knex.clients](#typeNames.knex.clients)</br>
+[typeNames.knex.knexConstructorParam](#typeNames.knex.knexConstructorParam)</br>
+[typeNames.joyeuse.columnFlags](#typeNames.joyeuse.columnFlags)
 
 #### typeNames.validType ###
 This is the name of a type that represents a string containing a name of a registerd [signet](https://www.npmjs.com/package/signet) type.
@@ -55,17 +55,17 @@ This is the name of the type that is used to construct [Knex](http://knexjs.org/
 This is the name of the type that represents the unique array of valid column flags.
 
 ### base ###
-This contains methods used to validate base types give directly off of [typeNames](typeNames).
+This contains methods used to validate base types give directly off of [typeNames](#typeNames).
 
 Functions Provided:
 
-[base.isRequiredString](base.isRequiredString)</br>
-[base.isPath](base.isPath)</br>
-[base.isDistinctItemArray](base.isDistinctItemArray)</br>
-[base.arrayHasDuplicates](base.arrayHasDuplicates)</br>
+[base.isRequiredString](#base.isRequiredString)</br>
+[base.isPath](#base.isPath)</br>
+[base.isDistinctItemArray](#base.isDistinctItemArray)</br>
+[base.arrayHasDuplicates](#base.arrayHasDuplicates)</br>
 
 #### base.isRequiredString ###
-This function determines if a given string is a [required string](typeNames.requiredString). Meaning it is a non-zero length string containing more then white space. This returns true if the item provides is a string containing something other then white space.
+This function determines if a given string is a [required string](#typeNames.requiredString). Meaning it is a non-zero length string containing more then white space. This returns true if the item provides is a string containing something other then white space.
 
 signature:
 ```
@@ -101,8 +101,8 @@ This exposes functions to validate an IP4 address string and its parts.
 
 Functions Provided:
 
-[ip4.isIp4String](ip4.isIp4String)</br>
-[ip4.isOctet](ip4.isOctet)</br>
+[ip4.isIp4String](#ip4.isIp4String)</br>
+[ip4.isOctet](#ip4.isOctet)</br>
 
 #### ip4.isIp4String ####
 This function will validate if a string is a valid IP4 address string. Returns true if the string is formatted correctly.
@@ -125,22 +125,22 @@ This gives types for dealing with [knexjs](http://knexjs.org) and methods relate
 
 Its members are:
 
-[knex.baseTypes](knex.baseTypes)</br>
-[knex.getKnexConnectionDef](knex.getKnexConnectionDef)</br>
-[knex.getKnexConstructorDef](knex.getKnexConstructorDef)</br>
-[knex.isKnexConstructor](knex.isKnexConstructor)</br>
-[knex.getConstuctorParameterErrors](knex.getConstuctorParameterErrors)</br>
-[knex.getConstructorParameterErrorMessage](knex.getConstructorParameterErrorMessage)
+[knex.baseTypes](#knex.baseTypes)</br>
+[knex.getKnexConnectionDef](#knex.getKnexConnectionDef)</br>
+[knex.getKnexConstructorDef](#knex.getKnexConstructorDef)</br>
+[knex.isKnexConstructor](#knex.isKnexConstructor)</br>
+[knex.getConstuctorParameterErrors](#knex.getConstuctorParameterErrors)</br>
+[knex.getConstructorParameterErrorMessage](#knex.getConstructorParameterErrorMessage)
 
 #### knex.baseTypes ###
 This structure represents the types used to build up [knexjs](http://knexjs.org) types and the functions to validate them.
 
 Members are:
 
-[knex.baseTypes.getConnectionPoolDef](knex.baseTypes.getConnectionPoolDef)</br>
-[knex.baseTypes.getConnectionPoolErrors](knex.baseTypes.getConnectionPoolErrors)</br>
-[knex.baseTypes.allowedDatabases](knex.baseTypes.allowedDatabases)</br>
-[knex.baseTypes.isClient](knex.baseTypes.isClient)
+[knex.baseTypes.getConnectionPoolDef](#knex.baseTypes.getConnectionPoolDef)</br>
+[knex.baseTypes.getConnectionPoolErrors](#knex.baseTypes.getConnectionPoolErrors)</br>
+[knex.baseTypes.allowedDatabases](#knex.baseTypes.allowedDatabases)</br>
+[knex.baseTypes.isClient](#knex.baseTypes.isClient)
 
 ##### knex.baseTypes.getConnectionPoolDef #####
 This function returns the deffinition for a connection pool object to be used in the [knexjs](http://knexjs.org) constructor.
@@ -163,7 +163,7 @@ The deffinition is:
 ##### knex.baseTypes.getConnectionPoolErrors #####
 This function takes a connection pool object and returns an array of type validation error. This function returns an empty array if there are no errors.
 
-These errors are defined in [typesValidation.js](typesValidation.md).
+These errors are defined in [typesValidation.js](#typesValidation.md).
 
 signature:
 ```
@@ -181,7 +181,7 @@ This is a list of database that Joyeuse is allowed to conncet to. The current li
 * oracle
 
 ##### knex.baseTypes.isClient #####
-This function determines if a given string is one of the [allowed databases](knex.baseTypes.allowedDatabases). This function returns true if the string given is in the list of allowed databases.
+This function determines if a given string is one of the [allowed databases](#knex.baseTypes.allowedDatabases). This function returns true if the string given is in the list of allowed databases.
 
 signature:
 ```
@@ -238,7 +238,7 @@ The definition is:
 ```
 
 #### knex.isKnexConstructor ####
-This function validates an object to determine if it is a [knexjs](http://knexjs.org/) constructor parameter. This parameter is defined in [knex.getKnexConstructorDef](knex.getKnexConstructorDef). This function returns true if the object passes validation.
+This function validates an object to determine if it is a [knexjs](http://knexjs.org/) constructor parameter. This parameter is defined in [knex.getKnexConstructorDef](#knex.getKnexConstructorDef). This function returns true if the object passes validation.
 
 signature:
 ```
