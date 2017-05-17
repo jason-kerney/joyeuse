@@ -206,21 +206,21 @@ describe('type definitions', function () {
         });
     });
 
-    describe('for joueuse types', function () {
+    describe('for joyeuse types', function () {
         it('should have all column flags', function () {
-            this.verify(JSON.stringify(types.joyeuse.dbFlags, null, 4));
+            this.verify(JSON.stringify(types.joyeuse.columnFlags, null, 4));
         });
 
-        it('should validate [\'readonly\'] as valid dbFlags', function () {
-            assert.isTrue(types.joyeuse.isDbFlag(['readonly']));
+        it('should validate [\'readonly\'] as valid columnFlags', function () {
+            assert.isTrue(types.joyeuse.isColumnFlag(['readonly']));
         });
 
-        it('should validate [\'readonly\', \'readonly\'] as not valid dbFlags', function () {
-            assert.isFalse(types.joyeuse.isDbFlag(['readonly', 'readonly']));
+        it('should validate [\'readonly\', \'readonly\'] as not valid columnFlags', function () {
+            assert.isFalse(types.joyeuse.isColumnFlag(['readonly', 'readonly']));
         });
 
-        it('should validate all flags as being valid as a dbFlags', function () {
-            assert.isTrue(types.joyeuse.isDbFlag(types.joyeuse.dbFlags));
+        it('should validate all flags as being valid as a columnFlags', function () {
+            assert.isTrue(types.joyeuse.isColumnFlag(types.joyeuse.columnFlags));
         })
 
         it('should contain a column definition type', function () {

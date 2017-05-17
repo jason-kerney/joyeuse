@@ -413,9 +413,9 @@ var joyeuseTypes = (function () {
 
     return {
         columnDefinitionType: getColumnTypeDef(),
-        dbFlags: getColumnFlags(),
+        columnFlags: getColumnFlags(),
         getColumnDefinitionTypeErrors: getColumnDefinitionTypeErrors,
-        isDbFlag: signet.isTypeOf(typeNames.joyeuse.columnFlags),
+        isColumnFlag: signet.isTypeOf(typeNames.joyeuse.columnFlags),
         isJoyeuseColumnDefinition: signet.isTypeOf(joyeuseColumnDef),
         getColumnDefinitionBuilder: getColumnDefinitionBuilder,
     };
