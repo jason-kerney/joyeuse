@@ -14,7 +14,7 @@ Types members are:
 [typeNames](typeNames)</br>
 [base](base)</br>
 [ip4](ip4)</br>
-[](knex)</br>
+[knex](knex)</br>
 [joyeuse](joyeuse)</br>
 
 ### typeNames ###
@@ -125,9 +125,66 @@ Its members are:
 
 [knex.baseTypes](knex.baseTypes)</br>
 [knex.getKnexConnectionDef](knex.getKnexConnectionDef)</br>
-[knex.getKnexConstructorDef]()</br>
-[knex.isKnexConstructor]()</br>
-[knex.getConstuctorParameterErrors]()</br>
-[knex.getConstructorParameterErrorMessage]()
+[knex.getKnexConstructorDef](knex.getKnexConstructorDef)</br>
+[knex.isKnexConstructor](knex.isKnexConstructor)</br>
+[knex.getConstuctorParameterErrors](knex.getConstuctorParameterErrors)</br>
+[knex.getConstructorParameterErrorMessage](knex.getConstructorParameterErrorMessage)
 
 #### knex.baseTypes ###
+This structure represents the types used to build up [knexjs](http://knexjs.org) types and the functions to validate them.
+
+Members are:
+
+[knex.baseTypes.getConnectionPoolDef](knex.baseTypes.getConnectionPoolDef)</br>
+[knex.baseTypes.getConnectionPoolErrors](knex.baseTypes.getConnectionPoolErrors)</br>
+[knex.baseTypes.allowedDatabases](knex.baseTypes.allowedDatabases)</br>
+[knex.baseTypes.isClient](knex.baseTypes.isClient)
+
+##### knex.baseTypes.getConnectionPoolDef #####
+This function returns the deffinition for a connection pool object to be used in the [knexjs](http://knexjs.org) constructor.
+
+signature:
+```
+    () => connectionPoolDef
+```
+
+The deffinition is:
+```
+    {
+        minMax: { min:0 - Infinity, max: 0 - Infinity },
+        afterCreate: { 
+            afterCreate: 'connectionMethodForConnectionPool' 
+        },
+    }
+```
+
+##### knex.baseTypes.getConnectionPoolErrors #####
+This function takes a connection pool object and returns an array of type validation error. This function returns an empty array if there are no errors.
+
+These errors are defined in [typesValidation.js](typesValidation.md).
+
+signature:
+```
+    Object => array<typeError>
+```
+
+##### knex.baseTypes.allowedDatabases #####
+This is a list of database that Joyeuse is allowed to conncet to. The current list is:
+
+* postgres
+* mssql
+* mysql
+* mariadb
+* sqlite3
+* oracle
+
+##### knex.baseTypes.isClient #####
+This function determines if a given string is one of the [allowed databases](knex.baseTypes.allowedDatabases). This function returns true if the string given is in the list of allowed databases.
+
+signature:
+```
+    string => boolean
+```
+
+
+#### knex.getKnexConnectionDef ####
