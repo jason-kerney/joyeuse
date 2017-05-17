@@ -14,7 +14,7 @@ Types members are:
 [typeNames](typeNames)</br>
 [base](base)</br>
 [ip4](ip4)</br>
-[knex]()</br>
+[](knex)</br>
 [joyeuse](joyeuse)</br>
 
 ### typeNames ###
@@ -123,8 +123,8 @@ This gives types for dealing with [knexjs](http://knexjs.org) and methods relate
 
 Its members are:
 
-[knex.baseTypes]()</br>
-[knex.getKnexConnectionDef]()</br>
+[knex.baseTypes](knex.baseTypes)</br>
+[knex.getKnexConnectionDef](knex.getKnexConnectionDef)</br>
 [knex.getKnexConstructorDef]()</br>
 [knex.isKnexConstructor]()</br>
 [knex.getConstuctorParameterErrors]()</br>
