@@ -188,3 +188,57 @@ signature:
 
 
 #### knex.getKnexConnectionDef ####
+This function returns the definition for the connection type used by [knexjs](http:/knexjs.org/) as part of its constructor.
+
+signature:
+```
+    () => connectionDef
+```
+
+The definition is:
+```
+    {
+        objectDef: optional {
+            host: optional IP4 string,
+            socketPath: optional path,
+            user: requiredString,
+            password: optional requiredString,
+            database: requiredString,
+        },
+        pathObjectDef: optional {
+            filename: typeNames.path,
+        },
+        connectionStringDef: optional requiredString,
+    }
+```
+
+The connection must have either: the object defined, the path object defined or the connection string defined.
+
+The if using a connection object, the connection object must have either the host or the socket path.
+
+#### knex.getKnexConstructorDef ####
+This function gets the definition of the constructor used by [knexjs](http://knexjs.org/).
+
+signature:
+```
+    () => constructorDef
+```
+
+The definition is:
+```
+    {
+        client: allowed database,
+        searchPath: optional requiredString,
+        debug: optional boolean,
+        acquireConnectionTimeout: optional int 0-Infinity,
+        connection: connectionDef
+    }
+```
+
+#### knex.isKnexConstructor ####
+This function validates an object to determine if it is a [knexjs](http://knexjs.org/) constructor parameter. This parameter is defined in [knex.getKnexConstructorDef](knex.getKnexConstructorDef). This function returns true if the object passes validation.
+
+signature:
+```
+    Object => boolean
+```
