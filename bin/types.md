@@ -21,7 +21,7 @@ Types members are:
 
 These are all the exposed type names. They are:
 
-[typeNames.validType](#typenames.validtype)</br>
+[typeNames.validType](#typenames-validtype)</br>
 [typeNames.requiredString](#typenames.requiredstring)</br>
 [typeNames.path](#typenames.path)</br>
 [typeNames.distinctItemArray](#typenames.distinctitemarray)</br>
@@ -30,7 +30,7 @@ These are all the exposed type names. They are:
 [typeNames.knex.knexConstructorParam](#typenames.knex.knexconstructorparam)</br>
 [typeNames.joyeuse.columnFlags](#typenames.joyeuse.columnflags)
 
-#### typeNames.validType ###
+#### typeNames-validType ###
 This is the name of a type that represents a string containing a name of a registerd [signet](https://www.npmjs.com/package/signet) type.
 
 #### typeNames.requiredString ####
