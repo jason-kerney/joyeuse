@@ -13,7 +13,7 @@ example:
 
 These are all the exposed type names.
 
-#### [typeNames.ip4.format](#ip4)
+#### [typeNames.ip4.format](###ip4)
 
 This it the name of 
 
