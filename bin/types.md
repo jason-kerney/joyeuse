@@ -58,6 +58,7 @@ This is the name of the type that represents the unique array of valid column fl
 This contains methods used to validate base types give directly off of [typeNames](typeNames).
 
 Functions Provided:
+
 [base.isRequiredString](base.isRequiredString)</br>
 [base.isPath](base.isPath)</br>
 [base.isDistinctItemArray](base.isDistinctItemArray)</br>
@@ -99,6 +100,7 @@ signature:
 This exposes functions to validate an IP4 address string and its parts.
 
 Functions Provided:
+
 [ip4.isIp4String](ip4.isIp4String)</br>
 [ip4.isOctet](ip4.isOctet)</br>
 
