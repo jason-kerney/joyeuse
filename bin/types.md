@@ -13,14 +13,17 @@ example:
 
 These are all the exposed type names. They are:
 
+[typeNames.validType](typeNames.validType)</br>
 [typeNames.requiredString](typeNames.requiredString)</br>
 [typeNames.path](typeNames.path)</br>
 [typeNames.distinctItemArray](typeNames.distinctItemArray)</br>
-[typeNames.validType](typeNames.validType)</br>
 [typeNames.ip4.format](typeNames.ip4.format)</br>
 [typeNames.knex.clients](typeNames.knex.clients)</br>
 [typeNames.knex.knexConstructorParam](typeNames.knex.knexConstructorParam)</br>
 [typeNames.joyeuse.columnFlags](typeNames.joyeuse.columnFlags)
+
+#### typeNames.validType ###
+This is the name of a type that represents a string containing a name of a registerd [signet](https://www.npmjs.com/package/signet) type.
 
 #### typeNames.requiredString ####
 This is the name of the type that requires a non-zero length string.
@@ -31,5 +34,78 @@ This is the name of the type that requires a string representing a valid path.
 #### typeNames.distinctItemArray ####
 This is the name of the type that represents an array of non-duplicate items.
 
-#### typeNames.validType ###
-This is the name of a type that represents a string containing a name of a registerd [signet](https://www.npmjs.com/package/signet) type.
+#### typeNames.ip4.format ####
+This is the name of the type represeting a string formatted as an IP4 address.
+
+#### typeNames.knex.clients ####
+This is the name of the type for a string field that is resticted to the list of [Knex](http://knexjs.org/) supported clients.
+
+#### typeNames.knex.knexConstructorParam ####
+This is the name of the type that is used to construct [Knex](http://knexjs.org/) and also used to construct the [Joyeuse Factory](joyeuse.md#getFactory).
+
+#### typeNames.joyeuse.columnFlags ####
+This is the name of the type that represents the unique array of valid column flags.
+
+### base ###
+This contains methods used to validate base types give directly off of [typeNames](typeNames).
+
+Functions Provided:
+[base.isRequiredString](base.isRequiredString)</br>
+[base.isPath](base.isPath)</br>
+[base.isDistinctItemArray](base.isDistinctItemArray)</br>
+[base.arrayHasDuplicates](base.arrayHasDuplicates)</br>
+
+#### base.isRequiredString ###
+This function determines if a given string is a [required string](typeNames.requiredString). Meaning it is a non-zero length string containing more then white space. This returns true if the item provides is a string containing something other then white space.
+
+signature:
+```
+    string => boolean
+```
+
+#### base.isPath ####
+This function determins if the string given meets the regex for a valid path. This returns true if the string could be a valid path.
+
+signature:
+```
+    path:string => boolean
+```
+
+#### base.isDistinctItemArray ####
+This function determins if this is an array containing items with no duplicates. This returns true if the array is empty or contains only unique items.
+
+signature:
+```
+    array => boolean
+```
+
+#### base.arrayHasDuplicates ####
+This function determines if an array has duplicate items. This uses the triple equals (===) comparison to determine if an array has duplicate items. This function returns true if the given array has duplicates.
+
+signature:
+```
+    array => boolean
+```
+
+### ip4 ###
+This exposes functions to validate an IP4 address string and its parts.
+
+Functions Provided:
+[ip4.isIp4String](ip4.isIp4String)</br>
+[ip4.isOctet](ip4.isOctet)</br>
+
+#### ip4.isIp4String ####
+This function will validate if a string is a valid IP4 address string. Returns true if the string is formatted correctly.
+
+signature:
+```
+    ip4_address:string => boolean
+```
+
+#### ip4.isOctet ###
+This function will return whether or not a string is a valid IP4 address octet. It must be a string contaning a number between 1 and 255. This returns true if the string is a valid octet.
+
+signature:
+```
+    ip4_octet:string => boolean
+```
