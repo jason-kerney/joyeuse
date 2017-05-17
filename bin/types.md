@@ -9,6 +9,14 @@ example:
     var typeNames = require('joyeuse').types;
 ```
 
+Types members are:
+
+[typeNames](typeNames)</br>
+[base](base)</br>
+[ip4](ip4)</br>
+[knex]()</br>
+[joyeuse](joyeuse)</br>
+
 ### typeNames ###
 
 These are all the exposed type names. They are:
@@ -109,3 +117,17 @@ signature:
 ```
     ip4_octet:string => boolean
 ```
+
+### knex ###
+This gives types for dealing with [knexjs](http://knexjs.org) and methods related those types.
+
+Its members are:
+
+[knex.baseTypes]()</br>
+[knex.getKnexConnectionDef]()</br>
+[knex.getKnexConstructorDef]()</br>
+[knex.isKnexConstructor]()</br>
+[knex.getConstuctorParameterErrors]()</br>
+[knex.getConstructorParameterErrorMessage]()
+
+#### knex.baseTypes ###
