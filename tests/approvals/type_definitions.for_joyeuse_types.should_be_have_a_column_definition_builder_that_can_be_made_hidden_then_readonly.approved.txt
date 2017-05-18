@@ -1,7 +1,0 @@
-{
-    "type": "boolean",
-    "flags": [
-        "hidden",
-        "readonly"
-    ]
-}
