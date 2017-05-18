@@ -7,5 +7,5 @@ Internal Libraries:
 [joyeuse API](./bin/joyeuse.md)</br>
 [typeBuilder](./bin/typeBuilder.md)</br>
 [types](./types.md)</br>
-[typeValidation](/.typeValidation.md)</br>
-[when](/.when.md)
+[typeValidation](./typeValidation.md)</br>
+[when](./when.md)
