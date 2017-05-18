@@ -1,4 +1,4 @@
-'use strinct'
+'use strinct';
 
 var typeBuilder = require('./typeBuilder');
 var signet = typeBuilder.signet;
