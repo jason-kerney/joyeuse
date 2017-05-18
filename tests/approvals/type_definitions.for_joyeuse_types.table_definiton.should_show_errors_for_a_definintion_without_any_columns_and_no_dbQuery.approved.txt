@@ -1,7 +1,0 @@
-[
-    {
-        "property_name": "joyeuseTableDefinition.key",
-        "type": "array<requiredString>",
-        "value_given": "undefined"
-    }
-]

@@ -362,7 +362,7 @@ describe('type definitions', function () {
                 type = joy.getColumnDefinitionBuilder();
             });
 
-            it('should validate a good table definintion with 1 key, 1 column no dbQuery and no defined relations', function () {
+            it.only('should validate a good table definintion with 1 key, 1 column no dbQuery and no defined relations', function () {
                 const table = {
                     tableName: 'device',
                     dbQueryColumns: false,
@@ -398,7 +398,8 @@ describe('type definitions', function () {
             it('should show errors for a definintion without any columns and no dbQuery', function () {
                 const table = {
                     tableName: 'device',
-                    dbQueryColumns: false
+                    dbQueryColumns: false,
+                    key: []
                 };
 
                 assert.isFalse(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));

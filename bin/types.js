@@ -321,7 +321,25 @@ var joyeuseTypes = (function () {
     var columnType = getColumnTypeDef();
 
     function getTableDefinitinTypeErrors(possibleTableDefinition) {
-        return validator.getErrors('joyeuseTableDefinition', tableType, possibleTableDefinition);
+        console.log(JSON.stringify(possibleTableDefinition, null, 4));
+
+        var dbQueryColumns = Boolean(possibleTableDefinition.dbQueryColumns);
+        var columns = (Object.keys(possibleTableDefinition).filter(function (key) {
+            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ', key, ':', typeof possibleTableDefinition[key])
+            console.log(signet.isTypeOf(joyeuseColumnDef));
+
+            var a =  signet.isTypeOf(joyeuseColumnDef)(possibleTableDefinition[key]);
+            console.log('HERE I AM');
+            return a;
+        }));
+
+        var baseErrors = validator.getErrors('joyeuseTableDefinition', tableType, possibleTableDefinition);
+        
+        if (!dbQueryColumns && columns.length === 0) {
+            baseErrors.push(validator.constructTypeError('joyeuseTableDefinition.column', joyeuseColumnDef, undefined));
+        }
+
+        return baseErrors;
     }
 
     function isTableDefinition(possibleTableDefiniton) {
