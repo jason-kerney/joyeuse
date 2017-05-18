@@ -266,14 +266,14 @@ This represents joyeuse types and methods describing and validating those types.
 
 It's members are:
 
-[joyuse.columnDefinitionType](joyuse-columndefinitiontype)</br>
-[joyuse.columnFlags](joyuse-columnflags)</br>
-[joyuse.getColumnDefinitionTypeErrors](joyuse-getColumndefinitiontypeerrors)</br>
-[joyuse.isColumnFlag](joyuse-iscolumnflag)</br>
-[joyuse.isJoyeuseColumnDefinition](joyuse-isJoyeusecolumndefinition)</br>
-[joyuse.getColumnDefinitionBuilder](joyuse-getcolumndefinitionbuilder)
+[joyeuse.columnDefinitionType](joyuse-columndefinitiontype)</br>
+[joyeuse.columnFlags](joyuse-columnflags)</br>
+[joyeuse.getColumnDefinitionTypeErrors](joyuse-getColumndefinitiontypeerrors)</br>
+[joyeuse.isColumnFlag](joyuse-iscolumnflag)</br>
+[joyeuse.isJoyeuseColumnDefinition](joyuse-isJoyeusecolumndefinition)</br>
+[joyeuse.getColumnDefinitionBuilder](joyuse-getcolumndefinitionbuilder)
 
-#### joyuse-columnDefinitionType ####
+#### joyeuse-columnDefinitionType ####
 This returns the definition of the type that is used to define a column in the database.
 
 signature:
@@ -285,14 +285,61 @@ The definition is:
 ```
     {
         type: validType,
-        flags: columnFlags,
+        flags: array<columnFlag>,
     }
 ```
 
-#### joyuse-columnFlags ####
+#### joyeuse-columnFlags ####
 This is an array of valid flags for a column definition.
 
 The valid flags are:
 
 * readonly
 * hidden
+
+#### joyeuse-getColumnDefinitionTypeErrors ####
+This function validates an object as a columnDefinition and returns an array of type errors. This function returns an empty array if the type is valid.
+
+signature:
+```
+    Object => array<typeErrors>
+```
+
+#### joyeuse-isColumnFlag ####
+This function is used to determine if a given string is a valid column flag. It returns true if the string is a column flag.
+
+signature:
+```
+    string => boolean
+```
+
+#### joyeuse-isJoyeuseColumnDefinition ####
+This function validates if an object is a column definiton. It returns true if the object is a column definiton.
+
+signature:
+```
+    Object => boolean
+```
+
+#### joyeuse-getColumnDefinitionBuilder ####
+This fucnction gets a builder to construct a valid column definition.
+
+signature:
+```
+    validType => columnDefinitionBuilder
+```
+
+returns:
+```
+    {
+        type: validTypeName,
+        flags: array<columnFlags>,
+        hidden: () => columnDefinitionBuilder,
+        readonly: () => columnDefinitionBuilder,
+        init: (* => columnDefinitionBuilder.type ) => columnDefinitionBuilder
+    }
+```
+
+_hidden:_ addes 'hidden' to the flags array if it does not exist.
+_readonly:_ addes 'readonly' to the flags array if it does not exist.
+_init:_ takes a function that returns the type named in the type field. This is will be used to create the initial value for the column.
