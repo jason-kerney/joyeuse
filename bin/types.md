@@ -326,7 +326,7 @@ This function gets a builder to construct a valid column definition.
 
 signature:
 ```
-    validType => columnDefinitionBuilder
+    () => ( validType => columnDefinitionBuilder )
 ```
 
 returns:

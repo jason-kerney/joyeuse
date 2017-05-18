@@ -14,7 +14,11 @@ function getFactory(constuctorInfo) {
     var knex = knexFactory(constuctorInfo);
 
     return {
-        knex: knex
+        knex: knex,
+        type: types.joyeuse.getColumnDefinitionBuilder(),
+        types: types,
+        typeBuilder: typeBuilder,
+        signet: signet
     }
 };
 

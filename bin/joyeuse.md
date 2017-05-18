@@ -18,8 +18,16 @@ signature:
 returns:
 ```
     {
+        type: string => columnDefinitionBuilder,
+        types: types.js,
+        typeBuilder: typeBuilder.js,
+        signet: typeBuilder.signet
         knex: knex
     }
 ```
 
+_type:_ is a function that allows for the creation of a column definition
+_types:_ [types.js](types.md)
+_typeBuilder:_ [typeBuilder.js](typebuilder.md)
+_signet:_ [typeBuilder.signet](typebuilder.md#signet)
 _knex:_ is the [knexjs](http://knexjs.org/) constructed by joyeuse.

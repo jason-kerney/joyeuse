@@ -1,6 +1,6 @@
 # typeBuilder.js
 
-## Type Builder
+## Type Builder ##
 
 **This module is used to build a custom type system for use with Joyeuse**
 
@@ -9,7 +9,7 @@ example:
     var typeBuilder = require('joyeuse').typeBuilder;
 ```
 
-### Signet
+### Signet ###
 
 [Signet](https://www.npmjs.com/package/signet) is the underlying type system used by Joyeuse
 
@@ -18,7 +18,7 @@ example:
     var signet = typeBuilder.signet;
 ```
 
-### isUndefined
+### isUndefined ###
 
 Returns whether or not an item is undefined. this is the same as:
 ```javascript
@@ -38,7 +38,7 @@ example
     }
 ```
 
-### asArrayDefString
+### asArrayDefString ###
 
 Creates the type definition for either a typed or untyped array
 
@@ -56,7 +56,7 @@ example:
     // returns: 'array<number>'
 ```
 
-### asVariantDefString
+### asVariantDefString ###
 
 Creates the type definition for a variant type
 
@@ -70,7 +70,7 @@ example:
     // returns 'variant<int; string>'
 ```
 
-### asFormattedStringDefString
+### asFormattedStringDefString ###
 
 Creates the type definition for a string that must follow a defined format.
 
@@ -84,7 +84,7 @@ example:
     // returns: 'formattedString<(\\d{3}\\-)?\d{3}\\-?\d{4}>'
 ```
 
-### asOptionalParameterDefString
+### asOptionalParameterDefString ###
 
 Creates the type definition for an optional parameter to a function.
 
@@ -98,7 +98,7 @@ example:
     // returns: '[int]'
 ```
 
-### asOptionalPropertyDefString
+### asOptionalPropertyDefString ###
 
 Creates the type definition for an optional property of an object. This allows the property to not be present but guarantees the property is of the correct type if it exists.
 
@@ -112,7 +112,7 @@ example:
     // returns 'variant<undefined;boolean>'
 ```
 
-### asBoundedIntDefString
+### asBoundedIntDefString ###
 
 Creates a type definition for an integer that is bounded by at least the min value.
 
@@ -127,7 +127,7 @@ example:
 	// returns 'boundedInt<2, Infinity>'
 ```
 
-### asFunctionalDefString
+### asFunctionalDefString ###
 
 Creates a type definition for a function.
 
@@ -150,7 +150,7 @@ example:
     // returns: 'int, boolean => number'
 ```
 
-### asStringEnum
+### asStringEnum ###
 
 Creates a type for a constrained string array that must have only strings of given values.
 
