@@ -1,0 +1,18 @@
+{
+    "language": "en",
+    "documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
+    ],
+    "groupDictionaries": true,
+    "statusBarIndicator": true,
+    "suggestionsInHints": true,
+    "ignoreWords": [
+        "truthy",
+        "Joyeuse",
+        "knex",
+        "knexjs"
+    ],
+    "ignoreRegExps": []
+}

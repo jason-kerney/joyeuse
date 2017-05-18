@@ -2,14 +2,18 @@
 
 ## Types Validation
 
-A module used to validate custome types and get useful type errors.
+A module used to validate custom types and get useful type errors.
 
 example:
 ```javascript
     var typeValidation = require('joyeuse').typeValidation;
 ```
 
-### costructTypeError
+This members are:
+[constructTypeError](constructtypeerror)</br>
+[getErrors](geterrors)
+
+### constructTypeError ###
 
 Used to return a type error structure.
 
@@ -41,7 +45,7 @@ example:
     */
 ```
 
-### getErrors
+### getErrors ###
 
 Used to validate a type and returns a list of errors.
 

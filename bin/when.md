@@ -2,7 +2,7 @@
 
 ## When
 
-used to programaticly define branches and call them at a later time.
+used to programmatically define branches and call them at a later time.
 
 example:
 ```javascript
@@ -14,7 +14,7 @@ signature:
     [transformer:function] -> simplifiedCondType
 ```
 
-_transformer_ is a function that takes a single item ant returns somesthing else.
+_transformer_ is a function that takes a single item ant returns something else.
 
 example:
 ```javascript
@@ -69,7 +69,7 @@ returns:
 
 Match is the function used to execute the predefined branches. When it is called, _transformer_ is called and its result is passed to each _cond_ in turn until **one** returns true.
 
-Then it calles the action with the original non-transformed value.
+Then it calls the action with the original non-transformed value.
 
 signature:
 ```

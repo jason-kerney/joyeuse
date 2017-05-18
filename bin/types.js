@@ -186,8 +186,8 @@ var connectionParts = (function () {
             var errors = validator.getErrors(prefix + connectionName, knexConnectionTypes.objectDef, value);
 
             if (typeBuilder.isUndefined(value.host) && typeBuilder.isUndefined(value.socketPath)) {
-                errors.push(validator.costructTypeError(prefix + connectionName + ".host", knexConnectionTypes.objectDef.host));
-                errors.push(validator.costructTypeError(prefix + connectionName + ".socketPath", knexConnectionTypes.objectDef.socketPath));
+                errors.push(validator.constructTypeError(prefix + connectionName + ".host", knexConnectionTypes.objectDef.host));
+                errors.push(validator.constructTypeError(prefix + connectionName + ".socketPath", knexConnectionTypes.objectDef.socketPath));
             }
 
             return errors;
@@ -238,7 +238,7 @@ var knex = (function () {
     }
 
 
-    function getConstuctorParameterErrors(constructorParameter) {
+    function getConstructorParameterErrors(constructorParameter) {
         var constructorTypePartial = getKnexConstructorDef();
         if (signet.isTypeOf(knexConstructorTypeName)(constructorParameter)) {
             return [];
@@ -269,7 +269,7 @@ var knex = (function () {
             '',
         ].join('\r\n');
 
-        var errors = getConstuctorParameterErrors(constuctorInfo);
+        var errors = getConstructorParameterErrors(constuctorInfo);
         var isGood = errors.length === 0;
 
         function ErrorToString(error) {
@@ -288,7 +288,7 @@ var knex = (function () {
         getKnexConnectionDef: connectionParts.getKnexConnectionDef,
         getKnexConstructorDef: getKnexConstructorDef,
         isKnexConstructor: signet.isTypeOf(knexConstructorTypeName),
-        getConstuctorParameterErrors: getConstuctorParameterErrors,
+        getConstuctorParameterErrors: getConstructorParameterErrors,
         getConstructorParameterErrorMessage: getConstructorParameterErrorMessage,
     };
 }());

@@ -43,10 +43,10 @@ This is the name of the type that requires a string representing a valid path.
 This is the name of the type that represents an array of non-duplicate items.
 
 #### typeNames-ip4-format ####
-This is the name of the type represeting a string formatted as an IP4 address.
+This is the name of the type representing a string formatted as an IP4 address.
 
 #### typeNames-knex-clients ####
-This is the name of the type for a string field that is resticted to the list of [Knex](http://knexjs.org/) supported clients.
+This is the name of the type for a string field that is restricted to the list of [Knex](http://knexjs.org/) supported clients.
 
 #### typeNames-knex-knexConstructorParam ####
 This is the name of the type that is used to construct [Knex](http://knexjs.org/) and also used to construct the [Joyeuse Factory](joyeuse.md#getfactory).
@@ -73,7 +73,7 @@ signature:
 ```
 
 #### base-isPath ####
-This function determins if the string given meets the regex for a valid path. This returns true if the string could be a valid path.
+This function determines if the string given meets the regex for a valid path. This returns true if the string could be a valid path.
 
 signature:
 ```
@@ -81,7 +81,7 @@ signature:
 ```
 
 #### base-isDistinctItemArray ####
-This function determins if this is an array containing items with no duplicates. This returns true if the array is empty or contains only unique items.
+This function determines if this is an array containing items with no duplicates. This returns true if the array is empty or contains only unique items.
 
 signature:
 ```
@@ -113,7 +113,7 @@ signature:
 ```
 
 #### ip4-isOctet ###
-This function will return whether or not a string is a valid IP4 address octet. It must be a string contaning a number between 1 and 255. This returns true if the string is a valid octet.
+This function will return whether or not a string is a valid IP4 address octet. It must be a string containing a number between 1 and 255. This returns true if the string is a valid octet.
 
 signature:
 ```
@@ -129,7 +129,7 @@ Its members are:
 [knex.getKnexConnectionDef](#knex-getknexconnectiondef)</br>
 [knex.getKnexConstructorDef](#knex-getknexconstructordef)</br>
 [knex.isKnexConstructor](#knex-isknexconstructor)</br>
-[knex.getConstuctorParameterErrors](#knex-getconstuctorparametererrors)</br>
+[knex.getConstructorParameterErrors](#knex-getconstuctorparametererrors)</br>
 [knex.getConstructorParameterErrorMessage](#knex-getconstructorparametererrormessage)
 
 #### knex-baseTypes ###
@@ -143,14 +143,14 @@ Members are:
 [knex.baseTypes.isClient](#knex-basetypes-isclient)
 
 ##### knex-baseTypes-getConnectionPoolDef #####
-This function returns the deffinition for a connection pool object to be used in the [knexjs](http://knexjs.org) constructor.
+This function returns the definition for a connection pool object to be used in the [knexjs](http://knexjs.org) constructor.
 
 signature:
 ```
     () => connectionPoolDef
 ```
 
-The deffinition is:
+The definition is:
 ```
     {
         minMax: { min:0-Infinity, max: 0-Infinity },
@@ -171,7 +171,7 @@ signature:
 ```
 
 ##### knex-baseTypes-allowedDatabases #####
-This is a list of database that Joyeuse is allowed to conncet to. The current list is:
+This is a list of database that Joyeuse is allowed to connect to. The current list is:
 
 * postgres
 * mssql
@@ -245,7 +245,7 @@ signature:
     Object => boolean
 ```
 
-#### knex-getConstuctorParameterErrors ####
+#### knex-getConstructorParameterErrors ####
 This function validates an object to determine if it is a valid parameter for the constructor of [knexjs](http://knexjs.org/). It then returns an array of type errors. This function returns an empty array if the type is valid.
 
 signature:
@@ -314,7 +314,7 @@ signature:
 ```
 
 #### joyeuse-isJoyeuseColumnDefinition ####
-This function validates if an object is a column definiton. It returns true if the object is a column definiton.
+This function validates if an object is a column definition. It returns true if the object is a column definition.
 
 signature:
 ```
@@ -322,7 +322,7 @@ signature:
 ```
 
 #### joyeuse-getColumnDefinitionBuilder ####
-This fucnction gets a builder to construct a valid column definition.
+This function gets a builder to construct a valid column definition.
 
 signature:
 ```
@@ -340,6 +340,6 @@ returns:
     }
 ```
 
-_hidden:_ addes 'hidden' to the flags array if it does not exist.
-_readonly:_ addes 'readonly' to the flags array if it does not exist.
+_hidden:_ adds 'hidden' to the flags array if it does not exist.
+_readonly:_ adds 'readonly' to the flags array if it does not exist.
 _init:_ takes a function that returns the type named in the type field. This is will be used to create the initial value for the column.
