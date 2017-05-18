@@ -353,6 +353,57 @@ describe('type definitions', function () {
                 assert.throws(throwing, "Expected to return type of boolean");
             });
         });
+
+        describe('table definiton', function () {
+            const joy = types.joyeuse;
+            var type;
+
+            beforeEach(function () {
+                type = joy.getColumnDefinitionBuilder();
+            });
+
+            it('should validate a good table definintion with 1 key, 1 column no dbQuery and no defined relations', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    key: ['id'],
+                    id: type('int')
+                };
+
+                assert.isTrue(joy.isTableDefinition(table), joy.getTableDefinitinTypeErrors(table));
+            });
+
+            it('should validate a good definintion with 1 key, 1 column no dbQuery and no defined relations', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    key: ['id'],
+                    id: type('int')
+                };
+
+                assert.isTrue(joy.isTableDefinition(table), joy.getTableDefinitinTypeErrors(table));
+            });
+
+            it('should show errors for a definintion without a key defined', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    id: type('int')
+                };
+
+                this.verify(pretyJson(joy.getTableDefinitinTypeErrors(table)));
+            });
+
+            it('should fail validation for a definintion without a key defined', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    id: type('int')
+                };
+
+                assert.isFalse(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
+            });
+        });
     });
 
     //proof of concept

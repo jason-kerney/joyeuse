@@ -302,6 +302,15 @@ var joyeuseTypes = (function () {
     var dbFlags = getColumnFlags();
     signet.extend(typeNames.validType, signet.isType);
 
+    function getTableDef() {
+        return {
+            tableName: typeNames.requiredString,
+            dbQueryColumns: typeBuilder.asOptionalPropertyDefString('boolean'),
+            key: typeBuilder.asArrayDefString(typeNames.requiredString),
+            id: joyeuseColumnDef,
+        };
+    }
+
     function getColumnTypeDef() {
         return {
             type: typeNames.validType,
@@ -309,7 +318,16 @@ var joyeuseTypes = (function () {
         };
     }
 
+    var tableType = getTableDef();
     var columnType = getColumnTypeDef();
+
+    function getTableDefinitinTypeErrors(possibleTableDefinition) {
+        return validator.getErrors('joyeuseTableDefinition', tableType, possibleTableDefinition);
+    }
+
+    function isTableDefinition(possibleTableDefiniton) {
+        return getTableDefinitinTypeErrors(possibleTableDefiniton).length === 0;
+    }
 
     function isDbFlag(item) {
         return dbFlags.includes(item);
@@ -353,7 +371,7 @@ var joyeuseTypes = (function () {
                 }
 
                 columnDefinition.flags.push('readonly');
-                return columnDefinition;                
+                return columnDefinition;
             }
 
             function init(fn) {
@@ -363,7 +381,7 @@ var joyeuseTypes = (function () {
 
                 var functionSignature = typeBuilder.asFunctionalDefString('()', validTypeName);
                 // signet.sign(functionSignature, fn);
-                
+
                 // columnDefinition.initFn = signet.enforce(functionSignature, fn);
                 columnDefinition.initFn = function () {
                     var result = fn();
@@ -418,6 +436,8 @@ var joyeuseTypes = (function () {
         isColumnFlag: signet.isTypeOf(typeNames.joyeuse.columnFlags),
         isJoyeuseColumnDefinition: signet.isTypeOf(joyeuseColumnDef),
         getColumnDefinitionBuilder: getColumnDefinitionBuilder,
+        getTableDefinitinTypeErrors: getTableDefinitinTypeErrors,
+        isTableDefinition: isTableDefinition,
     };
 }());
 
