@@ -391,17 +391,18 @@ describe('type definitions', function () {
                     id: type('int')
                 };
 
+                assert.isFalse(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
                 this.verify(pretyJson(joy.getTableDefinitinTypeErrors(table)));
             });
 
-            it('should fail validation for a definintion without a key defined', function () {
+            it('should show errors for a definintion without any columns and no dbQuery', function () {
                 const table = {
                     tableName: 'device',
-                    dbQueryColumns: false,
-                    id: type('int')
+                    dbQueryColumns: false
                 };
 
                 assert.isFalse(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
+                this.verify(pretyJson(joy.getTableDefinitinTypeErrors(table)));
             });
         });
     });

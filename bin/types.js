@@ -307,7 +307,6 @@ var joyeuseTypes = (function () {
             tableName: typeNames.requiredString,
             dbQueryColumns: typeBuilder.asOptionalPropertyDefString('boolean'),
             key: typeBuilder.asArrayDefString(typeNames.requiredString),
-            id: joyeuseColumnDef,
         };
     }
 
