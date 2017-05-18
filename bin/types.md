@@ -336,7 +336,7 @@ returns:
         flags: array<columnFlags>,
         hidden: () => columnDefinitionBuilder,
         readonly: () => columnDefinitionBuilder,
-        init: (* => columnDefinitionBuilder.type ) => columnDefinitionBuilder
+        init: ( () => columnDefinitionBuilder.type ) => columnDefinitionBuilder
     }
 ```
 
