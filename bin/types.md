@@ -244,3 +244,55 @@ signature:
 ```
     Object => boolean
 ```
+
+#### knex-getConstuctorParameterErrors ####
+This function validates an object to determine if it is a valid parameter for the constructor of [knexjs](http://knexjs.org/). It then returns an array of type errors. This function returns an empty array if the type is valid.
+
+signature:
+```
+    Object => array<typeError>
+```
+
+#### knex-getConstructorParameterErrorMessage ####
+This function validates an object to determine if it is a valid parameter for the constructor of [knexjs](http://knexjs.org/). This function returns a nice error message constructed from type errors. This function returns an empty string if there are no errors.
+
+signature:
+```
+    Object => string
+```
+
+### joyeuse ###
+This represents joyeuse types and methods describing and validating those types.
+
+It's members are:
+
+[joyuse.columnDefinitionType](joyuse-columndefinitiontype)</br>
+[joyuse.columnFlags](joyuse-columnflags)</br>
+[joyuse.getColumnDefinitionTypeErrors](joyuse-getColumndefinitiontypeerrors)</br>
+[joyuse.isColumnFlag](joyuse-iscolumnflag)</br>
+[joyuse.isJoyeuseColumnDefinition](joyuse-isJoyeusecolumndefinition)</br>
+[joyuse.getColumnDefinitionBuilder](joyuse-getcolumndefinitionbuilder)
+
+#### joyuse-columnDefinitionType ####
+This returns the definition of the type that is used to define a column in the database.
+
+signature:
+```
+    () => columnDefinitionType
+```
+
+The definition is:
+```
+    {
+        type: validType,
+        flags: columnFlags,
+    }
+```
+
+#### joyuse-columnFlags ####
+This is an array of valid flags for a column definition.
+
+The valid flags are:
+
+* readonly
+* hidden
