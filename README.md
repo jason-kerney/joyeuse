@@ -6,6 +6,6 @@ Internal Libraries:
 
 [joyeuse API](./bin/joyeuse.md)</br>
 [typeBuilder](./bin/typeBuilder.md)</br>
-[types](./types.md)</br>
-[typeValidation](./typeValidation.md)</br>
-[when](./when.md)
+[types](./bin/types.md)</br>
+[typeValidation](./bin/typeValidation.md)</br>
+[when](./bin/when.md)
