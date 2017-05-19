@@ -355,6 +355,7 @@ describe('type definitions', function () {
         });
 
         describe('table definiton', function () {
+            var signet = require('../bin/typeBuilder').signet;
             const joy = types.joyeuse;
             var type;
 
@@ -362,7 +363,7 @@ describe('type definitions', function () {
                 type = joy.getColumnDefinitionBuilder();
             });
 
-            it.only('should validate a good table definintion with 1 key, 1 column no dbQuery and no defined relations', function () {
+            it('should validate a good table definintion with 1 key, 1 column no dbQuery and no defined relations', function () {
                 const table = {
                     tableName: 'device',
                     dbQueryColumns: false,
@@ -400,6 +401,28 @@ describe('type definitions', function () {
                     tableName: 'device',
                     dbQueryColumns: false,
                     key: []
+                };
+
+                assert.isFalse(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
+                this.verify(pretyJson(joy.getTableDefinitinTypeErrors(table)));
+            });
+
+            it('should validate for a definintion without any columns and dbQuery', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: true,
+                    key: []
+                };
+
+                assert.isTrue(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
+            });
+
+            it.only('should show errors for a definintion a key that is not a column and no dbQuery', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    key: ['id'],
+                    name: type('string')
                 };
 
                 assert.isFalse(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));

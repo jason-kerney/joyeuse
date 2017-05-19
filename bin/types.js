@@ -300,7 +300,7 @@ var joyeuseTypes = (function () {
 
     const joyeuseColumnDef = 'joyeuseColumnDef';
     var dbFlags = getColumnFlags();
-    signet.extend(typeNames.validType, signet.isType);
+    signet.extend(typeNames.validType, signet.isTypeOf('type'));
 
     function getTableDef() {
         return {
@@ -321,22 +321,28 @@ var joyeuseTypes = (function () {
     var columnType = getColumnTypeDef();
 
     function getTableDefinitinTypeErrors(possibleTableDefinition) {
-        console.log(JSON.stringify(possibleTableDefinition, null, 4));
-
         var dbQueryColumns = Boolean(possibleTableDefinition.dbQueryColumns);
+        const keyColumns = Boolean(possibleTableDefinition.key) ? possibleTableDefinition.key : [];
         var columns = (Object.keys(possibleTableDefinition).filter(function (key) {
-            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ', key, ':', typeof possibleTableDefinition[key])
-            console.log(signet.isTypeOf(joyeuseColumnDef));
-
-            var a =  signet.isTypeOf(joyeuseColumnDef)(possibleTableDefinition[key]);
-            console.log('HERE I AM');
-            return a;
+            return signet.isTypeOf(joyeuseColumnDef)(possibleTableDefinition[key]);
         }));
 
         var baseErrors = validator.getErrors('joyeuseTableDefinition', tableType, possibleTableDefinition);
         
         if (!dbQueryColumns && columns.length === 0) {
             baseErrors.push(validator.constructTypeError('joyeuseTableDefinition.column', joyeuseColumnDef, undefined));
+        }
+
+            
+        if (!dbQueryColumns && (keyColumns.length > 0)) {
+
+            var keyErrors = keyColumns.filter(function (keyColumn) {
+               return !columns.includes(keyColumn); 
+            }).map(function (keyColumn){
+                return validator.constructTypeError('joyeuseTableDefinition.column_key', joyeuseColumnDef, undefined);
+            });
+
+            baseErrors = baseErrors.concat(keyErrors);
         }
 
         return baseErrors;
