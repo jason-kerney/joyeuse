@@ -295,6 +295,15 @@ var knex = (function () {
 }());
 
 var joyeuseTypes = (function () {
+    const tableColumnExpression = '[\\w\\d]+\\.[\\w\\d]+';
+    const arrowExpression = '\\s\\*?\\->\\*?\\s';
+    const relationshipExpression = '^' + tableColumnExpression + arrowExpression + tableColumnExpression + '$';
+    const isRelationShip = new RegExp(relationshipExpression);
+
+    signet.subtype('string')(typeNames.joyeuse.retlationsTypeDef, function (value) {
+        return isRelationShip.test(value);
+    });
+
     function getColumnFlags() {
         return ['readonly', 'hidden'];
     }
@@ -320,13 +329,14 @@ var joyeuseTypes = (function () {
         };
     }
 
-    var tableType = getTableDef();
-    var columnType = getColumnTypeDef();
+    const tableType = getTableDef();
+    const columnType = getColumnTypeDef();
 
     function getTableDefinitinTypeErrors(possibleTableDefinition) {
-        var dbQueryColumns = Boolean(possibleTableDefinition.dbQueryColumns);
+        const hasRelations = Boolean(possibleTableDefinition.relations);
+        const dbQueryColumns = Boolean(possibleTableDefinition.dbQueryColumns);
         const keyColumns = Boolean(possibleTableDefinition.key) ? possibleTableDefinition.key : [];
-        var columns = (Object.keys(possibleTableDefinition).filter(function (key) {
+        const columns = (Object.keys(possibleTableDefinition).filter(function (key) {
             const value = possibleTableDefinition[key];
             return signet.isTypeOf(joyeuseColumnDef)(value)
                 || signet.isTypeOf('type')(value);
@@ -340,14 +350,33 @@ var joyeuseTypes = (function () {
 
 
         if (!dbQueryColumns && (keyColumns.length > 0)) {
-
-            var keyErrors = keyColumns.filter(function (keyColumn) {
+            const keyErrors = keyColumns.filter(function (keyColumn) {
                 return !columns.includes(keyColumn);
             }).map(function (keyColumn) {
                 return validator.constructTypeError('joyeuseTableDefinition.column_key', joyeuseColumnDef, undefined);
             });
 
             baseErrors = baseErrors.concat(keyErrors);
+        }
+
+        const isStringArray = signet.isTypeOf(typeBuilder.asArrayDefString('string'));
+        if (hasRelations) {
+            if (isStringArray(possibleTableDefinition.relations)) {
+                const relations = possibleTableDefinition.relations;
+                const badRelations = relations.filter(function (value){
+                    return !signet.isTypeOf(typeNames.joyeuse.retlationsTypeDef)(value);
+                })
+
+                if(badRelations.length > 0){
+                    baseErrors = baseErrors.concat(badRelations.map(function (badRelation){
+                        return validator.constructTypeError('joyeuseTableDefinition.relations[' + relations.indexOf(badRelation) + ']', typeNames.joyeuse.retlationsTypeDef, badRelation);
+                    }));
+                }
+            }
+            else
+            {
+                baseErrors = baseErrors.push(validator.constructTypeError('joyeuseTableDefinition.relations', typeBuilder.asArrayDefString(typeNames.joyeuse.retlationsTypeDef), possibleTableDefinition.relations));
+            }
         }
 
         return baseErrors;
@@ -443,7 +472,6 @@ var joyeuseTypes = (function () {
         return deffErrors;
     }
 
-
     signet.alias('arrayString', typeBuilder.asArrayDefString('string'));
     signet.subtype('arrayString')(typeNames.joyeuse.columnFlags,
         function (flags) {
@@ -461,22 +489,16 @@ var joyeuseTypes = (function () {
         return isTableDefinition(value);
     });
 
-    const tableColumnExpression = '[\\w\\d]+\\.[\\w\\d]+';
-    const arrowExpression = '\\s\\*?\\->\\*?\\s';
-    const relationshipExpression = '^' + tableColumnExpression + arrowExpression + tableColumnExpression + '$';
-    const isRelationShip = new RegExp(relationshipExpression);
-
-    signet.subtype('string')(typeNames.joyeuse.retlationsTypeDef, function (value){
-        return isRelationShip.test(value);
-    });
+    const tableValidationErrorOptions = {
+        inputErrorBuilder: function (_, arg, __) {
+            return "Expected a valid table definition. The errors are: \n" + JSON.stringify(getTableDefinitinTypeErrors(arg), null, 4);
+        }
+    };
 
     var table = signet.enforce(joyeuseTableDef, function table(tableDefinition) {
         return tableDefinition;
-    }, {
-            inputErrorBuilder: function (_, arg, __) {
-                return "Expected a valid table definition. The errors are: \n" + JSON.stringify(getTableDefinitinTypeErrors(arg), null, 4);
-            }
-        });
+    }, tableValidationErrorOptions);
+
     return {
         columnDefinitionType: getColumnTypeDef(),
         columnFlags: getColumnFlags(),

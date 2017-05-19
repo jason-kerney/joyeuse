@@ -1,0 +1,7 @@
+[
+    {
+        "property_name": "joyeuseTableDefinition.relations[0]",
+        "type": "retlationsTypeDef",
+        "value_given": "MyDevice *-> MyUser.deviceId"
+    }
+]

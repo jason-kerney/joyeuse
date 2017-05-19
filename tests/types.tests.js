@@ -379,7 +379,22 @@ describe('type definitions', function () {
                 type = joy.getColumnDefinitionBuilder();
             });
 
-            it('should validate a good table definintion with 1 key, 1 column no dbQuery and no defined relations', function () {
+            it('should validate a good table definintion with 1 key, 1 column no dbQuery, and 2 defined relations', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    key: ['id'],
+                    id: type('int'),
+                    relations: [
+                        `MyDevice.id *-> MyUser.deviceId`,
+                        `MyDevice.id *-> Records.deviceId`
+                    ]
+                };
+
+                assert.isTrue(joy.isTableDefinition(table), joy.getTableDefinitinTypeErrors(table));
+            });
+
+            it('should validate a good definintion with 1 key, 1 column no dbQuery and no defined relations', function () {
                 const table = {
                     tableName: 'device',
                     dbQueryColumns: false,
@@ -401,7 +416,7 @@ describe('type definitions', function () {
                 assert.isTrue(joy.isTableDefinition(table), joy.getTableDefinitinTypeErrors(table));
             });
 
-            it('should validate a good table definintion with no key, 1 column as a type string no dbQuery and no defined relations', function () {
+            it('should validate a good definintion with no key, 1 column as a type string no dbQuery and no defined relations', function () {
                 const table = {
                     tableName: 'emails',
                     dbQueryColumns: false,
@@ -465,6 +480,23 @@ describe('type definitions', function () {
                 };
 
                 this.verify(pretyJson(joy.table(table)));
+            });
+
+            it('should fail a definintion with 1 key, 1 column no dbQuery, 1 incorrectly defined relation', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    key: ['id'],
+                    id: type('int'),
+                    relations: [
+                        `MyDevice *-> MyUser.deviceId`,
+                        `MyDevice.id *-> Records.deviceId`
+                    ]
+                };
+
+                var errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
+                assert.isFalse(joy.isTableDefinition(table), errors);
+                this.verify(errors);
             });
 
             it('should thow a nice error when table is called and given a definintion without a key defined', function () {
