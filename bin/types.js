@@ -334,6 +334,7 @@ var joyeuseTypes = (function () {
 
     function getTableDefinitinTypeErrors(possibleTableDefinition) {
         const hasRelations = Boolean(possibleTableDefinition.relations);
+        const relations = possibleTableDefinition.relations;
         const dbQueryColumns = Boolean(possibleTableDefinition.dbQueryColumns);
         const keyColumns = Boolean(possibleTableDefinition.key) ? possibleTableDefinition.key : [];
         const columns = (Object.keys(possibleTableDefinition).filter(function (key) {
@@ -348,7 +349,6 @@ var joyeuseTypes = (function () {
             baseErrors.push(validator.constructTypeError('joyeuseTableDefinition.column', joyeuseColumnDef, undefined));
         }
 
-
         if (!dbQueryColumns && (keyColumns.length > 0)) {
             const keyErrors = keyColumns.filter(function (keyColumn) {
                 return !columns.includes(keyColumn);
@@ -359,26 +359,60 @@ var joyeuseTypes = (function () {
             baseErrors = baseErrors.concat(keyErrors);
         }
 
-        const isStringArray = signet.isTypeOf(typeBuilder.asArrayDefString('string'));
-        if (hasRelations) {
-            if (isStringArray(possibleTableDefinition.relations)) {
-                const relations = possibleTableDefinition.relations;
-                const badRelations = relations.filter(function (value){
-                    return !signet.isTypeOf(typeNames.joyeuse.retlationsTypeDef)(value);
-                })
-
-                if(badRelations.length > 0){
-                    baseErrors = baseErrors.concat(badRelations.map(function (badRelation){
-                        return validator.constructTypeError('joyeuseTableDefinition.relations[' + relations.indexOf(badRelation) + ']', typeNames.joyeuse.retlationsTypeDef, badRelation);
-                    }));
-                }
-            }
-            else
-            {
-                baseErrors = baseErrors.push(validator.constructTypeError('joyeuseTableDefinition.relations', typeBuilder.asArrayDefString(typeNames.joyeuse.retlationsTypeDef), possibleTableDefinition.relations));
-            }
+        function isNamedColumn(name) {
+            return columns.includes(name);
         }
 
+        function getRelationColumnName(relation) {
+            const finds = /^([\w\d]+)\.([\w\d]+)/.exec(relation);
+            if (!Boolean(finds)) {
+                throw new Error('not a valid relation column')
+            }
+            return [relation, finds[2]];
+        }
+
+        function getRelationColumnNames() {
+            return relations.map(getRelationColumnName);
+        }
+
+        function columnsExist() {
+            const exists = 
+                getRelationColumnNames()
+                .map(function (values){
+                    return values[1]
+                })
+                .map(isNamedColumn)
+                .reduce(function (acc, hasName) {
+                    return acc && hasName;
+                }, true);
+
+            return columns.length > 0 && exists;
+        }
+
+        const isRelationshipArray = signet.isTypeOf(typeBuilder.asArrayDefString(typeNames.joyeuse.retlationsTypeDef))(relations);
+        console.log
+        if (!hasRelations || (isRelationshipArray && dbQueryColumns) || (isRelationshipArray && columnsExist())) {
+            return baseErrors;
+        }
+
+        const isStringArray = signet.isTypeOf(typeBuilder.asArrayDefString('string'))(relations);
+        if (hasRelations && !isRelationshipArray) {
+            baseErrors.push(validator.constructTypeError('joyeuseTableDefinition.relations', typeBuilder.asArrayDefString(typeNames.joyeuse.retlationsTypeDef), relations));
+        }
+
+        if (hasRelations && isRelationshipArray && !columnsExist() && !dbQueryColumns) {
+            const names = getRelationColumnNames();
+            const bads = names.filter(function (values){
+                return !isNamedColumn(values[1]);
+            }).map(function (name){
+                const relation = name[0];
+                const index = relations.indexOf(relation);
+
+                return validator.constructTypeError('joyeuseTableDefinition.relations[' + index + ']', typeNames.joyeuse.retlationsTypeDef, relation);
+            });
+
+            baseErrors = baseErrors.concat(bads);
+        }
         return baseErrors;
     }
 

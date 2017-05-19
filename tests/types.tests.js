@@ -227,6 +227,12 @@ describe('type definitions', function () {
             assert.isTrue(types.joyeuse.isColumnFlag(types.joyeuse.columnFlags));
         })
 
+        it.skip('blah', function () {
+            const relation = 'Customer.Id -> WishList.CustomerId';
+            console.log(pretyJson(/(?:^[\w\d]+\.)([\w\d]+)/.exec(relation)[1]));
+
+        });
+
         it('should correctly validate relationships', function () {
             const testCases = [
                 ['oneToOne', 'Customer.Id -> WishList.CustomerId'],
@@ -490,6 +496,23 @@ describe('type definitions', function () {
                     id: type('int'),
                     relations: [
                         `MyDevice *-> MyUser.deviceId`,
+                        `MyDevice.id *-> Records.deviceId`
+                    ]
+                };
+
+                var errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
+                assert.isFalse(joy.isTableDefinition(table), errors);
+                this.verify(errors);
+            });
+
+            it('should fail a definintion with 1 key, 1 column no dbQuery, and 2 defined relations but one relation does not contain a valid column.', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    key: ['id'],
+                    id: type('int'),
+                    relations: [
+                        `MyDevice.nameId *-> Names.Id`,
                         `MyDevice.id *-> Records.deviceId`
                     ]
                 };
