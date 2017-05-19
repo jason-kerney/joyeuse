@@ -301,7 +301,7 @@ var joyeuseTypes = (function () {
     const joyeuseTableDef = 'joyeuseTableDef'; 
     const joyeuseColumnDef = 'joyeuseColumnDef';
 
-    var dbFlags = getColumnFlags();
+    var columnFlags = getColumnFlags();
     signet.extend(typeNames.validType, signet.isTypeOf('type'));
 
     function getTableDef() {
@@ -354,8 +354,8 @@ var joyeuseTypes = (function () {
         return getTableDefinitinTypeErrors(possibleTableDefiniton).length === 0;
     }
 
-    function isDbFlag(item) {
-        return dbFlags.includes(item);
+    function isColumnFlag(item) {
+        return columnFlags.includes(item);
     }
 
     function getColumnDefinitionBuilder() {
@@ -430,7 +430,7 @@ var joyeuseTypes = (function () {
     signet.alias('arrayString', typeBuilder.asArrayDefString('string'));
     signet.subtype('arrayString')(typeNames.joyeuse.columnFlags,
         function (flags) {
-            var allItemsAreValid = flags.filter(isDbFlag).length === flags.length;
+            var allItemsAreValid = flags.filter(isColumnFlag).length === flags.length;
 
             return (
                 (flags.length > 0)

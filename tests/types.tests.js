@@ -451,6 +451,10 @@ describe('type definitions', function () {
                 assert.throws(badCall, 'Expected a valid table definition. The errors are: \n[\n    {\n        "property_name": "joyeuseTableDefinition.tableName",\n        "type": "requiredString",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.key",\n        "type": "array<requiredString>",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.column",\n        "type": "joyeuseColumnDef",\n        "value_given": "undefined"\n    }\n]')
             });
         });
+
+        describe('schema definition', function () {
+            //
+        });
     });
 
     //proof of concept
