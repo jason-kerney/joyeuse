@@ -298,7 +298,9 @@ var joyeuseTypes = (function () {
         return ['readonly', 'hidden'];
     }
 
+    const joyeuseTableDef = 'joyeuseTableDef'; 
     const joyeuseColumnDef = 'joyeuseColumnDef';
+
     var dbFlags = getColumnFlags();
     signet.extend(typeNames.validType, signet.isTypeOf('type'));
 
@@ -438,6 +440,9 @@ var joyeuseTypes = (function () {
         });
 
     signet.defineDuckType(joyeuseColumnDef, columnType);
+    signet.extend(joyeuseTableDef, function (value){
+        return isTableDefinition(value);
+    });
 
     function getColumnDefinitionTypeErrors(columnInfo) {
         if (signet.isTypeOf(joyeuseColumnDef)(columnInfo)) {
@@ -452,6 +457,14 @@ var joyeuseTypes = (function () {
         return deffErrors;
     }
 
+    var table = signet.enforce(joyeuseTableDef ,function table(tableDefinition) {
+        return tableDefinition;
+    }, {
+        inputErrorBuilder: function (_, arg, __) {
+            return "Expected a valid table definition. The errors are: \n" + JSON.stringify(getTableDefinitinTypeErrors(arg), null, 4);
+        }
+    });
+
     return {
         columnDefinitionType: getColumnTypeDef(),
         columnFlags: getColumnFlags(),
@@ -461,6 +474,7 @@ var joyeuseTypes = (function () {
         getColumnDefinitionBuilder: getColumnDefinitionBuilder,
         getTableDefinitinTypeErrors: getTableDefinitinTypeErrors,
         isTableDefinition: isTableDefinition,
+        table: table,
     };
 }());
 

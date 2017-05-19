@@ -417,7 +417,7 @@ describe('type definitions', function () {
                 assert.isTrue(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
             });
 
-            it.only('should show errors for a definintion a key that is not a column and no dbQuery', function () {
+            it('should show errors for a definintion a key that is not a column and no dbQuery', function () {
                 const table = {
                     tableName: 'device',
                     dbQueryColumns: false,
@@ -427,6 +427,28 @@ describe('type definitions', function () {
 
                 assert.isFalse(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
                 this.verify(pretyJson(joy.getTableDefinitinTypeErrors(table)));
+            });
+
+            it('should return the table if table is called with a valid table', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    key: ['id'],
+                    id: type('int')
+                };
+
+                this.verify(pretyJson(joy.table(table)));
+            });
+
+            it('should thow a nice error when table is called and given a definintion without a key defined', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    id: type('int')
+                };
+
+                var badCall = joy.table.bind(null, table);
+                assert.throws(badCall, 'Expected a valid table definition. The errors are: \n[\n    {\n        "property_name": "joyeuseTableDefinition.tableName",\n        "type": "requiredString",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.key",\n        "type": "array<requiredString>",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.column",\n        "type": "joyeuseColumnDef",\n        "value_given": "undefined"\n    }\n]')
             });
         });
     });
