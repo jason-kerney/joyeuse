@@ -4,6 +4,9 @@ var approvalsConfig = require('./test-utils/approvalsConfig');
 var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 var pretyJson = require('./test-utils/pretyJson');
 var assert = require('chai').assert;
+var typeBuilder = require('../bin/typeBuilder');
+var signet = typeBuilder.signet;
+
 
 function ipGenerator(max) {
     var values = [];
@@ -36,6 +39,7 @@ describe('type definitions', function () {
 
     var types = require('../bin/types');
     var ip4Types = types.ip4;
+    var typeNames = types.typeNames;
 
     it('should correctly validate ip4 strings', function () {
         var ips = ipGenerator(255 * 2);
@@ -223,6 +227,19 @@ describe('type definitions', function () {
             assert.isTrue(types.joyeuse.isColumnFlag(types.joyeuse.columnFlags));
         })
 
+        it('should correctly validate relationships', function () {
+            const testCases = [
+                ['oneToOne', 'Customer.Id -> WishList.CustomerId'],
+                ['oneToMany', 'Customer.Id ->* Orders.CustomerId'],
+                ['manyToOne', 'ZipCode.Id *-> Address.ZipCodeId'],
+                ['manyToMany', 'Orders.Tag *->* Product.Tag']
+            ];
+
+            testCases.forEach(function (testCase) {
+                assert.isTrue(signet.isTypeOf(typeNames.joyeuse.retlationsTypeDef)(testCase[1]), testCase[0] + ' "' + testCase[1] + '"');
+            }, this);
+        });
+
         describe('column definition', function () {
             it('should contain a definition type', function () {
                 this.verify(pretyJson(types.joyeuse.columnDefinitionType));
@@ -355,7 +372,6 @@ describe('type definitions', function () {
         });
 
         describe('table definiton', function () {
-            var signet = require('../bin/typeBuilder').signet;
             const joy = types.joyeuse;
             var type;
 
@@ -383,6 +399,17 @@ describe('type definitions', function () {
                 };
 
                 assert.isTrue(joy.isTableDefinition(table), joy.getTableDefinitinTypeErrors(table));
+            });
+
+            it('should validate a good table definintion with no key, 1 column as a type string no dbQuery and no defined relations', function () {
+                const table = {
+                    tableName: 'emails',
+                    dbQueryColumns: false,
+                    key: [],
+                    id: 'string'
+                };
+
+                assert.isTrue(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
             });
 
             it('should show errors for a definintion without a key defined', function () {
@@ -450,10 +477,6 @@ describe('type definitions', function () {
                 var badCall = joy.table.bind(null, table);
                 assert.throws(badCall, 'Expected a valid table definition. The errors are: \n[\n    {\n        "property_name": "joyeuseTableDefinition.tableName",\n        "type": "requiredString",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.key",\n        "type": "array<requiredString>",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.column",\n        "type": "joyeuseColumnDef",\n        "value_given": "undefined"\n    }\n]')
             });
-        });
-
-        describe('schema definition', function () {
-            //
         });
     });
 

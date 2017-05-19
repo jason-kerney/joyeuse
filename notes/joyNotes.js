@@ -9,7 +9,6 @@ var baseSchema =
     {
         //////// Device to User Example ////////
         SchemaName: 'dbo', // can be null
-        DbQueryColumns: true,
         DbQueryTables: true,
         MyDevice: Joy.table('MyDevice', {
             tableName: 'device',
