@@ -408,7 +408,7 @@ var joyeuseTypes = (function () {
                 const relation = name[0];
                 const index = relations.indexOf(relation);
 
-                return validator.constructTypeError('joyeuseTableDefinition.relations[' + index + ']', typeNames.joyeuse.retlationsTypeDef, relation);
+                return validator.constructTypeError('joyeuseTableDefinition.relations[' + index + ']', 'Must start with a reference to a valid column on base table.', relation);
             });
 
             baseErrors = baseErrors.concat(bads);
