@@ -534,7 +534,7 @@ describe('type definitions', function () {
                 this.verify(pretyJson(err));
             });
 
-            it.only('should not validate a good definintion if it has extra properties', function () {
+            it('should not validate a good definintion if it has extra properties', function () {
                 const table = {
                     tableName: 'device',
                     dbQueryColumns: false,
