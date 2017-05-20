@@ -1,0 +1,1 @@
+"Expected a valid table definition. The errors are: \n[\n    {\n        \"property_name\": \"joyeuseTableDefinition.key\",\n        \"type\": \"array<requiredString>\",\n        \"value_given\": \"undefined\"\n    }\n]"

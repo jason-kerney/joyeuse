@@ -340,7 +340,7 @@ var joyeuseTypes = (function () {
         const columns = (Object.keys(possibleTableDefinition).filter(function (key) {
             const value = possibleTableDefinition[key];
             return signet.isTypeOf(joyeuseColumnDef)(value)
-                || signet.isTypeOf('type')(value);
+                || (signet.isTypeOf('type')(value) && !signet.isTypeOf('function')(value));
         }));
 
         var baseErrors = validator.getErrors('joyeuseTableDefinition', tableType, possibleTableDefinition);
@@ -376,44 +376,59 @@ var joyeuseTypes = (function () {
         }
 
         function columnsExist() {
-            const exists = 
+            const exists =
                 getRelationColumnNames()
-                .map(function (values){
-                    return values[1]
-                })
-                .map(isNamedColumn)
-                .reduce(function (acc, hasName) {
-                    return acc && hasName;
-                }, true);
+                    .map(function (values) {
+                        return values[1]
+                    })
+                    .map(isNamedColumn)
+                    .reduce(function (acc, hasName) {
+                        return acc && hasName;
+                    }, true);
 
             return columns.length > 0 && exists;
         }
 
         const isRelationshipArray = signet.isTypeOf(typeBuilder.asArrayDefString(typeNames.joyeuse.retlationsTypeDef))(relations);
-        console.log
-        if (!hasRelations || (isRelationshipArray && dbQueryColumns) || (isRelationshipArray && columnsExist())) {
-            return baseErrors;
+        const hasGoodRelations = !hasRelations || (isRelationshipArray && dbQueryColumns) || (isRelationshipArray && columnsExist());
+        if (!hasGoodRelations) {
+            const isStringArray = signet.isTypeOf(typeBuilder.asArrayDefString('string'))(relations);
+            if (hasRelations && !isRelationshipArray) {
+                baseErrors.push(validator.constructTypeError('joyeuseTableDefinition.relations', typeBuilder.asArrayDefString(typeNames.joyeuse.retlationsTypeDef), relations));
+            }
+
+            if (hasRelations && isRelationshipArray && !columnsExist() && !dbQueryColumns) {
+                const names = getRelationColumnNames();
+                const bads = names.filter(function (values) {
+                    return !isNamedColumn(values[1]);
+                }).map(function (name) {
+                    const relation = name[0];
+                    const index = relations.indexOf(relation);
+
+                    return validator.constructTypeError('joyeuseTableDefinition.relations[' + index + ']', 'Must start with a reference to a valid column on base table.', relation);
+                });
+
+                baseErrors = baseErrors.concat(bads);
+            }
         }
 
-        const isStringArray = signet.isTypeOf(typeBuilder.asArrayDefString('string'))(relations);
-        if (hasRelations && !isRelationshipArray) {
-            baseErrors.push(validator.constructTypeError('joyeuseTableDefinition.relations', typeBuilder.asArrayDefString(typeNames.joyeuse.retlationsTypeDef), relations));
-        }
+        const knownFields = Object.keys(tableType);
+        const possibleKeys = Object.keys(possibleTableDefinition);
+        const unknownFields = possibleKeys.filter(function (key) {
+            const isBadField = !(
+                isNamedColumn(key)
+                || knownFields.includes(key)
+                || key === 'relations'
+            );
 
-        if (hasRelations && isRelationshipArray && !columnsExist() && !dbQueryColumns) {
-            const names = getRelationColumnNames();
-            const bads = names.filter(function (values){
-                return !isNamedColumn(values[1]);
-            }).map(function (name){
-                const relation = name[0];
-                const index = relations.indexOf(relation);
+            return isBadField;
+        }).map(function (key) {
+            const value = possibleTableDefinition[key];
+            const actualValue = signet.isTypeOf('function')(value) ? value.toString() : value;
+            return validator.constructTypeError('joyeuseTableDefinition.' + key, 'unknown member', actualValue);
+        });
 
-                return validator.constructTypeError('joyeuseTableDefinition.relations[' + index + ']', 'Must start with a reference to a valid column on base table.', relation);
-            });
-
-            baseErrors = baseErrors.concat(bads);
-        }
-        return baseErrors;
+        return baseErrors.concat(unknownFields);
     }
 
     function isTableDefinition(possibleTableDefiniton) {
@@ -471,9 +486,7 @@ var joyeuseTypes = (function () {
                 }
 
                 var functionSignature = typeBuilder.asFunctionalDefString('()', validTypeName);
-                // signet.sign(functionSignature, fn);
 
-                // columnDefinition.initFn = signet.enforce(functionSignature, fn);
                 columnDefinition.initFn = function () {
                     var result = fn();
                     if (!signet.isTypeOf(validTypeName)(result)) {
@@ -525,7 +538,8 @@ var joyeuseTypes = (function () {
 
     const tableValidationErrorOptions = {
         inputErrorBuilder: function (_, arg, __) {
-            return "Expected a valid table definition. The errors are: \n" + JSON.stringify(getTableDefinitinTypeErrors(arg), null, 4);
+            const errors = getTableDefinitinTypeErrors(arg[0]);
+            return "Expected a valid table definition. The errors are: \n" + JSON.stringify(errors, null, 4);
         }
     };
 

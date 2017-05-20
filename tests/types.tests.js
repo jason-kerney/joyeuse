@@ -227,12 +227,6 @@ describe('type definitions', function () {
             assert.isTrue(types.joyeuse.isColumnFlag(types.joyeuse.columnFlags));
         })
 
-        it.skip('blah', function () {
-            const relation = 'Customer.Id -> WishList.CustomerId';
-            console.log(pretyJson(/(?:^[\w\d]+\.)([\w\d]+)/.exec(relation)[1]));
-
-        });
-
         it('should correctly validate relationships', function () {
             const testCases = [
                 ['oneToOne', 'Customer.Id -> WishList.CustomerId'],
@@ -529,8 +523,35 @@ describe('type definitions', function () {
                     id: type('int')
                 };
 
-                var badCall = joy.table.bind(null, table);
-                assert.throws(badCall, 'Expected a valid table definition. The errors are: \n[\n    {\n        "property_name": "joyeuseTableDefinition.tableName",\n        "type": "requiredString",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.key",\n        "type": "array<requiredString>",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.column",\n        "type": "joyeuseColumnDef",\n        "value_given": "undefined"\n    }\n]')
+                var err;
+                try {
+                    joy.table(table);
+                    //assert.throws(badCall, 'Expected a valid table definition. The errors are: \n[\n    {\n        "property_name": "joyeuseTableDefinition.tableName",\n        "type": "requiredString",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.key",\n        "type": "array<requiredString>",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.column",\n        "type": "joyeuseColumnDef",\n        "value_given": "undefined"\n    }\n]');
+                } catch (error) {
+                    err = error.message;
+                }
+
+                this.verify(pretyJson(err));
+            });
+
+            it.only('should not validate a good definintion if it has extra properties', function () {
+                const table = {
+                    tableName: 'device',
+                    dbQueryColumns: false,
+                    key: ['id'],
+                    id: 'int',
+                    relations: [
+                        `MyDevice.id *-> MyUser.deviceId`
+                    ],
+                    comment_For_Developer: 'This is not a valid member of a table',
+                    transformer: function (value) {
+                        return String(value).length;
+                    }
+                };
+
+                var errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
+                assert.isFalse(joy.isTableDefinition(table), errors);
+                this.verify(errors);
             });
         });
     });
