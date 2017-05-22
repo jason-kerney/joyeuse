@@ -37,9 +37,11 @@ function ipGenerator(max) {
 
 describe('type definitions', function () {
 
-    var types = require('../bin/types');
-    var ip4Types = types.ip4;
-    var typeNames = types.typeNames;
+    const typesFactory = require('../bin/types');
+    const types = typesFactory();
+    const typeNames = types.typeNames;
+    const ip4Types = types.ip4;
+
 
     it('should correctly validate ip4 strings', function () {
         var ips = ipGenerator(255 * 2);
@@ -101,8 +103,8 @@ describe('type definitions', function () {
     });
 
     describe('knex constructor parameter', function () {
-        var isKnexConstructor = types.knex.isKnexConstructor;
-        var getConstructorParameterErrorMessage = types.knex.getConstructorParameterErrorMessage;
+        const isKnexConstructor = types.knex.isKnexConstructor;
+        const getConstructorParameterErrorMessage = types.knex.getConstructorParameterErrorMessage;
 
         it('should contain a type definition for the construction parameter', function () {
             this.verify(pretyJson(types.knex.getKnexConstructorDef()));

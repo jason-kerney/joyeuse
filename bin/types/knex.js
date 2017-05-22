@@ -15,24 +15,22 @@ const signet = typeBuilder.signet;
 const connectionParts = getConnectionParts();
 
 const connectionTypeDefs = typeBuilder.asVariantDefString(connectionObject, connectionFileObject, connectionString);
+const knexConstructorTypeName = 'knexConstructorType';
+
+function getKnexConstructorDef() {
+    return {
+        client: typeNames.knex.clients,
+        searchPath: typeBuilder.asOptionalPropertyDefString(typeNames.requiredString),
+        debug: typeBuilder.asOptionalPropertyDefString('boolean'),
+        acquireConnectionTimeout: typeBuilder.asOptionalPropertyDefString(typeBuilder.asBoundedIntDefString(0)),
+    };
+}
+
+var constructorType = getKnexConstructorDef();
+constructorType.connection = connectionTypeDefs;
+signet.defineDuckType(knexConstructorTypeName, constructorType);
 
 function getKnexTypes() {
-    const knexConstructorTypeName = 'knexConstructorType';
-
-    function getKnexConstructorDef() {
-        return {
-            client: typeNames.knex.clients,
-            searchPath: typeBuilder.asOptionalPropertyDefString(typeNames.requiredString),
-            debug: typeBuilder.asOptionalPropertyDefString('boolean'),
-            acquireConnectionTimeout: typeBuilder.asOptionalPropertyDefString(typeBuilder.asBoundedIntDefString(0)),
-        };
-    }
-
-    var constructorType = getKnexConstructorDef();
-    constructorType.connection = connectionTypeDefs;
-
-    signet.defineDuckType(knexConstructorTypeName, constructorType);
-
     function getConstructorParameterErrors(constructorParameter) {
         var constructorTypePartial = getKnexConstructorDef();
         if (signet.isTypeOf(knexConstructorTypeName)(constructorParameter)) {
@@ -51,7 +49,7 @@ function getKnexTypes() {
     }
 
     function getConstructorParameterErrorMessage(constuctorInfo) {
-        var header = [
+        const header = [
             'constuctor was not the correct type',
             '',
             'object recieved from constuctor:',

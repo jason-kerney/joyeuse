@@ -1,7 +1,7 @@
 'use strict';
 
 var typeBuilder = require('../bin/typeBuilder');
-var types = require('../bin/types');
+var types = require('../bin/types')();
 var typeNames = types.typeNames;
 var approvalsConfig = require('./test-utils/approvalsConfig');
 var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
