@@ -32,7 +32,7 @@ signet.defineDuckType(knexConstructorTypeName, constructorType);
 
 function getKnexTypes() {
     function getConstructorParameterErrors(constructorParameter) {
-        var constructorTypePartial = getKnexConstructorDef();
+        const constructorTypePartial = getKnexConstructorDef();
         if (signet.isTypeOf(knexConstructorTypeName)(constructorParameter)) {
             return [];
         }

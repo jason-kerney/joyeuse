@@ -14,7 +14,7 @@ function getFactory(constuctorInfo) {
     }
 
 
-    var knex = knexFactory(constuctorInfo);
+    const knex = knexFactory(constuctorInfo);
 
     return {
         knex: knex,

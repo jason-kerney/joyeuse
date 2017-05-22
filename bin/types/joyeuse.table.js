@@ -150,7 +150,7 @@ function isColumnFlag(item) {
 
 function getColumnDefinitionBuilder() {
     return signet.enforce(typeBuilder.asFunctionalDefString(typeNames.validType, joyeuseColumnDef), function type(validTypeName) {
-        var columnDefinition = {
+        const columnDefinition = {
             type: validTypeName,
             flags: []
         };
@@ -194,10 +194,10 @@ function getColumnDefinitionBuilder() {
                 return columnDefinition;
             }
 
-            var functionSignature = typeBuilder.asFunctionalDefString('()', validTypeName);
+            const functionSignature = typeBuilder.asFunctionalDefString('()', validTypeName);
 
             columnDefinition.initFn = function () {
-                var result = fn();
+                const result = fn();
                 if (!signet.isTypeOf(validTypeName)(result)) {
                     throw new Error("Expected to return type of " + validTypeName);
                 }
@@ -231,7 +231,7 @@ function getColumnDefinitionTypeErrors(columnInfo) {
 signet.alias('arrayString', typeBuilder.asArrayDefString('string'));
 signet.subtype('arrayString')(typeNames.joyeuse.columnFlags,
     function (flags) {
-        var allItemsAreValid = flags.filter(isColumnFlag).length === flags.length;
+        const allItemsAreValid = flags.filter(isColumnFlag).length === flags.length;
 
         return (
             (flags.length > 0)

@@ -3,7 +3,7 @@
 const typeNames = require('./typeNames')();
 const typeBuilder = require('../typeBuilder')();
 const signet = typeBuilder.signet;
-var fullPathRegex =
+const fullPathRegex =
     '^(' +
     '(\\.{0,2})|' +
     '(\\w\\:)|' +
