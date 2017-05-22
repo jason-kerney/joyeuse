@@ -9,10 +9,9 @@ var baseSchema =
     {
         //////// Device to User Example ////////
         SchemaName: 'dbo', // can be null
-        DbQueryTables: true,
         MyDevice: Joy.table('MyDevice', {
             tableName: 'device',
-            dbQueryColumns: false,
+            dbQueryColumns: false, // knex.table(model.tableName).columnInfo()
             key: ['id'],
             id: joy.type('int').readOnly(),
             serialNumber:
