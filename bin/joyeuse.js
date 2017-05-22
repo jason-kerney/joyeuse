@@ -18,7 +18,7 @@ function getFactory(constuctorInfo) {
 
     return {
         knex: knex,
-        type: types.joyeuse.getColumnDefinitionBuilder(),
+        type: types.joyeuse.tables.getColumnDefinitionBuilder(),
         types: types,
         typeBuilder: typeBuilder,
         signet: signet

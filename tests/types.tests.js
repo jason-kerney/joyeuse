@@ -213,20 +213,22 @@ describe('type definitions', function () {
     });
 
     describe('for joyeuse types', function () {
+        const joy = types.joyeuse.tables;
+
         it('should have all column flags', function () {
-            this.verify(JSON.stringify(types.joyeuse.columnFlags, null, 4));
+            this.verify(JSON.stringify(joy.columnFlags, null, 4));
         });
 
         it('should validate [\'readonly\'] as valid columnFlags', function () {
-            assert.isTrue(types.joyeuse.isColumnFlag(['readonly']));
+            assert.isTrue(joy.isColumnFlag(['readonly']));
         });
 
         it('should validate [\'readonly\', \'readonly\'] as not valid columnFlags', function () {
-            assert.isFalse(types.joyeuse.isColumnFlag(['readonly', 'readonly']));
+            assert.isFalse(joy.isColumnFlag(['readonly', 'readonly']));
         });
 
         it('should validate all flags as being valid as a columnFlags', function () {
-            assert.isTrue(types.joyeuse.isColumnFlag(types.joyeuse.columnFlags));
+            assert.isTrue(joy.isColumnFlag(joy.columnFlags));
         })
 
         it('should correctly validate relationships', function () {
@@ -243,8 +245,9 @@ describe('type definitions', function () {
         });
 
         describe('column definition', function () {
+            const joy = types.joyeuse.tables;
             it('should contain a definition type', function () {
-                this.verify(pretyJson(types.joyeuse.columnDefinitionType));
+                this.verify(pretyJson(joy.columnDefinitionType));
             });
 
             it('should validate a good deffinition', function () {
@@ -254,7 +257,7 @@ describe('type definitions', function () {
                     flags: ["readonly"],
                 };
 
-                assert.isTrue(types.joyeuse.isJoyeuseColumnDefinition(columnDefinition));
+                assert.isTrue(joy.isJoyeuseColumnDefinition(columnDefinition));
             });
 
             it('should be able to give good errors', function () {
@@ -263,65 +266,65 @@ describe('type definitions', function () {
                     flags: ["helpful"],
                 };
 
-                this.verify(pretyJson(types.joyeuse.getColumnDefinitionTypeErrors(columnDefinition)));
+                this.verify(pretyJson(joy.getColumnDefinitionTypeErrors(columnDefinition)));
             });
 
             it('should be have a definition builder that takes a type name', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
                 var columnDef = columnBuilder('int');
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that takes a type name - boolean', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
                 var columnDef = columnBuilder('boolean');
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that can be made readonly', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
                 var columnDef = columnBuilder('int').readonly();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a column builder that can be made hidden', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
                 var columnDef = columnBuilder('boolean').hidden();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that can be made hidden then readonly', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
                 var columnDef = columnBuilder('boolean').hidden().readonly();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that can be made readonly then hidden', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
                 var columnDef = columnBuilder('boolean').readonly().hidden();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a  definition builder that can be made readonly then readonly', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
                 var columnDef = columnBuilder('boolean').readonly().readonly();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that can be made hidden then hidden', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
                 var columnDef = columnBuilder('boolean').hidden().hidden();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that can be made hidden then hidden', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
                 var columnDef = columnBuilder('boolean').hidden().hidden();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should have a definition builder that init a type', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
 
                 var columnDef = columnBuilder('int');
                 assert.isUndefined(columnBuilder.initFn);
@@ -334,7 +337,7 @@ describe('type definitions', function () {
             });
 
             it('should have a definition builder that init a type - boolean', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
 
                 var columnDef = columnBuilder('boolean');
                 assert.isUndefined(columnBuilder.initFn);
@@ -347,7 +350,7 @@ describe('type definitions', function () {
             });
 
             it('should have a definition that throws an error when it returns wrong type.', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
 
                 var columnDef = columnBuilder('int');
                 assert.isUndefined(columnBuilder.initFn);
@@ -360,7 +363,7 @@ describe('type definitions', function () {
             });
 
             it('should have a definition that throws an error when it returns wrong type. - boolean', function () {
-                var columnBuilder = types.joyeuse.getColumnDefinitionBuilder();
+                var columnBuilder = joy.getColumnDefinitionBuilder();
 
                 var columnDef = columnBuilder('boolean');
                 assert.isUndefined(columnBuilder.initFn);
@@ -374,7 +377,7 @@ describe('type definitions', function () {
         });
 
         describe('table definiton', function () {
-            const joy = types.joyeuse;
+            const joy = types.joyeuse.tables;
             var type;
 
             beforeEach(function () {
