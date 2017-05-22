@@ -1,14 +1,14 @@
 'use strict';
 
-var typeBuilder = require('../bin/typeBuilder')();
-var types = require('../bin/types')();
-var typeNames = types.typeNames;
-var approvalsConfig = require('./test-utils/approvalsConfig');
-var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
-var typesValidation = require('../bin/typesValidation');
-var pretyJson = require('./test-utils/pretyJson');
+const typeBuilder = require('../bin/typeBuilder')();
+const types = require('../bin/types')();
+const typeNames = types.typeNames;
+const approvalsConfig = require('./test-utils/approvalsConfig');
+const approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
+const typesValidation = require('../bin/typesValidation')();
+const pretyJson = require('./test-utils/pretyJson');
 
-var assert = require('chai').assert;
+const assert = require('chai').assert;
 
 describe('type validation builder', function () {
     describe('basic type error builder', function () {

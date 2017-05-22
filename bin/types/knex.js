@@ -4,7 +4,7 @@ const typeBuilder = require('../typeBuilder')();
 const typeNames = require('./typeNames')();
 const getConnectionParts = require('./connectionParts');
 const knexBaseTypes = require('./knexBase')();
-const validator = require('../typesValidation');
+const validator = require('../typesValidation')();
 
 const connectionString = 'knexConnectionString';
 const connectionObject = 'knexConnectionObject';

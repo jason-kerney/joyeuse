@@ -23,7 +23,7 @@ function getBasicErrors(propertyName, typeInfo, value, errors) {
 
 function getObjectErrors(propertyName, typeInfo, value, errors) {
     var newErrors = errors.slice();
-    (Object.keys(typeInfo)).forEach(function(key) {
+    (Object.keys(typeInfo)).forEach(function (key) {
         var subName = propertyName + '.' + key;
         var subType = typeInfo[key];
         var subValue = value[key];
@@ -56,7 +56,9 @@ function getErrors() {
     return getBasicErrors(propertyName, typeInfo, value, []);
 }
 
-module.exports = {
-    constructTypeError: typeError,
-    getErrors: getErrors,
+module.exports = function () {
+    return {
+        constructTypeError: typeError,
+        getErrors: getErrors,
+    };
 }
