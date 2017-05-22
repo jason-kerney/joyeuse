@@ -1,7 +1,7 @@
 'use strict';
 
 const typeNames = require('./typeNames')();
-const typeBuilder = require('../typeBuilder');
+const typeBuilder = require('../typeBuilder')();
 const signet = typeBuilder.signet;
 var fullPathRegex =
     '^(' +

@@ -1,7 +1,7 @@
 'use strict';
 
 const typeNames = require('./typeNames')();
-const typeBuilder = require('../typeBuilder');
+const typeBuilder = require('../typeBuilder')();
 const signet = typeBuilder.signet;
 var ip4Format = 'ip4Format';
 var ip4Regex = '(localhost)|(([0-2]?\\d?\\d)\\.([0-2]?\\d?\\d)\\.(\\d?\\d?\\d)\\.([0-2]?\\d?\\d))';

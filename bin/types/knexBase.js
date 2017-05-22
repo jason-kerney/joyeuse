@@ -1,7 +1,7 @@
 'use strict';
 
 const typeNames = require('./typeNames')();
-const typeBuilder = require('../typeBuilder');
+const typeBuilder = require('../typeBuilder')();
 const signet = typeBuilder.signet;
 const allowedDatabases = ['postgres', 'mssql', 'mysql', 'mariadb', 'sqlite3', 'oracle'];
 const connectionAfterCreate = 'connectionAfterCreate';

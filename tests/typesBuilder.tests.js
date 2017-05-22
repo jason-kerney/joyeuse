@@ -2,7 +2,7 @@
 
 var approvalsConfig = require('./test-utils/approvalsConfig');
 var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
-var typeBuilder = require('../bin/typeBuilder');
+var typeBuilder = require('../bin/typeBuilder')();
 var ending = "\r\n";
 var assert = require('chai').assert;
 

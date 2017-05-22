@@ -64,17 +64,17 @@ var asStringEnum = signet.enforce(asFunctionDefString('string', 'string'), funct
     return asFormattedStringDefString('^(' + args.join('|') + ')$');
 });
 
-var exportedType = {
-    signet: signet,
-    isUndefined: isUndefined,
-    asArrayDefString: asArrayDefString,
-    asVariantDefString: asVariantDefString,
-    asFormattedStringDefString: asFormattedStringDefString,
-    asOptionalParameterDefString: asOptionalParameterDefString,
-    asOptionalPropertyDefString: asOptionalPropertyDefString,
-    asBoundedIntDefString: asBoundedIntDefString,
-    asFunctionalDefString: asFunctionDefString,
-    asStringEnum: asStringEnum,
+module.exports = function () {
+    return {
+        signet: signet,
+        isUndefined: isUndefined,
+        asArrayDefString: asArrayDefString,
+        asVariantDefString: asVariantDefString,
+        asFormattedStringDefString: asFormattedStringDefString,
+        asOptionalParameterDefString: asOptionalParameterDefString,
+        asOptionalPropertyDefString: asOptionalPropertyDefString,
+        asBoundedIntDefString: asBoundedIntDefString,
+        asFunctionalDefString: asFunctionDefString,
+        asStringEnum: asStringEnum,
+    };
 };
-
-module.exports = exportedType;

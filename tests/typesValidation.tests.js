@@ -1,6 +1,6 @@
 'use strict';
 
-var typeBuilder = require('../bin/typeBuilder');
+var typeBuilder = require('../bin/typeBuilder')();
 var types = require('../bin/types')();
 var typeNames = types.typeNames;
 var approvalsConfig = require('./test-utils/approvalsConfig');

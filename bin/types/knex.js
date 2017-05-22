@@ -1,6 +1,6 @@
 'use strict';
 
-const typeBuilder = require('../typeBuilder');
+const typeBuilder = require('../typeBuilder')();
 const typeNames = require('./typeNames')();
 const getConnectionParts = require('./connectionParts');
 const knexBaseTypes = require('./knexBase')();

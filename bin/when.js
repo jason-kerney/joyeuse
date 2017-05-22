@@ -1,6 +1,6 @@
 'use strinct';
 
-var typeBuilder = require('./typeBuilder');
+var typeBuilder = require('./typeBuilder')();
 var signet = typeBuilder.signet;
 
 var initialCond = 'initialCond';

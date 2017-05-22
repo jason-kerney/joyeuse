@@ -1,5 +1,5 @@
 'use strict';
-var typeBuilder = require('./typeBuilder');
+var typeBuilder = require('./typeBuilder')();
 var signet = typeBuilder.signet;
 
 function typeError(name, typeInfo, value) {

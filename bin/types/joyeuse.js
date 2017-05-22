@@ -1,6 +1,6 @@
 'use strict';
 
-const typeBuilder = require('../typeBuilder');
+const typeBuilder = require('../typeBuilder')();
 const typeNames = require('./typeNames')();
 const validator = require('../typesValidation');
 const baseTypes = require('./base')();

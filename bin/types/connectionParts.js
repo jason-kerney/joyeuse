@@ -1,7 +1,7 @@
 'use strict';
 
 require('./ip4')();
-const typeBuilder = require('../typeBuilder');
+const typeBuilder = require('../typeBuilder')();
 const typeNames = require('./typeNames')();
 const validator = require('../typesValidation');
 

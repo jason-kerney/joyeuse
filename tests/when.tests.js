@@ -1,12 +1,11 @@
 'use strict';
 
-var assert = require('chai').assert;
-
-var typeBuilder = require('../bin/typeBuilder');
-var signet = typeBuilder.signet;
-var sinon = require('sinon');
-var approvalsConfig = require('./test-utils/approvalsConfig');
-var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
+const assert = require('chai').assert;
+const typeBuilder = require('../bin/typeBuilder')();
+const signet = typeBuilder.signet;
+const sinon = require('sinon');
+const approvalsConfig = require('./test-utils/approvalsConfig');
+const approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 
 describe('when', function () {
     var when;

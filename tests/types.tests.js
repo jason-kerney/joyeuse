@@ -1,11 +1,11 @@
 'use strict';
 
-var approvalsConfig = require('./test-utils/approvalsConfig');
-var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
-var pretyJson = require('./test-utils/pretyJson');
-var assert = require('chai').assert;
-var typeBuilder = require('../bin/typeBuilder');
-var signet = typeBuilder.signet;
+const approvalsConfig = require('./test-utils/approvalsConfig');
+const approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
+const pretyJson = require('./test-utils/pretyJson');
+const assert = require('chai').assert;
+const typeBuilder = require('../bin/typeBuilder')();
+const signet = typeBuilder.signet;
 
 
 function ipGenerator(max) {
