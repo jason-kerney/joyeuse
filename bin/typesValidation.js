@@ -1,6 +1,6 @@
 'use strict';
-var typeBuilder = require('./typeBuilder')();
-var signet = typeBuilder.signet;
+const typeBuilder = require('./typeBuilder')();
+const signet = typeBuilder.signet;
 
 function typeError(name, typeInfo, value) {
     return {
@@ -11,11 +11,11 @@ function typeError(name, typeInfo, value) {
 }
 
 function getBasicErrors(propertyName, typeInfo, value, errors) {
-    var isType = signet.isTypeOf(typeInfo)(value);
+    const isType = signet.isTypeOf(typeInfo)(value);
     if (isType) {
         return errors;
     } else {
-        var newErrors = errors.slice();
+        const newErrors = errors.slice();
         newErrors.push(typeError(propertyName, typeInfo, value));
         return newErrors;
     }
@@ -24,30 +24,27 @@ function getBasicErrors(propertyName, typeInfo, value, errors) {
 function getObjectErrors(propertyName, typeInfo, value, errors) {
     var newErrors = errors.slice();
     (Object.keys(typeInfo)).forEach(function (key) {
-        var subName = propertyName + '.' + key;
-        var subType = typeInfo[key];
-        var subValue = value[key];
+        const subName = propertyName + '.' + key;
+        const subType = typeInfo[key];
+        const subValue = value[key];
 
-        var subErrors = getErrors(subName, subType, subValue);
+        const subErrors = getErrors(subName, subType, subValue);
 
-        for (var index = 0; index < subErrors.length; index++) {
-            var error = subErrors[index];
-            newErrors.push(error);
-        }
+        newErrors = newErrors.concat(subErrors);
     }, this);
 
     return newErrors;
 }
 
 function getErrors() {
-    var hasAllArguments = arguments.length === 3;
+    const hasAllArguments = arguments.length === 3;
 
-    var typeNameIndex = hasAllArguments ? 1 : 0;
-    var valueIndex = hasAllArguments ? 2 : 1;
+    const typeNameIndex = hasAllArguments ? 1 : 0;
+    const valueIndex = hasAllArguments ? 2 : 1;
 
-    var propertyName = hasAllArguments ? arguments[0] : '';
-    var typeInfo = arguments[typeNameIndex];
-    var value = arguments[valueIndex];
+    const propertyName = hasAllArguments ? arguments[0] : '';
+    const typeInfo = arguments[typeNameIndex];
+    const value = arguments[valueIndex];
 
     if (typeof typeInfo === 'object') {
         return getObjectErrors(propertyName, typeInfo, value, [])

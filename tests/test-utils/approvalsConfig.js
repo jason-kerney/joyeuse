@@ -1,4 +1,4 @@
-var BeyondCompare4 = require('./BeyondCompareReporters').BeyondCompare4;
+const BeyondCompare4 = require('./BeyondCompareReporters').BeyondCompare4;
 
 module.exports = {
     reporters: [new BeyondCompare4()],

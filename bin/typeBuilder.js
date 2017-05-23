@@ -1,10 +1,10 @@
 'use strict';
 
-var signet = require('signet')();
+const signet = require('signet')();
 
-var isUndefined = signet.isTypeOf('undefined');
+const isUndefined = signet.isTypeOf('undefined');
 
-var asFunctionDefString = signet.enforce('variant<string; array<string>> => string',
+const asFunctionDefString = signet.enforce('variant<string; array<string>> => string',
     function (input, output) {
         if (signet.isTypeOf('string')(input)) {
             return input + ' => ' + output;
@@ -13,14 +13,14 @@ var asFunctionDefString = signet.enforce('variant<string; array<string>> => stri
         }
     });
 
-var typedString = signet.enforce(asFunctionDefString('string', 'string'),
+const typedString = signet.enforce(asFunctionDefString('string', 'string'),
     function (name, typeString) {
         return name + '<' + typedString + '>';
     });
 
-var asVariantDefString = signet.enforce(asFunctionDefString('string', 'string'),
+const asVariantDefString = signet.enforce(asFunctionDefString('string', 'string'),
     function () {
-        var args = Array.prototype.slice.call(arguments);
+        const args = Array.prototype.slice.call(arguments);
         if (!(signet.isTypeOf('array<string>'))) {
             throw new Error("all parrameters need to be of type'string'");
         }
@@ -28,13 +28,13 @@ var asVariantDefString = signet.enforce(asFunctionDefString('string', 'string'),
         return 'variant<' + args.join('; ') + '>'
     });
 
-var asBoundedIntDefString = signet.enforce(asFunctionDefString('int, [int]', 'string'),
+const asBoundedIntDefString = signet.enforce(asFunctionDefString('int, [int]', 'string'),
     function (min, max) {
-        var realMax = isUndefined(max) ? Infinity : max;
+        const realMax = isUndefined(max) ? Infinity : max;
         return 'boundedInt<' + min + ';' + realMax + '>';
     });
 
-var asArrayDefString = signet.enforce(asFunctionDefString(asVariantDefString('undefined', 'string'), 'string'),
+const asArrayDefString = signet.enforce(asFunctionDefString(asVariantDefString('undefined', 'string'), 'string'),
     function (typeString) {
         const arrayName = 'array';
         if (isUndefined(typeString)) {
@@ -43,20 +43,20 @@ var asArrayDefString = signet.enforce(asFunctionDefString(asVariantDefString('un
         return arrayName + '<' + typeString + '>';
     });
 
-var asFormattedStringDefString = signet.enforce(asFunctionDefString('string', 'string'),
+const asFormattedStringDefString = signet.enforce(asFunctionDefString('string', 'string'),
     function (format) {
         return 'formattedString<' + format + '>';
     });
 
-var asOptionalParameterDefString = signet.enforce(asFunctionDefString('string', 'string'),
+const asOptionalParameterDefString = signet.enforce(asFunctionDefString('string', 'string'),
     function (typestring) {
         return '[' + typestring + ']';
     });
 
-var asOptionalPropertyDefString = signet.enforce(asFunctionDefString('string', 'string'), asVariantDefString.bind(null, 'undefined'));
+const asOptionalPropertyDefString = signet.enforce(asFunctionDefString('string', 'string'), asVariantDefString.bind(null, 'undefined'));
 
-var asStringEnum = signet.enforce(asFunctionDefString('string', 'string'), function () {
-    var args = Array.prototype.slice.call(arguments);
+const asStringEnum = signet.enforce(asFunctionDefString('string', 'string'), function () {
+    const args = Array.prototype.slice.call(arguments);
     if (!(signet.isTypeOf('array<string>'))) {
         throw new Error("all parrameters need to be of type'string'");
     }

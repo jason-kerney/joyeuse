@@ -16,11 +16,11 @@ function ipGenerator(max) {
     }
 
     for (var i = 0; i <= 1000; i++) {
-        var part1 = part();
-        var part2 = part();
-        var part3 = part();
-        var part4 = part();
-        var isValid =
+        const part1 = part();
+        const part2 = part();
+        const part3 = part();
+        const part4 = part();
+        const isValid =
             part1 <= 255
             && part2 <= 255
             && part3 <= 255
@@ -44,23 +44,23 @@ describe('type definitions', function () {
 
 
     it('should correctly validate ip4 strings', function () {
-        var ips = ipGenerator(255 * 2);
+        const ips = ipGenerator(255 * 2);
 
         ips.forEach(function (element) {
-            var check = ip4Types.isIp4String(element.ip);
-            var message = check ? element.ip + " is recorded as valid" : element.ip + " is recorded as invalid";
+            const check = ip4Types.isIp4String(element.ip);
+            const message = check ? element.ip + " is recorded as valid" : element.ip + " is recorded as invalid";
 
             assert.equal(element.isValid, check, message);
         }, this);
     });
 
     it('should validate required strings', function () {
-        var validString = "a";
-        var spaceOnly = " ";
-        var tabOnly = "\t";
-        var undifinedString = undefined;
-        var nullString = null;
-        var emptyString = '';
+        const validString = "a";
+        const spaceOnly = " ";
+        const tabOnly = "\t";
+        const undifinedString = undefined;
+        const nullString = null;
+        const emptyString = '';
 
         assert.isTrue(types.base.isRequiredString(validString), "a valid string should be valid");
         assert.isFalse(types.base.isRequiredString(spaceOnly), "a space is not a valid string");
@@ -87,7 +87,7 @@ describe('type definitions', function () {
         });
 
         it('should validate an exceptable sql client', function () {
-            var isClient = types.knex.baseTypes.isClient;
+            const isClient = types.knex.baseTypes.isClient;
             assert.isTrue(isClient('postgres'), 'Postgres');
             assert.isTrue(isClient('mssql'), 'MSSQL');
             assert.isTrue(isClient('mariadb'), 'MariaDB');
@@ -111,7 +111,7 @@ describe('type definitions', function () {
         });
 
         it('should show that database name was missing', function () {
-            var props = {
+            const props = {
                 client: 'mysql',
                 connection: {
                     user: 'root',
@@ -121,7 +121,7 @@ describe('type definitions', function () {
         });
 
         it('should validate a correct object with connection string, debug, connection pool and acquireConnectionTimeout', function () {
-            var param = {
+            const param = {
                 client: 'mysql',
                 connection: "some connection string",
                 searchPath: "some,path",
@@ -134,7 +134,7 @@ describe('type definitions', function () {
         });
 
         it('should validate a correct object wit connection string and without debug, connection pool and acquireConnectionTimeout', function () {
-            var param = {
+            const param = {
                 client: 'mysql',
                 connection: "some connection string",
                 searchPath: "some,path",
@@ -144,7 +144,7 @@ describe('type definitions', function () {
         });
 
         it('should require a correct client', function () {
-            var param = {
+            const param = {
                 client: 'access',
                 connection: "some connection string",
                 searchPath: "some,path",
@@ -154,7 +154,7 @@ describe('type definitions', function () {
         });
 
         it('should be able to tell you the client is incorrect', function () {
-            var param = {
+            const param = {
                 client: 'access',
                 connection: "some connection string",
                 searchPath: "some,path",
@@ -164,7 +164,7 @@ describe('type definitions', function () {
         });
 
         it('should require a connection', function () {
-            var param = {
+            const param = {
                 client: 'mssql',
                 searchPath: "some,path",
             };
@@ -173,7 +173,7 @@ describe('type definitions', function () {
         });
 
         it('should report that connection is missing', function () {
-            var param = {
+            const param = {
                 client: 'mssql',
                 searchPath: "some,path",
             };
@@ -182,7 +182,7 @@ describe('type definitions', function () {
         });
 
         it('should require a correct connection string', function () {
-            var param = {
+            const param = {
                 client: 'mssql',
                 connection: "",
                 searchPath: "some,path",
@@ -192,7 +192,7 @@ describe('type definitions', function () {
         });
 
         it('should report connection string is incorrect', function () {
-            var param = {
+            const param = {
                 client: 'mssql',
                 connection: "",
                 searchPath: "some,path",
@@ -202,7 +202,7 @@ describe('type definitions', function () {
         });
 
         it('should not require a search path', function () {
-            var param = {
+            const param = {
                 client: 'oracle',
                 connection: "some connection string",
                 database: "some database"
@@ -251,7 +251,7 @@ describe('type definitions', function () {
             });
 
             it('should validate a good deffinition', function () {
-                var columnDefinition = {
+                const columnDefinition = {
                     name: "ProductName",
                     type: 'int',
                     flags: ["readonly"],
@@ -261,7 +261,7 @@ describe('type definitions', function () {
             });
 
             it('should be able to give good errors', function () {
-                var columnDefinition = {
+                const columnDefinition = {
                     type: 'numberThingy',
                     flags: ["helpful"],
                 };
@@ -270,61 +270,61 @@ describe('type definitions', function () {
             });
 
             it('should be have a definition builder that takes a type name', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
-                var columnDef = columnBuilder('int');
+                const columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnDef = columnBuilder('int');
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that takes a type name - boolean', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
-                var columnDef = columnBuilder('boolean');
+                const columnBuilder = joy.getColumnDefinitionBuilder();
+                const  columnDef = columnBuilder('boolean');
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that can be made readonly', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
-                var columnDef = columnBuilder('int').readonly();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnDef = columnBuilder('int').readonly();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a column builder that can be made hidden', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
-                var columnDef = columnBuilder('boolean').hidden();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnDef = columnBuilder('boolean').hidden();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that can be made hidden then readonly', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
-                var columnDef = columnBuilder('boolean').hidden().readonly();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnDef = columnBuilder('boolean').hidden().readonly();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that can be made readonly then hidden', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
-                var columnDef = columnBuilder('boolean').readonly().hidden();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnDef = columnBuilder('boolean').readonly().hidden();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a  definition builder that can be made readonly then readonly', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
-                var columnDef = columnBuilder('boolean').readonly().readonly();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnDef = columnBuilder('boolean').readonly().readonly();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that can be made hidden then hidden', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
-                var columnDef = columnBuilder('boolean').hidden().hidden();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnDef = columnBuilder('boolean').hidden().hidden();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should be have a definition builder that can be made hidden then hidden', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
-                var columnDef = columnBuilder('boolean').hidden().hidden();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnDef = columnBuilder('boolean').hidden().hidden();
                 this.verify(pretyJson(columnDef));
             });
 
             it('should have a definition builder that init a type', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
 
                 var columnDef = columnBuilder('int');
                 assert.isUndefined(columnBuilder.initFn);
@@ -332,12 +332,12 @@ describe('type definitions', function () {
                     return 2;
                 });
 
-                var result = columnDef.initFn();
+                const result = columnDef.initFn();
                 assert.equal(2, result);
             });
 
             it('should have a definition builder that init a type - boolean', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
 
                 var columnDef = columnBuilder('boolean');
                 assert.isUndefined(columnBuilder.initFn);
@@ -345,12 +345,12 @@ describe('type definitions', function () {
                     return true;
                 });
 
-                var result = columnDef.initFn();
+                const result = columnDef.initFn();
                 assert.equal(true, result);
             });
 
             it('should have a definition that throws an error when it returns wrong type.', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
 
                 var columnDef = columnBuilder('int');
                 assert.isUndefined(columnBuilder.initFn);
@@ -358,12 +358,12 @@ describe('type definitions', function () {
                     return "some thing";
                 });
 
-                var throwing = columnDef.initFn.bind(null);
+                const throwing = columnDef.initFn.bind(null);
                 assert.throws(throwing, "Expected to return type of int");
             });
 
             it('should have a definition that throws an error when it returns wrong type. - boolean', function () {
-                var columnBuilder = joy.getColumnDefinitionBuilder();
+                const columnBuilder = joy.getColumnDefinitionBuilder();
 
                 var columnDef = columnBuilder('boolean');
                 assert.isUndefined(columnBuilder.initFn);
@@ -371,7 +371,7 @@ describe('type definitions', function () {
                     return 4;
                 });
 
-                var throwing = columnDef.initFn.bind(null);
+                const throwing = columnDef.initFn.bind(null);
                 assert.throws(throwing, "Expected to return type of boolean");
             });
         });
@@ -499,7 +499,7 @@ describe('type definitions', function () {
                     ]
                 };
 
-                var errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
+                const errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
                 assert.isFalse(joy.isTableDefinition(table), errors);
                 this.verify(errors);
             });
@@ -516,7 +516,7 @@ describe('type definitions', function () {
                     ]
                 };
 
-                var errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
+                const errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
                 assert.isFalse(joy.isTableDefinition(table), errors);
                 this.verify(errors);
             });
@@ -531,7 +531,6 @@ describe('type definitions', function () {
                 var err;
                 try {
                     joy.table(table);
-                    //assert.throws(badCall, 'Expected a valid table definition. The errors are: \n[\n    {\n        "property_name": "joyeuseTableDefinition.tableName",\n        "type": "requiredString",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.key",\n        "type": "array<requiredString>",\n        "value_given": "undefined"\n    },\n    {\n        "property_name": "joyeuseTableDefinition.column",\n        "type": "joyeuseColumnDef",\n        "value_given": "undefined"\n    }\n]');
                 } catch (error) {
                     err = error.message;
                 }
@@ -554,7 +553,7 @@ describe('type definitions', function () {
                     }
                 };
 
-                var errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
+                const errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
                 assert.isFalse(joy.isTableDefinition(table), errors);
                 this.verify(errors);
             });
@@ -565,7 +564,7 @@ describe('type definitions', function () {
     describe('connect to real db', function () {
         it.skip('should connect to a real db', function (done) {
 
-            var props = {
+            const props = {
                 client: 'mysql',
                 connection: {
                     host: 'localhost',
@@ -574,11 +573,11 @@ describe('type definitions', function () {
                 }
             };
 
-            var joy = require('../bin/joyeuse');
-            var factory = joy.getFactory(props);
-            var knex = factory.knex;
+            const joy = require('../bin/joyeuse');
+            const factory = joy.getFactory(props);
+            const knex = factory.knex;
 
-            var people = knex('people').select();
+            const people = knex('people').select();
 
             console.log(Object.keys(people));
 
@@ -592,17 +591,4 @@ describe('type definitions', function () {
             });
         });
     }); // end proof of concept
-});
-
-describe('signet', function () {
-    var signetFactory = require('signet');
-    var signet;
-
-    beforeEach(function () {
-        signet = signetFactory();
-    });
-
-    it('should recognize a bogus type', function () {
-        assert.isFalse(signet.isType('foo'));
-    });
 });

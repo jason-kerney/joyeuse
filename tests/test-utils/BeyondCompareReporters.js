@@ -1,5 +1,5 @@
-var spawn = require('child_process').spawn;
-var fs = require('fs');
+const spawn = require('child_process').spawn;
+const fs = require('fs');
 
 function statPath(filePath) {
     try {
@@ -16,11 +16,11 @@ function BeyondCompare4() {
             return true;
         },
         report: function (approvedFilePath, receivedFilePath) {
-            var executionPath = '/Program Files/Beyond Compare 4/BCompare.exe';
-            var approvedPath = './' + approvedFilePath;
-            var receivedPath = './' + receivedFilePath;
+            const executionPath = '/Program Files/Beyond Compare 4/BCompare.exe';
+            const approvedPath = './' + approvedFilePath;
+            const receivedPath = './' + receivedFilePath;
 
-            var approvedStat = statPath(approvedPath);
+            const approvedStat = statPath(approvedPath);
 
             if (!approvedStat) {
                 fs.writeFileSync(approvedPath, '');
@@ -38,11 +38,11 @@ function BeyondCompare3() {
             return true;
         },
         report: function (approvedFilePath, receivedFilePath) {
-            var executionPath = 'c:/Program Files (x86)/Beyond Compare 3/BCompare.exe';
-            var approvedPath = './' + approvedFilePath;
-            var receivedPath = './' + receivedFilePath;
+            const executionPath = 'c:/Program Files (x86)/Beyond Compare 3/BCompare.exe';
+            const approvedPath = './' + approvedFilePath;
+            const receivedPath = './' + receivedFilePath;
 
-            var approvedStat = statPath(approvedPath);
+            const approvedStat = statPath(approvedPath);
 
             if (!approvedStat) {
                 fs.writeFileSync(approvedPath, '');

@@ -26,7 +26,7 @@ function getKnexConstructorDef() {
     };
 }
 
-var constructorType = getKnexConstructorDef();
+const constructorType = getKnexConstructorDef();
 constructorType.connection = connectionTypeDefs;
 signet.defineDuckType(knexConstructorTypeName, constructorType);
 
@@ -37,13 +37,13 @@ function getKnexTypes() {
             return [];
         }
 
-        var constructorParameterName = 'constructorParameter';
-        var connectionName = constructorParameterName + '.connection';
+        const constructorParameterName = 'constructorParameter';
+        const connectionName = constructorParameterName + '.connection';
 
-        var connectionErrors = connectionParts.getConnectionErrors(constructorParameterName + ".")(constructorParameter.connection);
-        var connectionPoolErrors = knexBaseTypes.getConnectionPoolErrors(constructorParameterName + ".")(constructorParameter.pool);
+        const connectionErrors = connectionParts.getConnectionErrors(constructorParameterName + ".")(constructorParameter.connection);
+        const connectionPoolErrors = knexBaseTypes.getConnectionPoolErrors(constructorParameterName + ".")(constructorParameter.pool);
 
-        var errors = validator.getErrors(constructorParameterName, constructorTypePartial, constructorParameter);
+        const errors = validator.getErrors(constructorParameterName, constructorTypePartial, constructorParameter);
 
         return errors.concat(connectionPoolErrors).concat(connectionErrors);
     }
@@ -62,8 +62,8 @@ function getKnexTypes() {
             '',
         ].join('\r\n');
 
-        var errors = getConstructorParameterErrors(constuctorInfo);
-        var isGood = errors.length === 0;
+        const errors = getConstructorParameterErrors(constuctorInfo);
+        const isGood = errors.length === 0;
 
         function ErrorToString(error) {
             return error.property_name + ": " + String(error.value_given) + "\r\nExpected type: " + error.type;

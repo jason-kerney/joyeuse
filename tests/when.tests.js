@@ -9,6 +9,11 @@ const approvals = require('approvals').configure(approvalsConfig).mocha('./tests
 
 describe('when', function () {
     var when;
+
+    function spy(retValue) {
+        return sinon.stub().returns(retValue);
+    }
+
     beforeEach(function () {
         when = require('../bin/when')();
     });
@@ -18,7 +23,7 @@ describe('when', function () {
     });
 
     it('should call the transformer on match', function () {
-        var transformer = sinon.spy();
+        const transformer = sinon.spy();
         when(transformer)
             .cond(function (_) {
                 return true;
@@ -34,169 +39,111 @@ describe('when', function () {
             return "seven";
         }
 
-        var actual;
-        function spy(input) {
-            actual = input;
-            return false;
-        };
+        const condSpy = spy(false);
+        when(transformer).cond(condSpy, function (_) { }).match(5);
 
-        when(transformer).cond(spy, function (_) { }).match(5);
-
-        assert.equal("seven", actual);
+        assert.isTrue(condSpy.withArgs("seven").calledOnce);
     });
 
     it('should call next item with transformer being called once', function () {
-        var callCount = 0;
-        function transformer(_) {
-            callCount++;
-            return "from transformer";
-        }
-
-        var actual;
-        function spy(input) {
-            actual = input;
-            return false;
-        }
+        const transformer = sinon.stub().returns("from transformer");
+        const condSpy = sinon.stub().returns(false);
 
         when(transformer)
             .cond(function (_) { return false; }, function (_) { })
-            .cond(spy, function (_) { })
+            .cond(condSpy, function (_) { })
             .match(34);
 
-        assert.equal(1, callCount, "the transformer was called too many times");
-        assert.equal("from transformer", actual);
+        assert.equal(1, transformer.callCount, "the transformer was called too many times");
+        assert.isTrue(condSpy.withArgs("from transformer").calledOnce);
     });
 
     it('should not call the first action when condition returns false', function () {
-        var callCount = 0;
-        function action(_) {
-            callCount++;
-        }
-
         function transformer(input) {
             return input.toString();
         }
 
-        when(transformer)
-            .cond(function (_) { return true; }, action);
+        const actionSpy = sinon.spy();
 
-        assert.equal(0, callCount);
+        when(transformer)
+            .cond(function (_) { return false; }, actionSpy)
+            .match(34);
+
+        assert.isTrue(actionSpy.notCalled);
     });
 
     it('should call the first action when condition returns true', function () {
-        var callCount = 0;
-        var actual;
-        function action(input) {
-            actual = input;
-            callCount++;
-            return "done";
-        }
-
-        var result =
-            when(function(input) { return { undone:false }; })
-                .cond(function (_) { return true; }, action)
+        const actionSpy = spy("done");
+        const result =
+            when(function (input) { return { undone: false }; })
+                .cond(function (_) { return true; }, actionSpy)
                 .match(2);
 
-        assert.equal(1, callCount, 'was not called exactly once');
-        assert.equal(actual, 2, 'was called with wrong value');
+        assert.isTrue(actionSpy.calledWith(2).calledOnce, 'was not called exactly once with 2');
         assert.equal("done", result, 'did not return correct result');
     });
 
     it('should not call the second action if the second condition is false', function () {
-        var callCount = 0;
-        function action(_) {
-            callCount++;
-        }
-
-        when(function (input) { return { isPassing:"false" }; })
-            .cond(function (_) { return false; }, function (_) { })
-            .cond(function (_) { return false; }, action)
+        const actionSpy = spy(undefined);
+        when(function (input) { return { isPassing: "false" }; })
+            .cond(function (_) { return false; }, actionSpy)
+            .cond(function (_) { return false; }, actionSpy)
             .match("blarg");
 
-        assert.equal(0, callCount);
+        assert.isTrue(actionSpy.notCalled);
     });
 
     it('should call the second action if the second condition is true', function () {
-        var callCount = 0;
-        var actual;
-        function action(input) {
-            callCount++;
-            actual = input;
-            return "yep done";
-        }
-
-        var result =
-            when(function (input) { return { isPassing:"false" }; })
+        const actionSpy = spy("yep done");
+        const result =
+            when(function (input) { return { isPassing: "false" }; })
                 .cond(function (_) { return false; }, function (_) { })
-                .cond(function (_) { return true; }, action)
+                .cond(function (_) { return true; }, actionSpy)
                 .match("blarg");
 
-        assert.equal(1, callCount, 'did not call the action the correct number of times');
-        assert.equal("blarg", actual, 'did not get called with correct argument');
+        assert.isTrue(actionSpy.calledWith("blarg").calledOnce, 'did not call the action the correct number of times');
         assert.equal("yep done", result, 'did not return the correct value');
     });
 
     it('should call the first action when the transformer returns the correct type if the condition is a type string', function () {
-        var callCount = 0;
-        var actual;
-        function action(input) {
-            callCount++;
-            actual = input;
-            return "yep done";
-        }
+        const action = spy("yep done");
 
-        var result =
+        const result =
             when(function (input) { return 5; })
                 .cond('int', action)
                 .match("hello world");
 
-        assert.equal(1, callCount, 'did not get called the correct number of times');
-        assert.equal("hello world", actual, 'did not get called correctly');
-        assert.equal("yep done", result,'did not return the correct value');
+        assert.isTrue(action.calledWith("hello world").calledOnce, 'did not get called the correct number of times');
+        assert.equal("yep done", result, 'did not return the correct value');
     });
 
     it('should call the second action when the transformer returns the correct type if the condition is a type string', function () {
-        var callCount = 0;
-        var actual;
-        function action(input) {
-            callCount++;
-            actual = input;
-            return "yep done";
-        }
-
-        var result =
+        const actionSpy = spy("yep done");
+        const result =
             when(function (input) { return 5; })
                 .cond(function () { return false; }, function () { })
-                .cond('int', action)
+                .cond('int', actionSpy)
                 .match("hello world");
 
-        assert.equal(1, callCount, 'did not get called the correct number of times');
-        assert.equal("hello world", actual, 'did not get called correctly');
-        assert.equal("yep done", result,'did not return the correct value');
+        assert.isTrue(actionSpy.calledWith("hello world").calledOnce, 'did not get called the correct number of times');
+        assert.equal("yep done", result, 'did not return the correct value');
     });
 
     it('should not call the second action when the first action succeeds', function () {
-        var callCount = 0;
-        var actual;
-        function action(input) {
-            callCount++;
-            actual = input;
-            return "yep done";
-        }
-
-        var result =
+        const actionSpy = spy("yep done");
+        const result =
             when(function (input) { return 5; })
                 .cond(function () { return true; }, function () { return "first result"; })
-                .cond('int', action)
+                .cond('int', actionSpy)
                 .match("hello world");
 
-        assert.equal(0, callCount, 'did not get called the correct number of times');
-        assert.equal("first result", result,'did not return the correct value');
+        assert.isTrue(actionSpy.notCalled, 'did not get called the correct number of times');
+        assert.equal("first result", result, 'did not return the correct value');
     });
 
     it('should return a warning when all conditions fail', function () {
 
-        var result =
+        const result =
             when(function (input) { return ""; })
                 .cond(function () { return false; }, function () { return "bad1"; })
                 .cond('int', function (_) { return "bad2"; })
@@ -206,8 +153,7 @@ describe('when', function () {
     });
 
     it('should evaluate a condition as truthy', function () {
-
-        var result =
+        const result =
             when(function (input) { return ""; })
                 .cond(function () { return "bob"; }, function () { return "truthy"; })
                 .cond('int', function (_) { return "bad"; })
@@ -215,18 +161,14 @@ describe('when', function () {
 
         assert.equal("truthy", result);
     });
-    
+
     it('should default to an identity transformer', function () {
-        var actual;
-        function condition(input) {
-            actual = input;
-            return false;
-        }
+        const condition = spy(false);
 
         when()
             .cond(condition, function () { })
             .match(77);
 
-        assert.equal(77, actual);
+        assert.equal(condition.calledWith(77).calledOnce);
     });
 });

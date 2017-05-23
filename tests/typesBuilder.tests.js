@@ -1,10 +1,10 @@
 'use strict';
 
-var approvalsConfig = require('./test-utils/approvalsConfig');
-var approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
-var typeBuilder = require('../bin/typeBuilder')();
-var ending = "\r\n";
-var assert = require('chai').assert;
+const approvalsConfig = require('./test-utils/approvalsConfig');
+const approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
+const typeBuilder = require('../bin/typeBuilder')();
+const ending = "\r\n";
+const assert = require('chai').assert;
 
 function approveIt(context, value) {
     context.verify(value + ending);
@@ -64,7 +64,7 @@ describe('type builder', function () {
     })
 
     it('should be able to construct a string enum', function () {
-        var enumType = typeBuilder.asStringEnum('hello', 'world', 'blue');
+        const enumType = typeBuilder.asStringEnum('hello', 'world', 'blue');
         this.verify(enumType);
         assert.isTrue(typeBuilder.signet.isTypeOf(enumType)('hello'));
         assert.isFalse(typeBuilder.signet.isTypeOf(enumType)('ahello'));

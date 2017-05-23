@@ -1,25 +1,25 @@
 'use strinct';
 
-var typeBuilder = require('./typeBuilder')();
-var signet = typeBuilder.signet;
+const typeBuilder = require('./typeBuilder')();
+const signet = typeBuilder.signet;
 
-var initialCond = 'initialCond';
-var initialCondDuck = { cond: 'function' };
-var conditionalBuilder = 'conditionalBuilder';
+const initialCond = 'initialCond';
+const initialCondDuck = { cond: 'function' };
+const conditionalBuilder = 'conditionalBuilder';
 
 signet.defineDuckType(initialCond, initialCondDuck);
 signet.defineDuckType(conditionalBuilder, { cond:'function', match:'function' });
 
 module.exports = function () {
 
-    var when = signet.sign(typeBuilder.asFunctionalDefString(typeBuilder.asOptionalParameterDefString('function'), conditionalBuilder), function (transformer) {
+    const when = signet.sign(typeBuilder.asFunctionalDefString(typeBuilder.asOptionalParameterDefString('function'), conditionalBuilder), function (transformer) {
         var conditions = [];
 
-        var trueXformer = typeBuilder.isUndefined(transformer) ? function (item) { return item; } : transformer;
+        const trueXformer = typeBuilder.isUndefined(transformer) ? function (item) { return item; } : transformer;
 
-        var match = signet.sign('* => *', function (value) {
-            var xformed = trueXformer(value);
-            var found = conditions.find(function (condition) {
+        const match = signet.sign('* => *', function (value) {
+            const xformed = trueXformer(value);
+            const found = conditions.find(function (condition) {
                 return condition.condition(xformed);
             });
 
@@ -31,7 +31,7 @@ module.exports = function () {
             return found.action(value);
         });
 
-        var cond = signet.sign('function, function => conditionalBuilder', function (condition, action){
+        const cond = signet.sign('function, function => conditionalBuilder', function (condition, action){
             var trueCondition;
             if(signet.isTypeOf('string')(condition)) {
                 trueCondition = signet.isTypeOf(condition);
