@@ -6,12 +6,17 @@ const signet = typeBuilder.signet;
 const sinon = require('sinon');
 const approvalsConfig = require('./test-utils/approvalsConfig');
 const approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
+var pretyJson = require('./test-utils/pretyJson');
 
 describe('when', function () {
     var when;
 
     function spy(retValue) {
-        return sinon.stub().returns(retValue);
+        function fake() {
+            return retValue;
+        }
+
+        return sinon.spy(fake);
     }
 
     beforeEach(function () {
@@ -79,7 +84,8 @@ describe('when', function () {
                 .cond(function (_) { return true; }, actionSpy)
                 .match(2);
 
-        assert.isTrue(actionSpy.calledWith(2).calledOnce, 'was not called exactly once with 2');
+        assert.isTrue(actionSpy.calledWith(2), 'was not called with 2');
+        assert.isTrue(actionSpy.calledOnce, 'was not called exactly once');
         assert.equal("done", result, 'did not return correct result');
     });
 
@@ -101,7 +107,8 @@ describe('when', function () {
                 .cond(function (_) { return true; }, actionSpy)
                 .match("blarg");
 
-        assert.isTrue(actionSpy.calledWith("blarg").calledOnce, 'did not call the action the correct number of times');
+        assert.isTrue(actionSpy.calledWith("blarg"), 'did not call the action with original argument');
+        assert.isTrue(actionSpy.calledOnce, 'did not call the action exactly once.');
         assert.equal("yep done", result, 'did not return the correct value');
     });
 
@@ -113,7 +120,8 @@ describe('when', function () {
                 .cond('int', action)
                 .match("hello world");
 
-        assert.isTrue(action.calledWith("hello world").calledOnce, 'did not get called the correct number of times');
+        assert.isTrue(action.calledWith("hello world"), 'did not get called with original argument');
+        assert.isTrue(action.calledOnce, 'did not get called exactly once');
         assert.equal("yep done", result, 'did not return the correct value');
     });
 
@@ -125,7 +133,8 @@ describe('when', function () {
                 .cond('int', actionSpy)
                 .match("hello world");
 
-        assert.isTrue(actionSpy.calledWith("hello world").calledOnce, 'did not get called the correct number of times');
+        assert.isTrue(actionSpy.calledWith("hello world"), 'did not get called the original argument.');
+        assert.isTrue(actionSpy.calledOnce, 'did not get called exactly once');
         assert.equal("yep done", result, 'did not return the correct value');
     });
 
@@ -169,6 +178,7 @@ describe('when', function () {
             .cond(condition, function () { })
             .match(77);
 
-        assert.equal(condition.calledWith(77).calledOnce);
+        assert.isTrue(condition.calledWith(77), 'did not get called with the original argument.');
+        assert.isTrue(condition.calledOnce, 'did not get called exactly once.');
     });
 });
