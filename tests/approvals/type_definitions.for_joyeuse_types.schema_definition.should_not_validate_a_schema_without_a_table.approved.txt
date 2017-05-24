@@ -1,7 +1,0 @@
-[
-    {
-        "property_name": "shema.tables",
-        "type": "requires a table",
-        "value_given": "undefined"
-    }
-]
