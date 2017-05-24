@@ -594,6 +594,16 @@ describe('type definitions', function () {
                 assert.isFalse(joySchema.validateSchema(schema), errors);
                 this.verify(errors);
             });
+
+            it('should not validate a schema without a table', function () {
+                const schema = {
+                    schemaName: 'testSchema',
+                };
+
+                const errors = pretyJson(joySchema.getErrors(schema));
+                assert.isFalse(joySchema.validateSchema(schema), errors);
+                this.verify(errors);
+            });
         });
     });
 

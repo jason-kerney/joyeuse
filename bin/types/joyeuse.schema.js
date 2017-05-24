@@ -23,13 +23,21 @@ function getErrors(schema) {
         return schema[key];
     });
 
-    const tableErrors = possibleTables.map(function (table){
+    const tableErrors = possibleTables.map(function (table) {
         return tables.getTableDefinitinTypeErrors(table)
-    }).reduce(function (previous, current){
+    }).reduce(function (previous, current) {
         return previous.concat(current);
     }, []);
 
-    return baseErrors.concat(tableErrors);
+    const otherErrors = (
+        possibleTables.length > 0
+            ? []
+            : [
+                validator.constructTypeError('shema.tables', 'requires a table', undefined)
+            ]
+    );
+
+    return baseErrors.concat(tableErrors).concat(otherErrors);
 }
 
 function validateSchema(schema) {
