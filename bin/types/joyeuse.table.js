@@ -247,8 +247,10 @@ signet.extend(joyeuseTableDef, function (value) {
 
 const tableValidationErrorOptions = {
     inputErrorBuilder: function (_, arg, __) {
-        const errors = getTableDefinitinTypeErrors(arg[0]);
-        return "Expected a valid table definition. The errors are: \n" + JSON.stringify(errors, null, 4);
+        const value = arg[0];
+        const errors = getTableDefinitinTypeErrors(value);
+        const tableName = Boolean(value.tableName) ? " for table '" + value.tableName + "'" : '';
+        return "Expected a valid table definition" + tableName + ". The errors are: \n" + JSON.stringify(errors, null, 4);
     }
 };
 function getJoyeuseTypes() {

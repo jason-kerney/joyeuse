@@ -213,22 +213,22 @@ describe('type definitions', function () {
     });
 
     describe('for joyeuse types', function () {
-        const joy = types.joyeuse.tables;
+        const tables = types.joyeuse.tables;
 
         it('should have all column flags', function () {
-            this.verify(JSON.stringify(joy.columnFlags, null, 4));
+            this.verify(JSON.stringify(tables.columnFlags, null, 4));
         });
 
         it('should validate [\'readonly\'] as valid columnFlags', function () {
-            assert.isTrue(joy.isColumnFlag(['readonly']));
+            assert.isTrue(tables.isColumnFlag(['readonly']));
         });
 
         it('should validate [\'readonly\', \'readonly\'] as not valid columnFlags', function () {
-            assert.isFalse(joy.isColumnFlag(['readonly', 'readonly']));
+            assert.isFalse(tables.isColumnFlag(['readonly', 'readonly']));
         });
 
         it('should validate all flags as being valid as a columnFlags', function () {
-            assert.isTrue(joy.isColumnFlag(joy.columnFlags));
+            assert.isTrue(tables.isColumnFlag(tables.columnFlags));
         })
 
         it('should correctly validate relationships', function () {
@@ -277,7 +277,7 @@ describe('type definitions', function () {
 
             it('should be have a definition builder that takes a type name - boolean', function () {
                 const columnBuilder = joy.getColumnDefinitionBuilder();
-                const  columnDef = columnBuilder('boolean');
+                const columnDef = columnBuilder('boolean');
                 this.verify(pretyJson(columnDef));
             });
 
@@ -377,11 +377,10 @@ describe('type definitions', function () {
         });
 
         describe('table definiton', function () {
-            const joy = types.joyeuse.tables;
             var type;
 
             beforeEach(function () {
-                type = joy.getColumnDefinitionBuilder();
+                type = tables.getColumnDefinitionBuilder();
             });
 
             it('should validate a good table definintion with 1 key, 1 column no dbQuery, and 2 defined relations', function () {
@@ -396,7 +395,7 @@ describe('type definitions', function () {
                     ]
                 };
 
-                assert.isTrue(joy.isTableDefinition(table), joy.getTableDefinitinTypeErrors(table));
+                assert.isTrue(tables.isTableDefinition(table), tables.getTableDefinitinTypeErrors(table));
             });
 
             it('should validate a good definintion with 1 key, 1 column no dbQuery and no defined relations', function () {
@@ -407,7 +406,7 @@ describe('type definitions', function () {
                     id: type('int')
                 };
 
-                assert.isTrue(joy.isTableDefinition(table), joy.getTableDefinitinTypeErrors(table));
+                assert.isTrue(tables.isTableDefinition(table), tables.getTableDefinitinTypeErrors(table));
             });
 
             it('should validate a good definintion with 1 key, 1 column no dbQuery and no defined relations', function () {
@@ -418,7 +417,7 @@ describe('type definitions', function () {
                     id: type('int')
                 };
 
-                assert.isTrue(joy.isTableDefinition(table), joy.getTableDefinitinTypeErrors(table));
+                assert.isTrue(tables.isTableDefinition(table), tables.getTableDefinitinTypeErrors(table));
             });
 
             it('should validate a good definintion with no key, 1 column as a type string no dbQuery and no defined relations', function () {
@@ -429,7 +428,7 @@ describe('type definitions', function () {
                     id: 'string'
                 };
 
-                assert.isTrue(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
+                assert.isTrue(tables.isTableDefinition(table), pretyJson(tables.getTableDefinitinTypeErrors(table)));
             });
 
             it('should show errors for a definintion without a key defined', function () {
@@ -439,8 +438,8 @@ describe('type definitions', function () {
                     id: type('int')
                 };
 
-                assert.isFalse(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
-                this.verify(pretyJson(joy.getTableDefinitinTypeErrors(table)));
+                assert.isFalse(tables.isTableDefinition(table), pretyJson(tables.getTableDefinitinTypeErrors(table)));
+                this.verify(pretyJson(tables.getTableDefinitinTypeErrors(table)));
             });
 
             it('should show errors for a definintion without any columns and no dbQuery', function () {
@@ -450,8 +449,8 @@ describe('type definitions', function () {
                     key: []
                 };
 
-                assert.isFalse(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
-                this.verify(pretyJson(joy.getTableDefinitinTypeErrors(table)));
+                assert.isFalse(tables.isTableDefinition(table), pretyJson(tables.getTableDefinitinTypeErrors(table)));
+                this.verify(pretyJson(tables.getTableDefinitinTypeErrors(table)));
             });
 
             it('should validate for a definintion without any columns and dbQuery', function () {
@@ -461,7 +460,7 @@ describe('type definitions', function () {
                     key: []
                 };
 
-                assert.isTrue(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
+                assert.isTrue(tables.isTableDefinition(table), pretyJson(tables.getTableDefinitinTypeErrors(table)));
             });
 
             it('should show errors for a definintion a key that is not a column and no dbQuery', function () {
@@ -472,8 +471,8 @@ describe('type definitions', function () {
                     name: type('string')
                 };
 
-                assert.isFalse(joy.isTableDefinition(table), pretyJson(joy.getTableDefinitinTypeErrors(table)));
-                this.verify(pretyJson(joy.getTableDefinitinTypeErrors(table)));
+                assert.isFalse(tables.isTableDefinition(table), pretyJson(tables.getTableDefinitinTypeErrors(table)));
+                this.verify(pretyJson(tables.getTableDefinitinTypeErrors(table)));
             });
 
             it('should return the table if table is called with a valid table', function () {
@@ -484,7 +483,7 @@ describe('type definitions', function () {
                     id: type('int')
                 };
 
-                this.verify(pretyJson(joy.table(table)));
+                this.verify(pretyJson(tables.table(table)));
             });
 
             it('should fail a definintion with 1 key, 1 column no dbQuery, 1 incorrectly defined relation', function () {
@@ -499,8 +498,8 @@ describe('type definitions', function () {
                     ]
                 };
 
-                const errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
-                assert.isFalse(joy.isTableDefinition(table), errors);
+                const errors = pretyJson(tables.getTableDefinitinTypeErrors(table));
+                assert.isFalse(tables.isTableDefinition(table), errors);
                 this.verify(errors);
             });
 
@@ -516,8 +515,8 @@ describe('type definitions', function () {
                     ]
                 };
 
-                const errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
-                assert.isFalse(joy.isTableDefinition(table), errors);
+                const errors = pretyJson(tables.getTableDefinitinTypeErrors(table));
+                assert.isFalse(tables.isTableDefinition(table), errors);
                 this.verify(errors);
             });
 
@@ -530,7 +529,7 @@ describe('type definitions', function () {
 
                 var err;
                 try {
-                    joy.table(table);
+                    tables.table(table);
                 } catch (error) {
                     err = error.message;
                 }
@@ -553,8 +552,46 @@ describe('type definitions', function () {
                     }
                 };
 
-                const errors = pretyJson(joy.getTableDefinitinTypeErrors(table));
-                assert.isFalse(joy.isTableDefinition(table), errors);
+                const errors = pretyJson(tables.getTableDefinitinTypeErrors(table));
+                assert.isFalse(tables.isTableDefinition(table), errors);
+                this.verify(errors);
+            });
+        });
+
+        describe('schema definition', function () {
+            const joySchema = types.joyeuse.schema;
+            var type;
+
+            beforeEach(function () {
+                type = tables.getColumnDefinitionBuilder();
+            });
+
+            it('should validate correctly with a name and one table', function () {
+                const schema = {
+                    schemaName: 'testSchema',
+                    people: tables.table({
+                        tableName: 'People',
+                        dbQueryColumns: false,
+                        key: ['id'],
+                        id: type('int'),
+                    })
+                };
+
+                assert.isTrue(joySchema.validateSchema(schema), pretyJson(joySchema.getErrors(schema)));
+            });
+
+            it('should not validate a schema with a bad table', function () {
+                const schema = {
+                    schemaName: 'testSchema',
+                    people: {
+                        tableName: 'People',
+                        dbQueryColumns: false,
+                        key: ['id'],
+                    }
+                };
+
+                const errors = pretyJson(joySchema.getErrors(schema));
+                assert.isFalse(joySchema.validateSchema(schema), errors);
                 this.verify(errors);
             });
         });
