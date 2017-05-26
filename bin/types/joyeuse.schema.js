@@ -1,11 +1,11 @@
 'use strict';
 
-const typeBuilder = require('../typeBuilder')();
+// const typeBuilder = require('../typeBuilder')();
 const typeNames = require('./typeNames')();
 const validator = require('../typesValidation')();
-const baseTypes = require('./base')();
 const tables = require('./joyeuse.table')();
-const signet = typeBuilder.signet;
+
+// const signet = typeBuilder.signet;
 
 function getSchemaDefinition() {
     return {

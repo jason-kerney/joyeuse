@@ -4,6 +4,7 @@ const typeBuilder = require('../typeBuilder')();
 const typeNames = require('./typeNames')();
 const validator = require('../typesValidation')();
 const baseTypes = require('./base')();
+
 const signet = typeBuilder.signet;
 const tableColumnExpression = '[\\w\\d]+\\.[\\w\\d]+';
 const arrowExpression = '\\s\\*?\\->\\*?\\s';
