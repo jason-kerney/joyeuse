@@ -26,6 +26,10 @@ const variantOf = signet.enforce('variant<' + typeName + '; ' + arrayOf(typeName
     return generic('variant', type);    
 });
 
+const tupleOf = signet.enforce(variantOf([typeName, arrayOf(typeName)]) + ' => ' + typeName, function (type) {
+    return generic('tuple', type);
+});
+
 const functionBuilderToTypeDef = {
     to: 'function'
 }
@@ -48,5 +52,6 @@ module.exports = function () {
         fn: fn,
         arrayOf: arrayOf,
         variantOf: variantOf,
+        tupleOf: tupleOf,
     };
 }

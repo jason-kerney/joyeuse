@@ -9,6 +9,26 @@ const tb = require('../../bin/types/builder.types.js')();
 const fn = tb.fn;
 
 describe('type builder', function () {
+    it('will build a tulpe of type int', function () {
+        this.verify(tb.tupleOf('int'));
+    });
+
+    it('will build a tulpe of type string', function () {
+        this.verify(tb.tupleOf('string'));
+    });
+
+    it('will build a tulpe of type string, int and object', function () {
+        this.verify(tb.tupleOf(['string', 'int', 'object']));
+    });
+
+    it('will thow an error if tulpe of is called with invalid type', function () {
+        assert.throws(() => tb.tupleOf('explooodie'));
+    });
+
+    it('will thow an error if tulpe of is called with an invalid type as part of an array', function () {
+        assert.throws(() => tb.tupleOf(['string', 'explooodie', 'int']));
+    });
+    
     it('will build a variant of type undefined, string', function () {
         this.verify(tb.variantOf(['undefined', 'string']));
     });
