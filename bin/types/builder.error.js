@@ -1,7 +1,11 @@
 'use strict';
 const signet = require('../../bin/types/loader.signet')();
+const tb = require('./builder.types')();
 
-const toErrorMessage = signet.enforce("tuple<string; string; *> => *", function (triplet) {
+const fn = tb.fn;
+const tupleOf = tb.tupleOf;
+
+const toErrorMessage = signet.enforce(fn(tupleOf(['string', 'string', '*'])).to('*'), function (triplet) {
     const name = triplet[0];
     const expectedType = triplet[1];
     const value = triplet[2];

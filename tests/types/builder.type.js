@@ -9,6 +9,10 @@ const tb = require('../../bin/types/builder.types.js')();
 const fn = tb.fn;
 
 describe('type builder', function () {
+    it('will have a signed function "tupleOf"', function () {
+        this.verify(tb.tupleOf.signature);
+    });
+
     it('will build a tulpe of type int', function () {
         this.verify(tb.tupleOf('int'));
     });
@@ -29,6 +33,10 @@ describe('type builder', function () {
         assert.throws(() => tb.tupleOf(['string', 'explooodie', 'int']));
     });
     
+    it('will have a signed function "variantOf"', function () {
+        this.verify(tb.variantOf.signature);
+    });
+    
     it('will build a variant of type undefined, string', function () {
         this.verify(tb.variantOf(['undefined', 'string']));
     });
@@ -45,6 +53,10 @@ describe('type builder', function () {
         assert.throws(() => tb.variantOf(['string', 'bat type']));
     });
 
+    it('will have a signed function "arrayOf"', function () {
+        this.verify(tb.arrayOf.signature);
+    });
+
     it('will build an array of type undefined', function () {
         this.verify(tb.arrayOf('undefined'));
     });
@@ -55,6 +67,14 @@ describe('type builder', function () {
 
     it('will build an array of type number', function () {
         this.verify(tb.arrayOf('number'));
+    });
+
+    it('will have a signed function "fn"', function () {
+        this.verify(fn.signature);
+    });
+
+    it('will have function "fn" that returns a signed function "to"', function () {
+        this.verify(fn('*').to.signature);
     });
 
     it('will build a function type', function () {

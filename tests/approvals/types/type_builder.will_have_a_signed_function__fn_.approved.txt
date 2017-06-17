@@ -1,0 +1,1 @@
+variant<type_name;array<type_name>> => function_to
