@@ -1,10 +1,10 @@
 'use strict';
 
-const builder = require('../../bin/types/error.builder')();
+const builder = require('../../bin/types/builder.error')();
 const assert = require('chai').assert;
 
 const approvalsConfig = require('../test-utils/approvalsConfig');
-require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
+require('approvals').configure(approvalsConfig).mocha('./tests/approvals/types');
 
 
 describe('Error Builder', function () {
