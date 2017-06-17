@@ -26,8 +26,12 @@
   "devDependencies": {
     "approvals": "^2.1.2",
     "chai": "^3.5.0",
+    "eslint": "^4.0.0",
     "grunt": "^1.0.1",
     "mocha": "^3.3.0",
+    "quokka": "0.0.7",
+    "quokka-mocha-bdd": "^1.3.0",
+    "quokka-signet-explorer": "^1.2.0",
     "sinon": "^2.2.0"
   }
 }
