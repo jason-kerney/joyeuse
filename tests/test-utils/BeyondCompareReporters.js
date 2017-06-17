@@ -29,7 +29,7 @@ function BeyondCompare4() {
             spawn(executionPath, [receivedPath, approvedPath], { detached: true });
         }
     };
-};
+}
 
 function BeyondCompare3() {
     return {
@@ -52,7 +52,7 @@ function BeyondCompare3() {
 
         }
     };
-};
+}
 
 module.exports = {
     BeyondCompare4: BeyondCompare4,

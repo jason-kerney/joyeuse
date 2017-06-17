@@ -9,10 +9,12 @@
         "require": false,
         "module": false,
 
+        "before": false,
         "describe": false,
         "beforeEach": false,
         "it": false,
 
-        "runQuokkaMochaBdd": false
+        "runQuokkaMochaBdd": false,
+        "approvals": false
     }
 }
