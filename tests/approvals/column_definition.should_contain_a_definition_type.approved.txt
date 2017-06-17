@@ -1,4 +1,0 @@
-{
-    "type": "validType",
-    "flags": "columnFlags"
-}

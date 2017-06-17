@@ -1,9 +1,0 @@
-{
-    "minMax": {
-        "min": "boundedInt<0;Infinity>",
-        "max": "boundedInt<0;Infinity>"
-    },
-    "afterCreate": {
-        "afterCreate": "connectionMethodForConnectionPool"
-    }
-}

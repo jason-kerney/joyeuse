@@ -1,7 +1,0 @@
-[
-    {
-        "property_name": "joyeuseTableDefinition.relations[0]",
-        "type": "Must start with a reference to a valid column on base table.",
-        "value_given": "MyDevice.nameId *-> Names.Id"
-    }
-]

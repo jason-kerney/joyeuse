@@ -1,1 +1,0 @@
-variant<undefined; string>

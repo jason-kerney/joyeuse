@@ -1,7 +1,0 @@
-[
-    {
-        "property_name": "testObject.aProperty",
-        "type": "boolean",
-        "value_given": "thingy"
-    }
-]
