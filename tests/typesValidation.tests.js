@@ -3,14 +3,13 @@
 const typeBuilder = require('../bin/typeBuilder')();
 const types = require('../bin/types')();
 const typeNames = types.typeNames;
-const approvalsConfig = require('./test-utils/approvalsConfig');
-const approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 const typesValidation = require('../bin/typesValidation')();
 const pretyJson = require('./test-utils/pretyJson');
 
 const assert = require('chai').assert;
 
 describe('type validation builder', function () {
+    require('./test-utils/approvalsConfig');
     describe('basic type error builder', function () {
         it('should return no error for a good type', function () {
             const errors = typesValidation.getErrors('myProperty', 'boolean', true);
@@ -120,3 +119,7 @@ describe('type validation builder', function () {
         });
     });
 });
+
+if (typeof global.runQuokkaMochaBdd === 'function') {
+    runQuokkaMochaBdd();
+}
