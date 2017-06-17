@@ -1,4 +1,6 @@
 'use strict';
+const approvalsConfig = require('./test-utils/approvalsConfig');
+require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 
 const typeBuilder = require('../bin/typeBuilder')();
 // const ending = "\r\n";
@@ -9,7 +11,6 @@ const assert = require('chai').assert;
 // }
 
 describe('type builder', function () {
-    require('./test-utils/approvalsConfig');
     it('should return for a hard coded variant type', function () {
         this.verify(typeBuilder.asVariantDefString('int; string'));
     });

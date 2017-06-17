@@ -1,4 +1,6 @@
 'use strict';
+const approvalsConfig = require('./test-utils/approvalsConfig');
+require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 
 const assert = require('chai').assert;
 // const typeBuilder = require('../bin/typeBuilder')();
@@ -7,7 +9,6 @@ const sinon = require('sinon');
 // const pretyJson = require('./test-utils/pretyJson');
 
 describe('when', function () {
-    require('./test-utils/approvalsConfig');
     var when;
 
     function spy(retValue) {
@@ -29,9 +30,9 @@ describe('when', function () {
     it('should call the transformer on match', function () {
         const transformer = sinon.spy();
         when(transformer)
-            .cond(function (_) {
+            .cond(function () {
                 return true;
-            }, function (_) {
+            }, function () {
             })
             .match(5);
 
@@ -39,12 +40,12 @@ describe('when', function () {
     });
 
     it('should call the first condition with the transformed value', function () {
-        function transformer(_) {
+        function transformer() {
             return "seven";
         }
 
         const condSpy = spy(false);
-        when(transformer).cond(condSpy, function (_) { }).match(5);
+        when(transformer).cond(condSpy, function () { }).match(5);
 
         assert.isTrue(condSpy.withArgs("seven").calledOnce);
     });
@@ -54,8 +55,8 @@ describe('when', function () {
         const condSpy = sinon.stub().returns(false);
 
         when(transformer)
-            .cond(function (_) { return false; }, function (_) { })
-            .cond(condSpy, function (_) { })
+            .cond(function () { return false; }, function () { })
+            .cond(condSpy, function () { })
             .match(34);
 
         assert.equal(1, transformer.callCount, "the transformer was called too many times");
@@ -70,7 +71,7 @@ describe('when', function () {
         const actionSpy = sinon.spy();
 
         when(transformer)
-            .cond(function (_) { return false; }, actionSpy)
+            .cond(function () { return false; }, actionSpy)
             .match(34);
 
         assert.isTrue(actionSpy.notCalled);
@@ -79,8 +80,8 @@ describe('when', function () {
     it('should call the first action when condition returns true', function () {
         const actionSpy = spy("done");
         const result =
-            when(function (input) { return { undone: false }; })
-                .cond(function (_) { return true; }, actionSpy)
+            when(function () { return { undone: false }; })
+                .cond(function () { return true; }, actionSpy)
                 .match(2);
 
         assert.isTrue(actionSpy.calledWith(2), 'was not called with 2');
@@ -90,9 +91,9 @@ describe('when', function () {
 
     it('should not call the second action if the second condition is false', function () {
         const actionSpy = spy(undefined);
-        when(function (input) { return { isPassing: "false" }; })
-            .cond(function (_) { return false; }, actionSpy)
-            .cond(function (_) { return false; }, actionSpy)
+        when(function () { return { isPassing: "false" }; })
+            .cond(function () { return false; }, actionSpy)
+            .cond(function () { return false; }, actionSpy)
             .match("blarg");
 
         assert.isTrue(actionSpy.notCalled);
@@ -101,9 +102,9 @@ describe('when', function () {
     it('should call the second action if the second condition is true', function () {
         const actionSpy = spy("yep done");
         const result =
-            when(function (input) { return { isPassing: "false" }; })
-                .cond(function (_) { return false; }, function (_) { })
-                .cond(function (_) { return true; }, actionSpy)
+            when(function () { return { isPassing: "false" }; })
+                .cond(function () { return false; }, function (_) { })
+                .cond(function () { return true; }, actionSpy)
                 .match("blarg");
 
         assert.isTrue(actionSpy.calledWith("blarg"), 'did not call the action with original argument');
@@ -115,7 +116,7 @@ describe('when', function () {
         const action = spy("yep done");
 
         const result =
-            when(function (input) { return 5; })
+            when(function () { return 5; })
                 .cond('int', action)
                 .match("hello world");
 
@@ -127,7 +128,7 @@ describe('when', function () {
     it('should call the second action when the transformer returns the correct type if the condition is a type string', function () {
         const actionSpy = spy("yep done");
         const result =
-            when(function (input) { return 5; })
+            when(function () { return 5; })
                 .cond(function () { return false; }, function () { })
                 .cond('int', actionSpy)
                 .match("hello world");
@@ -140,7 +141,7 @@ describe('when', function () {
     it('should not call the second action when the first action succeeds', function () {
         const actionSpy = spy("yep done");
         const result =
-            when(function (input) { return 5; })
+            when(function () { return 5; })
                 .cond(function () { return true; }, function () { return "first result"; })
                 .cond('int', actionSpy)
                 .match("hello world");

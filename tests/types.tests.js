@@ -1,5 +1,7 @@
 'use strict';
 
+const approvalsConfig = require('./test-utils/approvalsConfig');
+require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 const pretyJson = require('./test-utils/pretyJson');
 const assert = require('chai').assert;
 // const typeBuilder = require('../bin/typeBuilder')();
@@ -34,8 +36,6 @@ function ipGenerator(max) {
 }
 
 describe('type definitions', function () {
-    require('./test-utils/approvalsConfig');
-
     const typesFactory = require('../bin/types');
     const types = typesFactory();
     const typeNames = types.typeNames;
@@ -212,8 +212,6 @@ describe('type definitions', function () {
 
     //proof of concept
     describe('connect to real db', function () {
-        require('./test-utils/approvalsConfig');
-
         it.skip('should connect to a real db', function (done) {
 
             const props = {

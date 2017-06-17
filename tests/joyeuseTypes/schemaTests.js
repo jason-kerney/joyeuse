@@ -1,19 +1,20 @@
 'use strict';
+const approvalsConfig = require('../test-utils/approvalsConfig');
+require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 
 const pretyJson = require('../test-utils/pretyJson');
 const assert = require('chai').assert;
-const typeBuilder = require('../../bin/typeBuilder')();
-const signet = typeBuilder.signet;
+// const typeBuilder = require('../../bin/typeBuilder')();
+// const signet = typeBuilder.signet;
 
 const typesFactory = require('../../bin/types');
 const types = typesFactory();
-const typeNames = types.typeNames;
-const ip4Types = types.ip4;
+// const typeNames = types.typeNames;
+// const ip4Types = types.ip4;
 
 const tables = types.joyeuse.tables;
 
 describe('schema definition', function () {
-    require('../test-utils/approvalsConfig');
     const joySchema = types.joyeuse.schema;
     var type;
 

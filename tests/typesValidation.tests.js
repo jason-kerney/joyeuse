@@ -1,4 +1,6 @@
 'use strict';
+const approvalsConfig = require('./test-utils/approvalsConfig');
+require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 
 const typeBuilder = require('../bin/typeBuilder')();
 const types = require('../bin/types')();
@@ -9,7 +11,6 @@ const pretyJson = require('./test-utils/pretyJson');
 const assert = require('chai').assert;
 
 describe('type validation builder', function () {
-    require('./test-utils/approvalsConfig');
     describe('basic type error builder', function () {
         it('should return no error for a good type', function () {
             const errors = typesValidation.getErrors('myProperty', 'boolean', true);

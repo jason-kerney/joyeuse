@@ -1,4 +1,6 @@
 'use strict';
+const approvalsConfig = require('../test-utils/approvalsConfig');
+require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 
 const pretyJson = require('../test-utils/pretyJson');
 const assert = require('chai').assert;
@@ -13,7 +15,6 @@ const types = typesFactory();
 const tables = types.joyeuse.tables;
 
 describe('table definiton', function () {
-    require('../test-utils/approvalsConfig');
     var type;
 
     beforeEach(function () {
