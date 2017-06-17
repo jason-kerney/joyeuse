@@ -1,0 +1,9 @@
+{
+    "type": "boolean",
+    "flags": [
+        "hidden"
+    ],
+    "hidden": "function hidden",
+    "readonly": "function readonly",
+    "init": "function init"
+}

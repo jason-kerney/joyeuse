@@ -4,7 +4,7 @@
   "description": "A friendly ORM",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha tests/*.js"
+    "test": "node ./node_modules/mocha/bin/mocha tests/**/*.js"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,7 @@
+[
+    {
+        "property_name": "joyeuseTableDefinition.column_key",
+        "type": "joyeuseColumnDef",
+        "value_given": "undefined"
+    }
+]

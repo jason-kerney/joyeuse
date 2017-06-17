@@ -1,0 +1,10 @@
+[
+    {
+        "property_name": "joyeuseTableDefinition.relations",
+        "type": "array<retlationsTypeDef>",
+        "value_given": [
+            "MyDevice *-> MyUser.deviceId",
+            "MyDevice.id *-> Records.deviceId"
+        ]
+    }
+]

@@ -1,0 +1,12 @@
+[
+    {
+        "property_name": "joyeuseTableDefinition.comment_For_Developer",
+        "type": "unknown member",
+        "value_given": "This is not a valid member of a table"
+    },
+    {
+        "property_name": "joyeuseTableDefinition.transformer",
+        "type": "unknown member",
+        "value_given": "function (value) {\r\n                return String(value).length;\r\n            }"
+    }
+]

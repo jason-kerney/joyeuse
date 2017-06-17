@@ -1,13 +1,13 @@
 'use strict';
 
-const approvalsConfig = require('./test-utils/approvalsConfig');
+const approvalsConfig = require('../test-utils/approvalsConfig');
 const approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
-const pretyJson = require('./test-utils/pretyJson');
+const pretyJson = require('../test-utils/pretyJson');
 const assert = require('chai').assert;
-const typeBuilder = require('../bin/typeBuilder')();
+const typeBuilder = require('../../bin/typeBuilder')();
 const signet = typeBuilder.signet;
 
-const typesFactory = require('../bin/types');
+const typesFactory = require('../../bin/types');
 const types = typesFactory();
 const typeNames = types.typeNames;
 const ip4Types = types.ip4;
