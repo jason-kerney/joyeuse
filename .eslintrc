@@ -17,6 +17,8 @@
         "runQuokkaMochaBdd": false,
 
         "approvals": false,
-        "verify": false
+        "verify": false,
+
+        "console": false
     }
 }

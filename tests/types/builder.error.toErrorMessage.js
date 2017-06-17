@@ -6,7 +6,6 @@ const assert = require('chai').assert;
 const approvalsConfig = require('../test-utils/approvalsConfig');
 require('approvals').configure(approvalsConfig).mocha('./tests/approvals/types');
 
-
 describe('Error Builder', function () {
     describe('toErrorMessage', function () {
 

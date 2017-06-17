@@ -1,0 +1,4 @@
+[
+    "'name' was expected to be of type string but was type undefined with value of 'undefined'",
+    "'age' was expected to be of type int but was type string with value of '3'"
+]
