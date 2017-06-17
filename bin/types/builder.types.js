@@ -18,15 +18,15 @@ function generic(name, params) {
     return combine(params);
 }
 
-const arrayOf = signet.enforce(typeName + ' => ' + typeName, function (type) {
+const arrayOf = signet.enforce('type:' + typeName + ' => ' + typeName, function (type) {
     return generic('array', type);
 });
 
-const variantOf = signet.enforce('variant<' + typeName + '; ' + arrayOf(typeName) + '> => ' + typeName, function (type) {
+const variantOf = signet.enforce('type:variant<' + typeName + '; ' + arrayOf(typeName) + '> => ' + typeName, function (type) {
     return generic('variant', type);    
 });
 
-const tupleOf = signet.enforce(variantOf([typeName, arrayOf(typeName)]) + ' => ' + typeName, function (type) {
+const tupleOf = signet.enforce('type:' + variantOf([typeName, arrayOf(typeName)]) + ' => ' + typeName, function (type) {
     return generic('tuple', type);
 });
 
@@ -35,7 +35,7 @@ const functionBuilderToTypeDef = {
 }
 signet.defineDuckType('function_to', functionBuilderToTypeDef);
 
-const fn = signet.enforce(variantOf([typeName, arrayOf(typeName)]) + " => function_to", function (inputType) {
+const fn = signet.enforce('input_type:' + variantOf([typeName, arrayOf(typeName)]) + " => function_to", function (inputType) {
     const function_to = signet.enforce(typeName + ' => string', function (outputType) {
         return inputType + " => " + outputType;
     });
