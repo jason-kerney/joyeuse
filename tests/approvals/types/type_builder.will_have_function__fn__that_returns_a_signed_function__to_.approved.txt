@@ -1,1 +1,1 @@
-type_name => string
+outputType:type_name => string
