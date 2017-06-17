@@ -10,6 +10,10 @@ require('approvals').configure(approvalsConfig).mocha('./tests/approvals/types')
 describe('Error Builder', function () {
     describe('toErrorMessage', function () {
 
+        it('will be a signed function', function () {
+            this.verify(builder.toErrorMessage.signature);
+        });
+
         it('will convert signet errors to nice sentences', function () {
             this.verify(builder.toErrorMessage(["value", "Object", undefined]));
         });
