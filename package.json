@@ -19,6 +19,14 @@
     "url": "https://github.com/jason-kerney/joyeuse/issues"
   },
   "homepage": "https://github.com/jason-kerney/joyeuse#readme",
+  "quokka": {
+    "plugins": [
+        "quokka-mocha-bdd"
+    ],
+    "quokka-mocha-bdd": {
+        "interface": "bdd"
+    }
+  },
   "dependencies": {
     "knex": "^0.13.0",
     "signet": "^1.4.0"

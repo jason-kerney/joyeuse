@@ -1,7 +1,5 @@
 'use strict';
 
-const approvalsConfig = require('../test-utils/approvalsConfig');
-const approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 const pretyJson = require('../test-utils/pretyJson');
 const assert = require('chai').assert;
 const typeBuilder = require('../../bin/typeBuilder')();
@@ -13,6 +11,7 @@ const typeNames = types.typeNames;
 const ip4Types = types.ip4;
 
 describe('for joyeuse types', function () {
+    require('../test-utils/approvalsConfig');
     const tables = types.joyeuse.tables;
 
     it('should have all column flags', function () {
@@ -44,3 +43,7 @@ describe('for joyeuse types', function () {
         }, this);
     });
 });
+
+if(typeof global.runQuokkaMochaBdd === 'function') {
+    runQuokkaMochaBdd();
+}

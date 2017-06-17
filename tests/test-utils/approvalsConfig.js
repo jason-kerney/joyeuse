@@ -1,7 +1,8 @@
 const BeyondCompare4 = require('./BeyondCompareReporters').BeyondCompare4;
+const helper = require("./quokkaApprovalsHelper");
 
-module.exports = {
-    reporters: [new BeyondCompare4()],
+const approvalsConfig = {
+    reporters: [helper.chooseReporter(new BeyondCompare4())],
     normalizeLineEndingsTo: '\n',
     appendEOL: true,
     EOL: require('os').EOL,
@@ -10,4 +11,10 @@ module.exports = {
     stripBOM: false,
     forceApproveAll: false,
     failOnLineEndingDifferences: false
-}
+};
+
+const approvalsPath = './tests/approvals';
+const approvals = require('approvals').configure(approvalsConfig).mocha(approvalsPath);
+helper(approvalsPath);
+
+module.exports = approvals;
