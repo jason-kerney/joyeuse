@@ -1,14 +1,13 @@
 'use strict';
 
 const assert = require('chai').assert;
-const typeBuilder = require('../bin/typeBuilder')();
-const signet = typeBuilder.signet;
+// const typeBuilder = require('../bin/typeBuilder')();
+// const signet = typeBuilder.signet;
 const sinon = require('sinon');
-const approvalsConfig = require('./test-utils/approvalsConfig');
-const approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
-var pretyJson = require('./test-utils/pretyJson');
+// const pretyJson = require('./test-utils/pretyJson');
 
 describe('when', function () {
+    require('./test-utils/approvalsConfig');
     var when;
 
     function spy(retValue) {
@@ -153,9 +152,9 @@ describe('when', function () {
     it('should return a warning when all conditions fail', function () {
 
         const result =
-            when(function (input) { return ""; })
+            when(function () { return ""; })
                 .cond(function () { return false; }, function () { return "bad1"; })
-                .cond('int', function (_) { return "bad2"; })
+                .cond('int', function () { return "bad2"; })
                 .match("hello world");
 
         this.verify(JSON.stringify(result) + '\r\n');
@@ -163,9 +162,9 @@ describe('when', function () {
 
     it('should evaluate a condition as truthy', function () {
         const result =
-            when(function (input) { return ""; })
+            when(function () { return ""; })
                 .cond(function () { return "bob"; }, function () { return "truthy"; })
-                .cond('int', function (_) { return "bad"; })
+                .cond('int', function () { return "bad"; })
                 .match("hello world");
 
         assert.equal("truthy", result);
@@ -182,3 +181,7 @@ describe('when', function () {
         assert.isTrue(condition.calledOnce, 'did not get called exactly once.');
     });
 });
+
+if (typeof global.runQuokkaMochaBdd === 'function') {
+    runQuokkaMochaBdd();
+}
