@@ -1,7 +1,5 @@
 'use strict';
 
-const approvalsConfig = require('../test-utils/approvalsConfig');
-const approvals = require('approvals').configure(approvalsConfig).mocha('./tests/approvals');
 const pretyJson = require('../test-utils/pretyJson');
 const assert = require('chai').assert;
 const typeBuilder = require('../../bin/typeBuilder')();
@@ -15,6 +13,7 @@ const ip4Types = types.ip4;
 const tables = types.joyeuse.tables;
 
 describe('column definition', function () {
+    require('../test-utils/approvalsConfig');
     const joy = types.joyeuse.tables;
     it('should contain a definition type', function () {
         this.verify(pretyJson(joy.columnDefinitionType));
@@ -145,3 +144,7 @@ describe('column definition', function () {
         assert.throws(throwing, "Expected to return type of boolean");
     });
 });
+
+if (typeof global.runQuokkaMochaBdd === 'function') {
+    runQuokkaMochaBdd();
+}
