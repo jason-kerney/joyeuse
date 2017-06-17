@@ -5,18 +5,25 @@ const typeName = 'type_name';
 
 const isString = signet.isTypeOf('string');
 signet.subtype('type')(typeName, isString);
+const isArrayOfTypes = signet.isTypeOf('array<' + typeName + '>');
 
-const arrayOf = signet.enforce(typeName + ' => ' + typeName, function (type) {
-    return 'array<' + type + '>';
-});
-
-const isArrayOfTypes = signet.isTypeOf(arrayOf(typeName));
-const variantOf = signet.enforce('variant<' + typeName + '; ' + arrayOf(typeName) + '> => ' + typeName, function (type) {
-    if (isArrayOfTypes(type)) {
-        return 'variant<' + type.join('; ') + '>';
+function generic(name, params) {
+    function combine(types) {
+        return name + '<' + types + '>';
+    }
+    if (isArrayOfTypes(params)) {
+        return combine(params.join('; '));
     }
 
-    return 'variant<' + type + '>';    
+    return combine(params);
+}
+
+const arrayOf = signet.enforce(typeName + ' => ' + typeName, function (type) {
+    return generic('array', type);
+});
+
+const variantOf = signet.enforce('variant<' + typeName + '; ' + arrayOf(typeName) + '> => ' + typeName, function (type) {
+    return generic('variant', type);    
 });
 
 const functionBuilderToTypeDef = {
