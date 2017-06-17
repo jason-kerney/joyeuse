@@ -21,10 +21,10 @@
   "homepage": "https://github.com/jason-kerney/joyeuse#readme",
   "quokka": {
     "plugins": [
-        "quokka-mocha-bdd"
+      "quokka-mocha-bdd"
     ],
     "quokka-mocha-bdd": {
-        "interface": "bdd"
+      "interface": "bdd"
     }
   },
   "dependencies": {

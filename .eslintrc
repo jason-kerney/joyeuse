@@ -1,0 +1,17 @@
+{
+    "extends": "eslint:recommended",
+    "env": { "es6": true },
+    "rules": {
+        "no-extra-boolean-cast": "off"
+    },
+    "globals": {
+        "global": false,
+        "require": false,
+
+        "describe": false,
+        "beforeEach": false,
+        "it": false,
+
+        "runQuokkaMochaBdd": false
+    }
+}
